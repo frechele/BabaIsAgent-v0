@@ -11,7 +11,7 @@ namespace Baba
 enum class EntityType
 {
 #define TEXT(a) TEXT_##a,
-#define BLOCK(a) BLOCK_##a, TEXT_##a,
+#define BLOCK(a) a, TEXT_##a,
 #include "EntityType.def"
 #undef TEXT
 #undef BLOCK
