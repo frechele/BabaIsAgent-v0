@@ -1,3 +1,6 @@
 [submodule "Libraries/googletest"]
 	path = Libraries/googletest
 	url = https://github.com/google/googletest
+[submodule "Libraries/SFML"]
+	path = Libraries/SFML
+	url = https://github.com/SFML/SFML
