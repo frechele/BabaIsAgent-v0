@@ -20,6 +20,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 add_subdirectory(Libraries/googletest)
 
 add_subdirectory(Libraries/SFML)
+add_subdirectory(Libraries/spdlog)
 
 # Includes
 include_directories(Includes)
