@@ -4,3 +4,6 @@
 [submodule "Libraries/SFML"]
 	path = Libraries/SFML
 	url = https://github.com/SFML/SFML
+[submodule "Libraries/spdlog"]
+	path = Libraries/spdlog
+	url = https://github.com/gabime/spdlog
