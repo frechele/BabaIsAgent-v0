@@ -8,17 +8,26 @@
 namespace Baba
 {
 //!
-//! \brief Entity interface that conists level
+//! \brief Entity that conists level
 //!
 class Entity
 {
  public:
+    //! Constructor
+    Entity();
+
+    //! Constructor with EntityType
+    Entity(EntityType type);
+
     //! Default destructor
     virtual ~Entity() = default;
 
     //! Return entity type
     //! \return returned entity type
     virtual EntityType GetType() const = 0;
+
+ private:
+    EntityType type_;
 };
 }  // namespace Baba
 
