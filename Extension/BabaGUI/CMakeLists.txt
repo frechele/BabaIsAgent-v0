@@ -8,7 +8,6 @@ add_executable(${target} ${sources})
 target_link_libraries(${target}
 	Baba
 	sfml-graphics
-	sfml-main
 	sfml-system
 	sfml-window
 	spdlog::spdlog

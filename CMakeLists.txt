@@ -19,6 +19,7 @@ set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 add_subdirectory(Libraries/googletest)
 
+set(SFML_BUILD_AUDIO FALSE)
 add_subdirectory(Libraries/SFML)
 add_subdirectory(Libraries/spdlog)
 

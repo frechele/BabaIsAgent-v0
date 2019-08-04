@@ -1,0 +1,50 @@
+language: cpp
+
+matrix:
+  include:
+    - name: Ubuntu 18.04 + gcc
+      os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      script:
+        - sh Scripts/travis_build_docker.sh
+    - name: Ubuntu 18.10 + gcc
+      os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      script:
+        - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.cosmic cosmic
+    - name: Ubuntu 19.04 + gcc
+      os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      script:
+        - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco disco
+    - name: Ubuntu 19.04 + gcc-latest
+      os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      script:
+        - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco.gcc-latest disco-gcc-latest
+    - name: Ubuntu 19.04 + clang-latest
+      os: linux
+      dist: trusty
+      services: docker
+      script:
+        - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco.clang-latest disco-clang-latest
+    - name: OS X 10.14 + Xcode 10.2 + clang
+      os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      script:
+        - sh Scripts/travis_build.sh
+
+  before_install:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - eval "${MATRIX_EVAL}"
+      
