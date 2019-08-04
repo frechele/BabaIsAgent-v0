@@ -19,9 +19,14 @@ set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 add_subdirectory(Libraries/googletest)
 
+add_subdirectory(Libraries/SFML)
+
 # Includes
 include_directories(Includes)
+include_directories(Libraries/SFML/include)
 
 # Project modules
 add_subdirectory(Sources/Baba)
 add_subdirectory(UnitTest)
+
+add_subdirectory(Extension/BabaGUI)
