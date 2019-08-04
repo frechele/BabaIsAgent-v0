@@ -15,7 +15,7 @@ matrix:
 configuration:
   - Release
 
-clone_folder: C:\BabaIsYou
+clone_folder: C:\BabaIsAgent
 
 install:
   - git submodule update --init
@@ -27,14 +27,14 @@ install:
       }
 
 before_build:
-  - md C:\BabaIsYou\build
-  - cd C:\BabaIsYou\build
+  - md C:\BabaIsAgent\build
+  - cd C:\BabaIsAgent\build
   - cmake .. -G "%CMAKE_GENERATOR%" -A x64
 
 build:
-  project: C:\BabaIsYou\build\BabaIsYou.sln
+  project: C:\BabaIsAgent\build\BabaIsAgent.sln
   parallel: true
   verbosity: normal
 
 after_build:
-  - C:\BabaIsYou\build\bin\Release\UnitTest.exe
+  - C:\BabaIsAgent\build\bin\Release\UnitTest.exe
