@@ -27,7 +27,7 @@ class EmptyBlock final : public Entity
 class EmptyText final : public Entity
 {
  public:
-	//! Default destructor
+    //! Default destructor
     virtual ~EmptyText() = default;
 
     //! Return entity type

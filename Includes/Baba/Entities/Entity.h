@@ -18,7 +18,7 @@ class Entity
 
     //! Return entity type
     //! \return returned entity type
-	virtual EntityType GetType() const = 0;
+    virtual EntityType GetType() const = 0;
 };
 }  // namespace Baba
 
