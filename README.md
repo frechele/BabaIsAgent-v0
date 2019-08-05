@@ -53,3 +53,5 @@ This project is based on [GNU General Public License v3](https://opensource.org/
 Copyright(C) 2019 BabaIsAgent Team
 - [Junyeong Park](https://github.com/JYPark09)
 - [Hyeonsu Kim](https://github.com/git-rla)
+- [Taehwan Yu](https://github.com/PhoenixPlanet)
+- [Inyeong Park](https://github.com/clwmrndl92)
