@@ -10,11 +10,12 @@ namespace Baba
 //!
 enum class Action
 {
-    UP,
+    UP = 0,
     DOWN,
     LEFT,
     RIGHT,
-    STAY
+    STAY,
+    COUNT
 };
 }  // namespace Baba
 

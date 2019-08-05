@@ -10,8 +10,7 @@ Action RandomAgent::GetAction([[maybe_unused]]const Game& state)
 {
     using Random = effolkronium::random_static;
 
-    auto actions = { Action::UP, Action::DOWN, Action::LEFT, Action::RIGHT, Action::STAY };
-
-    return Random::get(actions);
+    return static_cast<Action>(
+        Random::get(0, static_cast<int>(Action::COUNT)));
 }
 }  // namespace Baba
