@@ -37,7 +37,9 @@ ObjectBuilder& ObjectBuilder::SetEffects(std::vector<EffectType> effects)
 {
     for (auto& effect : effects)
     {
-        object_->effects_.set(static_cast<int>(effect));
+        EffectsBitset bitset;
+        bitset.set(static_cast<int>(effect));
+        object_->enchants_.emplace(-1, bitset);
     }
 
     return *this;
