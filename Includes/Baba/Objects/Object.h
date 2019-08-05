@@ -26,7 +26,7 @@ class Object
     //! Default destructor
     ~Object() = default;
 
-    std::bitset<static_cast<int>(EffectType::COUNT)> effects_;
+    std::bitset<static_cast<std::size_t>(EffectType::COUNT)> effects_;
     ObjectType type_ = ObjectType::INVALID;
     EffectType effectType_ = EffectType::INVALID;
 };
