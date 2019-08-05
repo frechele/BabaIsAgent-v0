@@ -16,8 +16,8 @@ namespace Baba
 class GameRules final
 {
  private:
-    //! Constructor
-    GameRules();
+    //! Defalaut constructor
+    GameRules() = default;
 
  public:
     //! Default destructor
