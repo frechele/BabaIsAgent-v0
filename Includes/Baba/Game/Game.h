@@ -35,11 +35,21 @@ class Game final
     //! \return Object in that position vector
     const Object::Arr& At(std::size_t x, std::size_t y) const;
 
+    //! Put object in that position
+    //! \param x x position
+    //! \param y y position
+    //! \param object reference of object
+    void Put(std::size_t x, std::size_t y, Object& object);
+
     //! Find objects by type
     //! \param Object's type
     //! \return Objects having the same \p type
     Object::Arr FindObjectsByType(ObjectType type) const;
-
+    
+    //! Find objects by Property
+    //! \param property Object's property
+    //! \return Objects having the same \p property
+    Object::Arr FindObjectsByProperty(EffectType property) const;
  private:
     std::size_t width_, height_;
     std::vector<Object::Arr> map_;
