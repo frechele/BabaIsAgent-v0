@@ -15,15 +15,12 @@ namespace Baba
 //!
 class GameRules final
 {
- private:
+ public:
     //! Defalaut constructor
     GameRules() = default;
 
- public:
     //! Default destructor
     ~GameRules() = default;
-
-    static GameRules& GetInstance();
 
     //! Add base rule.
     //! \param target target's type.

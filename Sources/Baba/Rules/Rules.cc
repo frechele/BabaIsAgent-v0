@@ -4,12 +4,6 @@
 
 namespace Baba
 {
-GameRules& GameRules::GetInstance()
-{
-    static GameRules instance;
-    return instance;
-}
-
 const int GameRules::AddBaseRule(ObjectType target, std::string_view verb, EffectType effect)
 {
     ++ruleCount;
