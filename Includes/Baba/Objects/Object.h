@@ -5,6 +5,7 @@
 
 #include <Baba/Enums/ObjectType.h>
 
+#include <bitset>
 #include <vector>
 
 namespace Baba
@@ -25,7 +26,8 @@ class Object
     //! Default destructor
     ~Object() = default;
 
-    std::string type_;
+    std::bitset<static_cast<int>(EffectType::COUNT)> effects_;
+    ObjectType type_;
 };
 }  // namespace Baba
 
