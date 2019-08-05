@@ -25,7 +25,7 @@ class Object
     //! Default destructor
     ~Object() = default;
 
-    std::string name_;
+    std::string type_;
 };
 }  // namespace Baba
 
