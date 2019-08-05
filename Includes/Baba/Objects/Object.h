@@ -27,7 +27,8 @@ class Object
     ~Object() = default;
 
     std::bitset<static_cast<int>(EffectType::COUNT)> effects_;
-    ObjectType type_;
+    ObjectType type_ = ObjectType::INVALID;
+    EffectType effectType_ = EffectType::INVALID;
 };
 }  // namespace Baba
 
