@@ -12,8 +12,9 @@ GameRules& GameRules::GetInstance()
 
 const int GameRules::AddBaseRule(ObjectType target, std::string_view verb, EffectType effect)
 {
-    rules_.emplace_back(target, verb, effect, ruleCount);
     ++ruleCount;
+    rules_.emplace_back(target, verb, effect, ruleCount);
+    return ruleCount;
 }
 
 void GameRules::DeleteRule(const int& ruleID)
