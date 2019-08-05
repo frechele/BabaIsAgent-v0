@@ -23,7 +23,7 @@ class GameRules final
     //! Default destructor
     ~GameRules() = default;
 
-    GameRules& GetInstance();
+    static GameRules& GetInstance();
 
     //! Add base rule.
     //! \param target target's type.
