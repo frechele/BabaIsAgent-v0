@@ -3,6 +3,8 @@
 #ifndef BABA_OBJECT_TYPE_H
 #define BABA_OBJECT_TYPE_H
 
+#include <string>
+
 namespace Baba
 {
 //!
@@ -10,13 +12,21 @@ namespace Baba
 //!
 enum class ObjectType
 {
+    INVALID,
 #define TEXT(a) TEXT_##a,
 #define BLOCK(a) a, TEXT_##a,
 #include "ObjectType.def"
 #undef TEXT
 #undef BLOCK
+};
 
-    INVALID,
+const std::string OBJECT_TYPE_STR[] {
+    "INVALID",
+#define TEXT(a) "TEXT_"#a,
+#define BLOCK(a) #a, "TEXT_"#a,
+#include "ObjectType.def"
+#undef TEXT
+#undef BLOCK
 };
 }  // namespace Baba
 
