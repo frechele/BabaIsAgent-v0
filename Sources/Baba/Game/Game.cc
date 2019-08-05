@@ -28,13 +28,12 @@ const Object::Arr& Game::At(std::size_t x, std::size_t y) const
 Object::Arr Game::FindObjectsByType(ObjectType type) const
 {
     Object::Arr result;
-    auto& t = OBJECT_TYPE_STR[static_cast<unsigned int>(type)];
 
     for (auto& objs : map_)
     {
         for (Object* obj : objs)
         {
-            if (obj->type_ == t)
+            if (obj->type_ == type)
             {
                 result.emplace_back(obj);
             }

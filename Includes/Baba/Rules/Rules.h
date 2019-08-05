@@ -30,7 +30,7 @@ class GameRules final
     //! \param verb verb's type.
     //! \param effect effect's type.
     //! \return id of rule.
-    const int AddBaseRule(std::string_view target, std::string_view verb, std::string_view effect);
+    const int AddBaseRule(ObjectType target, std::string_view verb, EffectType effect);
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.

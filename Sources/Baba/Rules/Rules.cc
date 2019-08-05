@@ -1,4 +1,4 @@
-// Copyright(c) 2019 Junyeong Park
+// Copyright(c) 2019 Junyeong Park, Hyeonsu Kim
 
 #include <Baba/Rules/Rules.h>
 
@@ -10,7 +10,7 @@ GameRules& GameRules::GetInstance()
     return instance;
 }
 
-const int GameRules::AddBaseRule(std::string_view target, std::string_view verb, std::string_view effect)
+const int GameRules::AddBaseRule(ObjectType target, std::string_view verb, EffectType effect)
 {
     rules_.emplace_back(target, verb, effect, ruleCount);
     ++ruleCount;

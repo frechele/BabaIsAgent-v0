@@ -17,13 +17,13 @@ class Rule
 {
  public:
     //! Constructor
-    Rule(std::string_view target, std::string_view verb, std::string_view effect, int ruleID);
+    Rule(ObjectType target, std::string_view verb, EffectType effect, int ruleID);
 
     //! Default destructor
     virtual ~Rule() = default;
 
-    std::string target_;
-    std::string effect_;
+    ObjectType target_;
+    EffectType effect_;
     std::string verb_;
 
     int ruleID_;
