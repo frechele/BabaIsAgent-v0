@@ -6,7 +6,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/615531ce885443ec981e7aee0b6388de)](https://www.codacy.com/app/JYPark09/BabaIsAgent?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=JYPark09/BabaIsAgent&amp;utm_campaign=Badge_Grade)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/JYPark09/BabaIsAgent.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JYPark09/BabaIsAgent/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/JYPark09/BabaIsAgent.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JYPark09/BabaIsAgent/context:cpp)  
-BabaIsAgent is [Baba Is You](https://store.steampowered.com/app/736260/Baba_Is_You/) simulation for Reinforcement Learning.  
+Baba Is Agent is [Baba Is You](https://store.steampowered.com/app/736260/Baba_Is_You/) simulation for Reinforcement Learning.  
 This project is a research project at [OOPArts](https://www.facebook.com/OOPArts-%EC%98%A4%ED%8C%8C%EC%B8%A0-1232318310248618/).
 
 ## Key Features
@@ -38,7 +38,7 @@ make
 ```
 mkdir build
 cd build
-cmake .. -G"Visual Studio 16 2019" -A x64
+cmake .. -G "Visual Studio 16 2019" -A x64
 MSBuild BabaIsAgent.sln /p:Configuration=Release
 ```
 
@@ -49,9 +49,13 @@ You can contact us using the following means.
 - github issue
 
 ## License
-This project is based on [GNU General Public License v3](https://opensource.org/licenses/GPL-3.0).  
-Copyright(C) 2019 BabaIsAgent Team
+This project is based on [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0).  
+  
+Copyright(C) 2019 Baba Is Agent Team
 - [Junyeong Park](https://github.com/JYPark09)
 - [Hyeonsu Kim](https://github.com/git-rla)
 - [Taehwan Yu](https://github.com/PhoenixPlanet)
 - [Inyeong Park](https://github.com/clwmrndl92)
+- [Sooyeon Kim](https://github.com/estela19)
+- [Gyeonguk Chae](https://github.com/ShyRoute)
+- [Sangyun Chung](https://github.com/starga2er)
