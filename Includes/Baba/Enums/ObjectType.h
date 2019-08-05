@@ -25,6 +25,7 @@ enum class ObjectType
 enum class EffectType
 {
     INVALID,
+    TEXT,
 #define TEXT(a)
 #define BLOCK(a) a,
 #define PROPERTY(a) a,
@@ -48,6 +49,7 @@ const std::string OBJECT_TYPE_STR[] {
 
 const std::string EFFECT_TYPE_STR[] {
     "INVALID",
+    "TEXT",
 #define TEXT(a)
 #define PROPERTY(a) #a,
 #define BLOCK(a) #a,
