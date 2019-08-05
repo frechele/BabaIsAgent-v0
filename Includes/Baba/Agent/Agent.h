@@ -4,6 +4,7 @@
 #define BABA_AGENT_H
 
 #include <Baba/Enums/Action.h>
+#include <Baba/Game/Game.h>
 
 namespace Baba
 {
@@ -17,7 +18,9 @@ class Agent
     virtual ~Agent() = default;
 
     //! Generate agent's action
-    virtual Action GetAction() = 0;
+    //! \param state Current game state
+    //! \return Generated agent's action
+    virtual Action GetAction(const Game& state) = 0;
 };
 }  // namespace Baba
 

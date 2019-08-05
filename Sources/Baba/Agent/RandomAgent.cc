@@ -6,7 +6,7 @@
 
 namespace Baba
 {
-Action RandomAgent::GetAction()
+Action RandomAgent::GetAction([[maybe_unused]]const Game& state)
 {
     using Random = effolkronium::random_static;
 

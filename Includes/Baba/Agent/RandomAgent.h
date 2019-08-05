@@ -17,7 +17,9 @@ class RandomAgent : public Agent
     virtual ~RandomAgent() = default;
 
     //! Generate agent's action
-    virtual Action GetAction() override;
+    //! \param state Current game state
+    //! \return Generated agent's action
+    virtual Action GetAction(const Game& state) override;
 };
 }  // namespace Baba
 
