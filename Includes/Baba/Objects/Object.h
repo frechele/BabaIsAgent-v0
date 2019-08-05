@@ -5,6 +5,8 @@
 
 #include <Baba/Enums/ObjectType.h>
 
+#include <vector>
+
 namespace Baba
 {
 //!
@@ -12,6 +14,10 @@ namespace Baba
 //!
 class Object
 {
+ public:
+     //! Pointer vector wrapper
+     using Arr = std::vector<Object*>;
+
  public:
     //! Constructor
     Object();
