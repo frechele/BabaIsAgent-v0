@@ -6,10 +6,12 @@
 #include <Baba/Enums/ObjectType.h>
 
 #include <bitset>
+#include <map>
 #include <vector>
 
 namespace Baba
 {
+using EffectsBitset = std::bitset<static_cast<std::size_t>(EffectType::COUNT)>;
 //!
 //! \brief Object that conists level
 //!
@@ -26,7 +28,9 @@ class Object
     //! Default destructor
     ~Object() = default;
 
-    std::bitset<static_cast<std::size_t>(EffectType::COUNT)> effects_;
+    const EffectsBitset GetEffects() const;
+
+    std::map<std::size_t, EffectsBitset> enchants_;
     ObjectType type_ = ObjectType::INVALID;
     EffectType effectType_ = EffectType::INVALID;
 };

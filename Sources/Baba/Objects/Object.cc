@@ -8,4 +8,16 @@ Object::Object()
 {
     // Do nothing
 }
+
+const EffectsBitset Object::GetEffects() const
+{
+    EffectsBitset result;
+
+    for (const auto& enchant : enchants_)
+    {
+        result |= enchant.second;
+    }
+
+    return result;
+}
 }  // namespace Baba

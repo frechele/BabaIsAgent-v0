@@ -31,5 +31,5 @@ TEST(ObjectBuilderTest, BuildText)
     
     EXPECT_EQ(object->type_, ObjectType::TEXT_BABA);
     EXPECT_EQ(object->effectType_, EffectType::BABA);
-    EXPECT_TRUE(object->effects_.test(static_cast<std::size_t>(EffectType::TEXT)));
+    EXPECT_TRUE(object->GetEffects().test(static_cast<std::size_t>(EffectType::TEXT)));
 }
