@@ -27,6 +27,9 @@ add_subdirectory(Libraries/spdlog)
 include_directories(Includes)
 include_directories(Libraries/SFML/include)
 
+# Compile options
+include(CMake/CompileOptions.cmake)
+
 # Project modules
 add_subdirectory(Sources/Baba)
 add_subdirectory(UnitTest)
