@@ -19,7 +19,7 @@ void GameRules::DeleteRule(const int& ruleID)
         {
             i = rules_.erase(i);
         }
-        else
+        else if (i != rules_.end())
         {
             ++i;
         }
