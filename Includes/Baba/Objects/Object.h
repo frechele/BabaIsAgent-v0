@@ -16,18 +16,10 @@ class Object
     //! Constructor
     Object();
 
-    //! Constructor with ObjectType
-    Object(ObjectType type);
-
     //! Default destructor
-    virtual ~Object() = default;
+    ~Object() = default;
 
-    //! Return entity type
-    //! \return returned entity type
-    virtual ObjectType GetType() const = 0;
-
- private:
-    ObjectType type_;
+    std::string name_;
 };
 }  // namespace Baba
 
