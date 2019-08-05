@@ -23,8 +23,8 @@ class Rule
     virtual ~Rule() = default;
 
     ObjectType target_;
-    EffectType effect_;
     std::string verb_;
+    EffectType effect_;
 
     int ruleID_;
 };
