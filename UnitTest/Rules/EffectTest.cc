@@ -33,7 +33,7 @@ TEST(EffectTest, BABA)
     EXPECT_EQ(game.FindObjectsByType(ObjectType::KEKE).at(0), obj1);
     EXPECT_EQ(game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 
-    const int id = game.gameRules_.AddBaseRule(ObjectType::KEKE, "IS", EffectType::BABA);
+    game.gameRules_.AddBaseRule(ObjectType::KEKE, "IS", EffectType::BABA);
 
     game.ApplyRules();
 
@@ -53,7 +53,7 @@ TEST(EffectTest, MELT)
     
     game.Put(0, 0, *obj1);
 
-    const int id = game.gameRules_.AddBaseRule(ObjectType::BABA, "IS", EffectType::MELT);
+    game.gameRules_.AddBaseRule(ObjectType::BABA, "IS", EffectType::MELT);
 
     game.ApplyRules();
 
@@ -78,8 +78,8 @@ TEST(EffectTest, HOT)
     game.Put(0, 0, *obj1);
     game.Put(0, 0, *obj2);
 
-    const int id1 = game.gameRules_.AddBaseRule(ObjectType::BABA, "IS", EffectType::MELT);
-    const int id2 = game.gameRules_.AddBaseRule(ObjectType::KEKE, "IS", EffectType::HOT);
+    game.gameRules_.AddBaseRule(ObjectType::BABA, "IS", EffectType::MELT);
+    game.gameRules_.AddBaseRule(ObjectType::KEKE, "IS", EffectType::HOT);
 
     game.ApplyRules();
 
