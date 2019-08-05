@@ -8,7 +8,7 @@
 
 using namespace Baba;
 
-TEST(ObjectBuilder, BuildBlockTest)
+TEST(ObjectBuilderTest, BuildBlock)
 {
     ObjectBuilder builder;
     Object* object = builder.Init()
@@ -20,7 +20,7 @@ TEST(ObjectBuilder, BuildBlockTest)
     EXPECT_EQ(object->effectType_, EffectType::BABA);
 }
 
-TEST(ObjectBuilder, BuildTextTest)
+TEST(ObjectBuilderTest, BuildText)
 {
     ObjectBuilder builder;
     Object* object = builder.Init()
