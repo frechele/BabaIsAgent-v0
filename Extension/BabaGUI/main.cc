@@ -4,7 +4,7 @@
 
 #include <spdlog/spdlog.h>
 
-int main(int argc, char** argv)
+int main([[maybe_unused]]int argc, [[maybe_unused]]char** argv)
 {
     spdlog::info("BabaIsYou GUI");
 

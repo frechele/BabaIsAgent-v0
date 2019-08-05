@@ -9,3 +9,21 @@ target_link_libraries(${target}
 	PRIVATE
 	effolkronium_random
 )
+
+target_compile_options(${target}
+    PRIVATE
+
+    PUBLIC
+    ${DEFAULT_COMPILE_OPTIONS}
+
+    INTERFACE
+)
+
+target_link_libraries(${target}
+	PRIVATE
+
+    PUBLIC
+    ${DEFAULT_LINKER_OPTIONS}
+
+	INTERFACE
+)
