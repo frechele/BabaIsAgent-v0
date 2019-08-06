@@ -14,9 +14,7 @@ Effects& Effects::GetInstance()
 void Effects::EmplaceEffect(EffectType effectType,
                             std::function<void(Game&, Object&, Rule&)> func)
 {
-    auto decorated = [effectType, func]([[maybe_unused]] Game& game,
-                                        [[maybe_unused]] Object& target,
-                                        [[maybe_unused]] Rule& rule) {
+    auto decorated = [effectType, func](Game& game, Object& target, Rule& rule) {
         EffectsBitset bitset;
         bitset.set(static_cast<std::size_t>(effectType));
         target.enchants_.emplace(rule.ruleID_, bitset);
@@ -49,9 +47,7 @@ void Effects::ImplementNonBlockEffects()
     // MELT
     // Enchant target with MELT.
     // ----------------------------------------------------------------------
-    auto MeltEffect = [](Game& game,
-                         Object& target,
-                         Rule& rule) {
+    auto MeltEffect = [](Game& game, Object& target, Rule& rule) {
         (void)game;
         (void)target;
         (void)rule;
@@ -62,9 +58,7 @@ void Effects::ImplementNonBlockEffects()
     // HOT
     // Destroy any MELT object that is or intersects with it
     // ----------------------------------------------------------------------
-    auto HotEffect = []([[maybe_unused]] Game& game,
-                        [[maybe_unused]] Object& target,
-                        Rule& rule) {
+    auto HotEffect = [](Game& game, Object& target, Rule& rule) {
         (void)rule;
         
         auto objects = game.FindObjectsByPosition(target);
