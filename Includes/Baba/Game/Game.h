@@ -59,7 +59,7 @@ class Game final
     //! Find objects by Position of target
     //! \param target Object to provide position
     //! \return Objects havaing the same position as target
-    Object::Arr FindObjectsByPosition(const Object& object) const;
+    Object::Arr FindObjectsByPosition(const Object& target) const;
 
     //! Apply all rules 
     void ApplyRules();

@@ -84,13 +84,13 @@ Object::Arr Game::FindObjectsByProperty(EffectType property) const
     return result;
 }
 
-Object::Arr Game::FindObjectsByPosition(const Object& object) const
+Object::Arr Game::FindObjectsByPosition(const Object& target) const
 {
     for (auto& objs : map_)
     {
         for (Object* obj : objs)
         {
-            if (obj == &object)
+            if (obj == &target)
             {
                 return objs;
             }
