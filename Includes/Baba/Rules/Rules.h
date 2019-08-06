@@ -22,18 +22,27 @@ class GameRules final
     //! Default destructor
     ~GameRules() = default;
 
+    //! Returns a list of all rules.
+    //! \return A list of all rules.
+    const std::list<Rule>& GetAllRules();
+
+    //! Returns count of rules.
+    //! \return Count of rules.
+    int GetRuleCount() const;
+
     //! Add base rule.
     //! \param target target's type.
     //! \param verb verb's type.
     //! \param effect effect's type.
     //! \return id of rule.
-    const int AddBaseRule(ObjectType target, std::string_view verb, EffectType effect);
+    int AddBaseRule(ObjectType target, const std::string_view& verb, EffectType effect);
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.
-    void DeleteRule(const int& ruleID);
+    void DeleteRule(int ruleID);
 
-    int ruleCount = 0;
+ private:
+    int ruleCount_ = 0;
     std::list<Rule> rules_;
 };
 }  // namespace Baba

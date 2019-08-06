@@ -25,12 +25,12 @@ TEST(GameRulesTest, AddAndDeleteBaseRule)
     Game game(5, 5);
     const int id = game.gameRules.AddBaseRule(ObjectType::BABA, "IS", EffectType::TEXT);
     
-    EXPECT_EQ(game.gameRules.rules_.begin()->target, ObjectType::BABA);
-    EXPECT_EQ(game.gameRules.rules_.begin()->verb, "IS");
-    EXPECT_EQ(game.gameRules.rules_.begin()->effect, EffectType::TEXT);
-    EXPECT_EQ(game.gameRules.rules_.begin()->ruleID, id);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->target, ObjectType::BABA);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->verb, "IS");
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->effect, EffectType::TEXT);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->ruleID, id);
 
     game.gameRules.DeleteRule(id);
 
-    EXPECT_TRUE(game.gameRules.rules_.empty());
+    EXPECT_TRUE(game.gameRules.GetAllRules().empty());
 }

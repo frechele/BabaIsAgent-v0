@@ -102,8 +102,8 @@ Object::Arr Game::FindObjectsByPosition(const Object& object) const
 
 void Game::ApplyRules()
 {
-    auto& rules = gameRules.rules_;
-    auto& effects = Effects::GetInstance().effects_;
+    auto& rules = gameRules.GetAllRules();
+    auto& effects = Effects::GetInstance().effects;
 
     for (auto& rule : rules)
     {

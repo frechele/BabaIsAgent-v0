@@ -23,13 +23,16 @@ class Effects
     Effects();
 
  public:
+    using EffectFunc = std::function<void(Game&, Object&, const Rule&)>;
+
+ public:
     //! Default destructor
     ~Effects() = default;
 
     static Effects& GetInstance();
     
-    //! Emplace effect to effects_
-    void EmplaceEffect(EffectType effectType, std::function<void(Game&, Object&, Rule&)> func);
+    //! Emplace effect to effects
+    void EmplaceEffect(EffectType effectType, EffectFunc func);
 
     //! Implement effects of the texts that exist block.
     void ImplementBlockEffects();
@@ -37,7 +40,7 @@ class Effects
     //! Implement effects of the texts that don't exist block.
     void ImplementNonBlockEffects();
 
-    std::map<EffectType, std::function<void(Game&, Object&, Rule&)>> effects_;
+    std::map<EffectType, EffectFunc> effects;
 };
 }  // namespace Baba
 
