@@ -39,7 +39,7 @@ void Game::DestroyObject(Object& object)
     {
         for (auto obj = objs.begin(); obj != objs.end(); ++obj)
         {
-            if (*obj == &object)
+            if (**obj == object)
             {
                 objs.erase(obj);
                 return;
@@ -54,7 +54,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
 
     for (auto& objs : map_)
     {
-        for (Object* obj : objs)
+        for (auto& obj : objs)
         {
             if (obj->type == type)
             {
@@ -72,7 +72,7 @@ Object::Arr Game::FindObjectsByProperty(EffectType property) const
 
     for (auto& objs : map_)
     {
-        for (Object* obj : objs)
+        for (auto& obj : objs)
         {
             if (obj->GetEffects().test(static_cast<std::size_t>(property)))
             {
@@ -88,9 +88,9 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
 {
     for (auto& objs : map_)
     {
-        for (Object* obj : objs)
+        for (auto& obj : objs)
         {
-            if (obj == &target)
+            if (*obj == target)
             {
                 return objs;
             }

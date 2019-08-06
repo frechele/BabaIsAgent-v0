@@ -23,8 +23,7 @@ const EffectsBitset Object::GetEffects() const
 
 bool Object::operator==(const Object& other) const
 {
-    return (GetEffects() == other.GetEffects()) && (type == other.type) &&
-           (effectType == other.effectType);
+    return (this == &other);
 }
 
 bool Object::operator!=(const Object& other) const
