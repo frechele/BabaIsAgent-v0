@@ -2,6 +2,8 @@
 
 #include <Baba/Rules/Rules.h>
 
+#include <algorithm>
+
 namespace Baba
 {
 const int GameRules::AddBaseRule(ObjectType target, std::string_view verb, EffectType effect)
@@ -13,13 +15,9 @@ const int GameRules::AddBaseRule(ObjectType target, std::string_view verb, Effec
 
 void GameRules::DeleteRule(const int& ruleID)
 {
-    for (auto i = rules_.begin(); i != rules_.end(); ++i)
-    {
-        if (i->ruleID_ == ruleID)
-        {
-            rules_.erase(i);
-            return;
-        }
-    }
+    auto predicate = [ruleID](const Rule& rule)->bool{
+        return rule.ruleID_ == ruleID;
+    };
+    rules_.erase(std::remove_if(rules_.begin(), rules_.end(), predicate), rules_.end());
 }
 }  // namespace Baba
