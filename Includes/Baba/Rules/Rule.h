@@ -22,11 +22,11 @@ class Rule
     //! Default destructor
     virtual ~Rule() = default;
 
-    ObjectType target_;
-    std::string verb_;
-    EffectType effect_;
+    ObjectType target;
+    std::string verb;
+    EffectType effect;
 
-    int ruleID_;
+    int ruleID;
 };
 }  // namespace Baba
 

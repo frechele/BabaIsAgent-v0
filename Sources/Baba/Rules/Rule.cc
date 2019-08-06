@@ -5,7 +5,7 @@
 namespace Baba
 {
 Rule::Rule(ObjectType target, std::string_view verb, EffectType effect, int ruleID)
-    : target_(target), verb_(verb), effect_(effect), ruleID_(ruleID)
+    : target(target), verb(verb), effect(effect), ruleID(ruleID)
 {
     // Do nothing
 }

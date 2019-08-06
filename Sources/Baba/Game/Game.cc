@@ -107,21 +107,21 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.verb_ == "IS")
+        if (rule.verb == "IS")
         {
-            auto func = effects.at(rule.effect_);
-            auto targets = FindObjectsByType(rule.target_);
+            auto func = effects.at(rule.effect);
+            auto targets = FindObjectsByType(rule.target);
 
             for (auto& target : targets)
             {
                 func(*this, *target, rule);
             }  
         }
-        else if (rule.verb_ == "HAS")
+        else if (rule.verb == "HAS")
         {
             // Not implemented yet
         }
-        else if (rule.verb_ == "MAKE")
+        else if (rule.verb == "MAKE")
         {
             // Not implemented yet
         }

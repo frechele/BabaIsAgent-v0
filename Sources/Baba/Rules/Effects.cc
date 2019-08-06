@@ -17,7 +17,7 @@ void Effects::EmplaceEffect(EffectType effectType,
     auto decorated = [effectType, func](Game& game, Object& target, Rule& rule) {
         EffectsBitset bitset;
         bitset.set(static_cast<std::size_t>(effectType));
-        target.enchants_.emplace(rule.ruleID_, bitset);
+        target.enchants_.emplace(rule.ruleID, bitset);
 
         func(game, target, rule);
     };

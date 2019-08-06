@@ -16,7 +16,7 @@ const int GameRules::AddBaseRule(ObjectType target, std::string_view verb, Effec
 void GameRules::DeleteRule(const int& ruleID)
 {
     auto predicate = [ruleID](const Rule& rule)->bool{
-        return rule.ruleID_ == ruleID;
+        return rule.ruleID == ruleID;
     };
     rules_.erase(std::remove_if(rules_.begin(), rules_.end(), predicate), rules_.end());
 }
