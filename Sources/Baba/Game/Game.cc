@@ -115,6 +115,21 @@ void Game::ApplyRules()
     {
         if (rule.verb == "IS")
         {
+            auto targets = FindObjectsByType(rule.target);
+
+            for (auto& target : targets)
+            {
+                EffectsBitset bitset;
+                bitset.set(static_cast<std::size_t>(rule.effect));
+                target->enchants.emplace(rule.ruleID, bitset);
+            }
+        }
+    }
+
+    for (auto& rule : rules)
+    {
+        if (rule.verb == "IS")
+        {
             auto func = effects.at(rule.effect);
             auto targets = FindObjectsByType(rule.target);
 

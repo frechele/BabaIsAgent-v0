@@ -11,19 +11,6 @@ Effects& Effects::GetInstance()
     return instance;
 }
 
-void Effects::EmplaceEffect(EffectType effectType, EffectFunc func)
-{
-    auto decorated = [effectType, func](Game& game, Object& target, const Rule& rule) {
-        EffectsBitset bitset;
-        bitset.set(static_cast<std::size_t>(effectType));
-        target.enchants.emplace(rule.ruleID, bitset);
-
-        func(game, target, rule);
-    };
-
-    effects.emplace(effectType, decorated);
-}
-
 void Effects::ImplementBlockEffects()
 {
     // ----------------------------------------------------------------------
@@ -37,7 +24,7 @@ void Effects::ImplementBlockEffects()
         target.type = ObjectType::BABA;
         target.effectType = EffectType::BABA;
     };
-    EmplaceEffect(EffectType::BABA, BabaEffect);
+    effects.emplace(EffectType::BABA, BabaEffect);
 }
 
 void Effects::ImplementNonBlockEffects()
@@ -51,7 +38,7 @@ void Effects::ImplementNonBlockEffects()
         (void)target;
         (void)rule;
     };
-    EmplaceEffect(EffectType::MELT, MeltEffect);
+    effects.emplace(EffectType::MELT, MeltEffect);
 
     // ----------------------------------------------------------------------
     // HOT
@@ -71,7 +58,7 @@ void Effects::ImplementNonBlockEffects()
             }
         }
     };
-    EmplaceEffect(EffectType::HOT, HotEffect);
+    effects.emplace(EffectType::HOT, HotEffect);
 }
 
 Effects::Effects()

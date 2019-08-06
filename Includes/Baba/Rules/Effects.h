@@ -30,9 +30,6 @@ class Effects
     ~Effects() = default;
 
     static Effects& GetInstance();
-    
-    //! Emplace effect to effects
-    void EmplaceEffect(EffectType effectType, EffectFunc func);
 
     //! Implement effects of the texts that exist block.
     void ImplementBlockEffects();
