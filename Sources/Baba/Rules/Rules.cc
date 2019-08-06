@@ -6,17 +6,17 @@
 
 namespace Baba
 {
-const std::list<Rule>& GameRules::GetAllRules()
+const std::list<Rule>& Rules::GetAllRules()
 {
     return rules_;
 }
 
-int GameRules::GetRuleCount() const
+int Rules::GetRuleCount() const
 {
     return ruleCount_;
 }
 
-int GameRules::AddBaseRule(ObjectType target, const std::string_view& verb,
+int Rules::AddBaseRule(ObjectType target, const std::string_view& verb,
                            EffectType effect)
 {
     ++ruleCount_;
@@ -24,7 +24,7 @@ int GameRules::AddBaseRule(ObjectType target, const std::string_view& verb,
     return ruleCount_;
 }
 
-void GameRules::DeleteRule(int ruleID)
+void Rules::DeleteRule(int ruleID)
 {
     auto predicate = [ruleID](const Rule& rule) -> bool {
         return rule.ruleID == ruleID;

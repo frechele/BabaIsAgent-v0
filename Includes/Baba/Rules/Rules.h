@@ -13,14 +13,14 @@ namespace Baba
 //!
 //! \brief Game rule manager
 //!
-class GameRules final
+class Rules final
 {
  public:
     //! Defalaut constructor
-    GameRules() = default;
+    Rules() = default;
 
     //! Default destructor
-    ~GameRules() = default;
+    ~Rules() = default;
 
     //! Returns a list of all rules.
     //! \return A list of all rules.

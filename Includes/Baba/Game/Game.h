@@ -64,7 +64,7 @@ class Game final
     //! Apply all rules 
     void ApplyRules();
 
-    GameRules gameRules;
+    Rules gameRules;
  private:
     std::size_t width_, height_;
     std::vector<Object::Arr> map_;
