@@ -5,19 +5,29 @@
 namespace Baba
 {
 Object::Object()
-    : type_(ObjectType::INVALID)
 {
     // Do nothing
 }
 
-Object::Object(ObjectType type)
-    : type_(type)
+const EffectsBitset Object::GetEffects() const
 {
-    // Do nothing
+    EffectsBitset result;
+
+    for (const auto& enchant : enchants)
+    {
+        result |= enchant.second;
+    }
+
+    return result;
 }
 
-ObjectType Object::GetType() const
+bool Object::operator==(const Object& other) const
 {
-    return ObjectType::TEXT_EMPTY;
+    return (this == &other);
+}
+
+bool Object::operator!=(const Object& other) const
+{
+    return !(*this == other);
 }
 }  // namespace Baba
