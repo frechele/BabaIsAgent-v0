@@ -20,6 +20,9 @@ class ObjectBuilder
     //! Constructor
     ObjectBuilder();
 
+    //! Default destructor
+    ~ObjectBuilder() = default;
+
     //! Init ObjectBuilder class
     //! \return Return own reference.
     ObjectBuilder& Init();
@@ -40,9 +43,7 @@ class ObjectBuilder
     //! \return Return the created Object.
     Object* Build() const;
 
-    //! Default destructor
-    ~ObjectBuilder() = default;
-
+ private:
     Object* object_;
 };
 }  // namespace Baba

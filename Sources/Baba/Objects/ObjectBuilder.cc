@@ -7,7 +7,7 @@
 
 namespace Baba
 {
-ObjectBuilder::ObjectBuilder()
+ObjectBuilder::ObjectBuilder() : object_(nullptr)
 {
     // Do nothing
 }
