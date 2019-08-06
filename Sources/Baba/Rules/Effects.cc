@@ -64,7 +64,9 @@ void Effects::ImplementNonBlockEffects()
     // ----------------------------------------------------------------------
     auto HotEffect = []([[maybe_unused]] Game& game,
                         [[maybe_unused]] Object& target,
-                        [[maybe_unused]] Rule& rule) {
+                        Rule& rule) {
+        (void)rule;
+        
         auto objects = game.FindObjectsByPosition(target);
 
         for (auto& object : objects)
