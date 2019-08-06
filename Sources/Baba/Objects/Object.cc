@@ -13,11 +13,22 @@ const EffectsBitset Object::GetEffects() const
 {
     EffectsBitset result;
 
-    for (const auto& enchant : enchants_)
+    for (const auto& enchant : enchants)
     {
         result |= enchant.second;
     }
 
     return result;
+}
+
+bool Object::operator==(const Object& other) const
+{
+    return (GetEffects() == other.GetEffects()) && (type == other.type) &&
+           (effectType == other.effectType);
+}
+
+bool Object::operator!=(const Object& other) const
+{
+    return !(*this == other);
 }
 }  // namespace Baba

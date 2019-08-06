@@ -30,9 +30,12 @@ class Object
 
     const EffectsBitset GetEffects() const;
 
-    std::map<std::size_t, EffectsBitset> enchants_;
-    ObjectType type_ = ObjectType::INVALID;
-    EffectType effectType_ = EffectType::INVALID;
+    bool operator==(const Object& other) const;
+    bool operator!=(const Object& other) const;
+
+    std::map<std::size_t, EffectsBitset> enchants;
+    ObjectType type = ObjectType::INVALID;
+    EffectType effectType = EffectType::INVALID;
 };
 }  // namespace Baba
 

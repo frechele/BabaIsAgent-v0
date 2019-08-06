@@ -16,7 +16,7 @@ void Effects::EmplaceEffect(EffectType effectType, EffectFunc func)
     auto decorated = [effectType, func](Game& game, Object& target, const Rule& rule) {
         EffectsBitset bitset;
         bitset.set(static_cast<std::size_t>(effectType));
-        target.enchants_.emplace(rule.ruleID, bitset);
+        target.enchants.emplace(rule.ruleID, bitset);
 
         func(game, target, rule);
     };
@@ -34,8 +34,8 @@ void Effects::ImplementBlockEffects()
         (void)game;
         (void)rule;
 
-        target.type_ = ObjectType::BABA;
-        target.effectType_ = EffectType::BABA;
+        target.type = ObjectType::BABA;
+        target.effectType = EffectType::BABA;
     };
     EmplaceEffect(EffectType::BABA, BabaEffect);
 }

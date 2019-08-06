@@ -21,7 +21,7 @@ class ObjectBuilder
     ObjectBuilder();
 
     //! Default destructor
-    ~ObjectBuilder() = default;
+    ~ObjectBuilder();
 
     //! Init ObjectBuilder class
     //! \return Return own reference.
@@ -39,9 +39,9 @@ class ObjectBuilder
     //! \return Return own reference.
     ObjectBuilder& SetEffects(std::vector<EffectType> effects);
 
-    //! Get Object
-    //! \return Return the created Object.
-    Object* Build() const;
+    //! Returns a created Object
+    //! \return A created Object.
+    Object Build() const;
 
  private:
     Object* object_;

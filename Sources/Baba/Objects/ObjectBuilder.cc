@@ -12,23 +12,29 @@ ObjectBuilder::ObjectBuilder() : object_(nullptr)
     // Do nothing
 }
 
+ObjectBuilder::~ObjectBuilder()
+{
+    if (object_ != nullptr)
+        delete object_;
+}
+
 ObjectBuilder& ObjectBuilder::Init()
 {
     object_ = new Object();
-    
+
     return *this;
 }
 
 ObjectBuilder& ObjectBuilder::SetObjectType(ObjectType objectType)
 {
-    object_->type_ = objectType;
+    object_->type = objectType;
 
     return *this;
 }
 
 ObjectBuilder& ObjectBuilder::SetEffectType(EffectType effectType)
 {
-    object_->effectType_ = effectType;
+    object_->effectType = effectType;
 
     return *this;
 }
@@ -39,16 +45,17 @@ ObjectBuilder& ObjectBuilder::SetEffects(std::vector<EffectType> effects)
     {
         EffectsBitset bitset;
         bitset.set(static_cast<int>(effect));
-        object_->enchants_.emplace(-1, bitset);
+        object_->enchants.emplace(-1, bitset);
     }
 
     return *this;
 }
 
-Object* ObjectBuilder::Build() const
+Object ObjectBuilder::Build() const
 {
-    assert(object_->type_ == ObjectType::INVALID || object_->effectType_ == EffectType::INVALID);
+    assert(object_->type != ObjectType::INVALID &&
+           object_->effectType != EffectType::INVALID);
 
-    return object_;
+    return *object_;
 }
-} // namespace Baba
+}  // namespace Baba

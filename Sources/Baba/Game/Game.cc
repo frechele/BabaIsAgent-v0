@@ -56,7 +56,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     {
         for (Object* obj : objs)
         {
-            if (obj->type_ == type)
+            if (obj->type == type)
             {
                 result.emplace_back(obj);
             }
