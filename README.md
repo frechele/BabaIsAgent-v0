@@ -15,6 +15,7 @@ This project is a research project at [OOPArts](https://www.facebook.com/OOPArts
 
 ## To-do Features
 - [ ] Game simulation
+- [ ] GUI program
 - [ ] Level solver
 
 ## Quick Start
@@ -59,3 +60,4 @@ Copyright(C) 2019 Baba Is Agent Team
 - [Sooyeon Kim](https://github.com/estela19)
 - [Gyeonguk Chae](https://github.com/ShyRoute)
 - [Sangyun Chung](https://github.com/starga2er)
+- [Seokwon Moon](https://github.com/you4rin)
