@@ -36,6 +36,8 @@ class Object
     std::map<std::size_t, EffectsBitset> enchants;
     ObjectType type = ObjectType::INVALID;
     EffectType effectType = EffectType::INVALID;
+
+    bool isDestroyed = false;
 };
 }  // namespace Baba
 

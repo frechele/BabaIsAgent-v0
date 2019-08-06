@@ -28,6 +28,11 @@ const Object::Arr& Game::At(std::size_t x, std::size_t y) const
     return map_[x + y * width_];
 }
 
+ObjectBuilder& Game::Builder()
+{
+    return builder_;
+}
+
 void Game::Put(std::size_t x, std::size_t y, Object& object)
 {
     map_[x + y * width_].emplace_back(&object);
@@ -41,6 +46,7 @@ void Game::DestroyObject(Object& object)
         {
             if (**obj == object)
             {
+                (*obj)->isDestroyed = true;
                 objs.erase(obj);
                 return;
             }

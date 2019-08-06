@@ -15,17 +15,18 @@ using namespace Baba;
 TEST(EffectTest, BABA)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
 
-    Object obj1 = builder.Init()
-                         .SetObjectType(ObjectType::KEKE)
-                         .SetEffectType(EffectType::KEKE)
-                         .Build();
+    Object obj1 = game.Builder()
+                      .Init()
+                      .SetObjectType(ObjectType::KEKE)
+                      .SetEffectType(EffectType::KEKE)
+                      .Build();
 
-    Object obj2 = builder.Init()
-                         .SetObjectType(ObjectType::STAR)
-                         .SetEffectType(EffectType::STAR)
-                         .Build();
+    Object obj2 = game.Builder()
+                      .Init()
+                      .SetObjectType(ObjectType::STAR)
+                      .SetEffectType(EffectType::STAR)
+                      .Build();
     
     game.Put(0, 0, obj1);
     game.Put(1, 1, obj2);
@@ -44,12 +45,12 @@ TEST(EffectTest, BABA)
 TEST(EffectTest, MELT)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
 
-    Object obj1 = builder.Init()
-                         .SetObjectType(ObjectType::BABA)
-                         .SetEffectType(EffectType::BABA)
-                         .Build();
+    Object obj1 = game.Builder()
+                      .Init()
+                      .SetObjectType(ObjectType::BABA)
+                      .SetEffectType(EffectType::BABA)
+                      .Build();
     
     game.Put(0, 0, obj1);
 
@@ -63,17 +64,18 @@ TEST(EffectTest, MELT)
 TEST(EffectTest, HOT)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
 
-    Object obj1 = builder.Init()
-                         .SetObjectType(ObjectType::BABA)
-                         .SetEffectType(EffectType::BABA)
-                         .Build();
+    Object obj1 = game.Builder()
+                      .Init()
+                      .SetObjectType(ObjectType::BABA)
+                      .SetEffectType(EffectType::BABA)
+                      .Build();
 
-    Object obj2 = builder.Init()
-                         .SetObjectType(ObjectType::KEKE)
-                         .SetEffectType(EffectType::KEKE)
-                         .Build();
+    Object obj2 = game.Builder()
+                      .Init()
+                      .SetObjectType(ObjectType::KEKE)
+                      .SetEffectType(EffectType::KEKE)
+                      .Build();
 
     game.Put(0, 0, obj1);
     game.Put(0, 0, obj2);

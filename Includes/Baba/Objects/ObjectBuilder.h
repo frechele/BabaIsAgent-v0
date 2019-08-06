@@ -41,10 +41,11 @@ class ObjectBuilder
 
     //! Returns a created Object
     //! \return A created Object.
-    Object Build() const;
+    Object& Build();
 
  private:
     Object* object_;
+    std::vector<Object*> objects_;
 };
 }  // namespace Baba
 

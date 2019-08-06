@@ -15,13 +15,25 @@ ObjectBuilder::ObjectBuilder() : object_(nullptr)
 ObjectBuilder::~ObjectBuilder()
 {
     if (object_ != nullptr)
+    {
         delete object_;
+    }
+
+    for (auto& object : objects_)
+    {
+        delete object;
+    }
 }
 
 ObjectBuilder& ObjectBuilder::Init()
 {
-    object_ = new Object();
+    if (object_ != nullptr)
+    {
+        delete object_;
+    }
 
+    object_ = new Object();
+    
     return *this;
 }
 
@@ -51,11 +63,14 @@ ObjectBuilder& ObjectBuilder::SetEffects(std::vector<EffectType> effects)
     return *this;
 }
 
-Object ObjectBuilder::Build() const
+Object& ObjectBuilder::Build()
 {
     assert(object_->type != ObjectType::INVALID &&
            object_->effectType != EffectType::INVALID);
+    
+    Object* obj = object_;
+    object_ = nullptr;
 
-    return *object_;
+    return *obj;
 }
 }  // namespace Baba

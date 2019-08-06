@@ -4,6 +4,7 @@
 #define BABA_GAME_H
 
 #include <Baba/Objects/Object.h>
+#include <Baba/Objects/ObjectBuilder.h>
 #include <Baba/Rules/Rules.h>
 
 #include <vector>
@@ -35,6 +36,10 @@ class Game final
     //! \param y y position
     //! \return Object in that position vector
     const Object::Arr& At(std::size_t x, std::size_t y) const;
+
+    //! Get ObjectBuilder
+    //! \return own ObjectBuilder
+    ObjectBuilder& Builder();
 
     //! Put object in that position
     //! \param x x position
@@ -68,6 +73,7 @@ class Game final
  private:
     std::size_t width_, height_;
     std::vector<Object::Arr> map_;
+    ObjectBuilder builder_;
 };
 }  // namespace Baba
 
