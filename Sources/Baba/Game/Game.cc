@@ -41,6 +41,7 @@ void Game::DestroyObject(Object& object)
         {
             if (**obj == object)
             {
+                delete *obj;
                 objs.erase(obj);
                 return;
             }
