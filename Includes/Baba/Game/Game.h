@@ -3,8 +3,7 @@
 #ifndef BABA_GAME_H
 #define BABA_GAME_H
 
-#include <Baba/Objects/Object.h>
-#include <Baba/Objects/ObjectBuilder.h>
+#include <Baba/Game/Object.h>
 #include <Baba/Rules/Rules.h>
 
 #include <vector>
@@ -21,7 +20,7 @@ class Game final
     Game(std::size_t width, std::size_t height);
 
     //! Default destructor
-    ~Game() = default;
+    ~Game();
 
     //! Delete copy constructor
     Game(const Game&) = delete;
@@ -48,16 +47,12 @@ class Game final
     //! \param y y position
     //! \return Object in that position vector
     const Object::Arr& At(std::size_t x, std::size_t y) const;
-
-    //! Get ObjectBuilder
-    //! \return own ObjectBuilder
-    ObjectBuilder& Builder();
-
+    
     //! Put object in that position
     //! \param x x position
     //! \param y y position
-    //! \param object reference of object
-    void Put(std::size_t x, std::size_t y, Object& object);
+    //! \return Created object
+    Object& Put(std::size_t x, std::size_t y);
 
     //! Destory object
     //! \param object Object will be destroyed
@@ -85,7 +80,6 @@ class Game final
  private:
     std::size_t width_, height_;
     std::vector<Object::Arr> map_;
-    ObjectBuilder builder_;
 };
 }  // namespace Baba
 

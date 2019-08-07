@@ -3,7 +3,7 @@
 #ifndef BABA_RULE_H
 #define BABA_RULE_H
 
-#include <Baba/Objects/Object.h>
+#include <Baba/Game/Object.h>
 
 #include <string>
 #include <string_view>

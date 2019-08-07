@@ -13,6 +13,17 @@ Game::Game(std::size_t width, std::size_t height)
     // Do nothing
 }
 
+Game::~Game()
+{
+    for (auto& v : map_)
+    {
+        for (auto& c : v)
+        {
+            delete c;
+        }
+    }
+}
+
 std::size_t Game::GetWidth() const
 {
     return width_;
@@ -28,14 +39,11 @@ const Object::Arr& Game::At(std::size_t x, std::size_t y) const
     return map_[x + y * width_];
 }
 
-ObjectBuilder& Game::Builder()
+Object& Game::Put(std::size_t x, std::size_t y)
 {
-    return builder_;
-}
+    map_[x + y * width_].emplace_back(new Object);
 
-void Game::Put(std::size_t x, std::size_t y, Object& object)
-{
-    map_[x + y * width_].emplace_back(&object);
+    return *map_[x + y * width_].back();
 }
 
 void Game::DestroyObject(Object& object)
@@ -46,7 +54,7 @@ void Game::DestroyObject(Object& object)
         {
             if (**obj == object)
             {
-                (*obj)->isDestroyed = true;
+                (*obj)->Destroy();
                 objs.erase(obj);
                 return;
             }
@@ -62,7 +70,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     {
         for (auto& obj : objs)
         {
-            if (obj->type == type)
+            if (obj->GetType() == type)
             {
                 result.emplace_back(obj);
             }
@@ -119,9 +127,7 @@ void Game::ApplyRules()
 
             for (auto& target : targets)
             {
-                EffectsBitset bitset;
-                bitset.set(static_cast<std::size_t>(rule.GetEffect()));
-                target->enchants.emplace(rule.GetRuleID(), bitset);
+                target->SetEffect(rule.GetEffect(), rule.GetRuleID());
             }
         }
     }
@@ -136,7 +142,7 @@ void Game::ApplyRules()
             for (auto& target : targets)
             {
                 func(*this, *target, rule);
-            }  
+            }
         }
         else if (rule.GetVerb() == VerbType::HAS)
         {
@@ -148,7 +154,7 @@ void Game::ApplyRules()
         }
         else
         {
-            // throw 
+            // throw
         }
     }
 }

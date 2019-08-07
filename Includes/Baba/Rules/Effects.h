@@ -5,7 +5,7 @@
 
 #include <Baba/Enums/ObjectType.h>
 #include <Baba/Game/Game.h>
-#include <Baba/Objects/Object.h>
+#include <Baba/Game/Object.h>
 #include <Baba/Rules/Rule.h>
 
 #include <functional>
