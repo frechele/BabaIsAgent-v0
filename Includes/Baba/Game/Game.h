@@ -23,6 +23,18 @@ class Game final
     //! Default destructor
     ~Game() = default;
 
+    //! Delete copy constructor
+    Game(const Game&) = delete;
+
+    //! Delete move constructor
+    Game(Game&&) = delete;
+
+    //! Delete copy assignment operator
+    Game& operator=(const Game&) = delete;
+
+    //! Delete move assignment operator
+    Game& operator=(Game&&) = delete;
+
     //! Return level's width
     //! \return Returned level's width
     std::size_t GetWidth() const;

@@ -23,6 +23,18 @@ class ObjectBuilder
     //! Default destructor
     ~ObjectBuilder();
 
+    //! Delete copy constructor
+    ObjectBuilder(const ObjectBuilder&) = delete;
+
+    //! Delete move constructor
+    ObjectBuilder(ObjectBuilder&&) = delete;
+
+    //! Delete copy assignment operator
+    ObjectBuilder& operator=(const ObjectBuilder&) = delete;
+
+    //! Delete move assignment operator
+    ObjectBuilder& operator=(ObjectBuilder&&) = delete;
+    
     //! Init ObjectBuilder class
     //! \return Return own reference.
     ObjectBuilder& Init();
