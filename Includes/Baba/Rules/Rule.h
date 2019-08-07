@@ -39,9 +39,9 @@ class Rule
     int GetRuleID() const;
 
  private:
-    ObjectType target;
-    VerbType verb;
-    EffectType effect;
+    ObjectType target_;
+    VerbType verb_;
+    EffectType effect_;
 
     int ruleID;
 };
