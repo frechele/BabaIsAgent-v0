@@ -23,10 +23,10 @@ TEST(EnumTest, EffectToObject)
 TEST(GameRulesTest, AddAndDeleteBaseRule)
 {
     Game game(5, 5);
-    const int id = game.gameRules.AddBaseRule(ObjectType::BABA, "IS", EffectType::TEXT);
+    const int id = game.gameRules.AddBaseRule(ObjectType::BABA, VerbType::IS, EffectType::TEXT);
     
     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetTarget(), ObjectType::BABA);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), "IS");
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), VerbType::IS);
     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetEffect(), EffectType::TEXT);
     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetRuleID(), id);
 

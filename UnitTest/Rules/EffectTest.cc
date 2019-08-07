@@ -34,7 +34,7 @@ TEST(EffectTest, BABA)
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 
-    game.gameRules.AddBaseRule(ObjectType::KEKE, "IS", EffectType::BABA);
+    game.gameRules.AddBaseRule(ObjectType::KEKE, VerbType::IS, EffectType::BABA);
 
     game.ApplyRules();
 
@@ -54,7 +54,7 @@ TEST(EffectTest, MELT)
     
     game.Put(0, 0, obj1);
 
-    game.gameRules.AddBaseRule(ObjectType::BABA, "IS", EffectType::MELT);
+    game.gameRules.AddBaseRule(ObjectType::BABA, VerbType::IS, EffectType::MELT);
 
     game.ApplyRules();
 
@@ -80,8 +80,8 @@ TEST(EffectTest, HOT)
     game.Put(0, 0, obj1);
     game.Put(0, 0, obj2);
 
-    game.gameRules.AddBaseRule(ObjectType::BABA, "IS", EffectType::MELT);
-    game.gameRules.AddBaseRule(ObjectType::KEKE, "IS", EffectType::HOT);
+    game.gameRules.AddBaseRule(ObjectType::BABA, VerbType::IS, EffectType::MELT);
+    game.gameRules.AddBaseRule(ObjectType::KEKE, VerbType::IS, EffectType::HOT);
 
     game.ApplyRules();
 

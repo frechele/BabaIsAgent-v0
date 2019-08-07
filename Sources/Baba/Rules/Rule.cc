@@ -4,8 +4,7 @@
 
 namespace Baba
 {
-Rule::Rule(ObjectType target, std::string_view verb, EffectType effect,
-           int ruleID)
+Rule::Rule(ObjectType target, VerbType verb, EffectType effect, int ruleID)
     : target(target), verb(verb), effect(effect), ruleID(ruleID)
 {
     // Do nothing
@@ -16,7 +15,7 @@ ObjectType Rule::GetTarget() const
     return target;
 }
 
-const std::string& Rule::GetVerb() const
+VerbType Rule::GetVerb() const
 {
     return verb;
 }

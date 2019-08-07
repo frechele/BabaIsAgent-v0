@@ -17,7 +17,7 @@ class Rule
 {
  public:
     //! Constructor
-    Rule(ObjectType target, std::string_view verb, EffectType effect, int ruleID);
+    Rule(ObjectType target, VerbType verb, EffectType effect, int ruleID);
 
     //! Default destructor
     virtual ~Rule() = default;
@@ -28,7 +28,7 @@ class Rule
 
     //! Returns object's verb
     //! \return Object's verb
-    const std::string& GetVerb() const;
+    VerbType GetVerb() const;
     
     //! Returns effect's type
     //! \return Effect's type
@@ -40,7 +40,7 @@ class Rule
 
  private:
     ObjectType target;
-    std::string verb;
+    VerbType verb;
     EffectType effect;
 
     int ruleID;

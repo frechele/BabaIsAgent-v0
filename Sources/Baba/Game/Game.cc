@@ -113,7 +113,7 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == "IS")
+        if (rule.GetVerb() == VerbType::IS)
         {
             auto targets = FindObjectsByType(rule.GetTarget());
 
@@ -128,7 +128,7 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == "IS")
+        if (rule.GetVerb() == VerbType::IS)
         {
             auto func = effects.at(rule.GetEffect());
             auto targets = FindObjectsByType(rule.GetTarget());
@@ -138,11 +138,11 @@ void Game::ApplyRules()
                 func(*this, *target, rule);
             }  
         }
-        else if (rule.GetVerb() == "HAS")
+        else if (rule.GetVerb() == VerbType::HAS)
         {
             // Not implemented yet
         }
-        else if (rule.GetVerb() == "MAKE")
+        else if (rule.GetVerb() == VerbType::MAKE)
         {
             // Not implemented yet
         }

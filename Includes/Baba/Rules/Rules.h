@@ -47,8 +47,7 @@ class Rules final
     //! \param verb verb's type.
     //! \param effect effect's type.
     //! \return id of rule.
-    int AddBaseRule(ObjectType target, const std::string_view& verb,
-                    EffectType effect);
+    int AddBaseRule(ObjectType target, VerbType verb, EffectType effect);
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.
