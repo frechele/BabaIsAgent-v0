@@ -20,6 +20,11 @@ int Object::GetID() const
 
 Object& Object::SetType(ObjectType type)
 {
+    if (type == ObjectType::INVALID)
+    {
+        throw std::runtime_error("Invalid object type");
+    }
+
     type_ = type;
 
     return *this;
@@ -32,6 +37,11 @@ ObjectType Object::GetType() const
 
 Object& Object::SetEffectType(EffectType type)
 {
+    if (type == EffectType::INVALID)
+    {
+        throw std::runtime_error("Invalid effect type");
+    }
+
     this->effectType_ = type;
 
     return *this;
@@ -76,7 +86,9 @@ const EffectsBitset Object::GetEffects() const
 void Object::Destroy()
 {
     if (isDestroyed_)
+    {
         throw std::runtime_error("Already destroyed object");
+    }
 
     isDestroyed_ = true;
 }
