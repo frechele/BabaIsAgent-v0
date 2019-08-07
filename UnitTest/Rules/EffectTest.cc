@@ -22,8 +22,8 @@ TEST(EffectTest, BABA)
                        .SetType(ObjectType::STAR)
                        .SetEffectType(EffectType::STAR);
 
-    EXPECT_EQ(game.FindObjectsByType(ObjectType::KEKE).at(0), &obj1);
-    EXPECT_EQ(game.FindObjectsByType(ObjectType::STAR).at(0), &obj2);
+    EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj1);
+    EXPECT_EQ(*game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 
     game.gameRules.AddBaseRule(ObjectType::KEKE, VerbType::IS, EffectType::BABA);
 
@@ -45,7 +45,7 @@ TEST(EffectTest, MELT)
 
     game.ApplyRules();
 
-    EXPECT_EQ(game.FindObjectsByProperty(EffectType::MELT).at(0), &obj1);
+    EXPECT_EQ(*game.FindObjectsByProperty(EffectType::MELT).at(0), obj1);
 }
 
 TEST(EffectTest, HOT)

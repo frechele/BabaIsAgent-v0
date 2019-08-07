@@ -28,6 +28,20 @@ class Object
     //! Default destructor
     ~Object() = default;
 
+    //! Delete copy constructor
+    Object(const Object&) = delete;
+
+    //! Delete move constructor
+    Object(Object&&) = delete;
+
+    //! Delete copy assignment operator
+    Object& operator=(const Object&) = delete;
+
+    //! Delete move assignment operator
+    Object& operator=(Object&&) = delete;
+
+    int GetID() const;
+
     Object& SetType(ObjectType type);
     ObjectType GetType() const;
 
@@ -45,6 +59,7 @@ class Object
     bool operator!=(const Object& other) const;
 
  private:
+    int objectID_;
     std::map<std::size_t, EffectsBitset> enchants_;
     ObjectType type_ = ObjectType::INVALID;
     EffectType effectType_ = EffectType::INVALID;

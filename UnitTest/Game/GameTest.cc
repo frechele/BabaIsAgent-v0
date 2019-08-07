@@ -42,8 +42,8 @@ TEST(GameTest, FindObjectByType)
                        .SetType(ObjectType::KEKE)
                        .SetEffectType(EffectType::KEKE);
 
-    EXPECT_EQ(game.FindObjectsByType(ObjectType::BABA).at(0), &obj1);
-    EXPECT_EQ(game.FindObjectsByType(ObjectType::KEKE).at(0), &obj2);
+    EXPECT_EQ(*game.FindObjectsByType(ObjectType::BABA).at(0), obj1);
+    EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj2);
 }
 
 TEST(GameTest, FindObjectsByProperty)
@@ -59,7 +59,7 @@ TEST(GameTest, FindObjectsByProperty)
                        .SetEffectType(EffectType::KEKE)
                        .SetEffects({ EffectType::TEXT });
 
-    EXPECT_EQ(game.FindObjectsByProperty(EffectType::TEXT).at(0), &obj2);
+    EXPECT_EQ(*game.FindObjectsByProperty(EffectType::TEXT).at(0), obj2);
 }
 
 TEST(GameTest, FindObjectsByPosition)
@@ -73,6 +73,6 @@ TEST(GameTest, FindObjectsByPosition)
                        .SetType(ObjectType::KEKE)
                        .SetEffectType(EffectType::KEKE);
 
-    EXPECT_EQ(game.FindObjectsByPosition(obj1).at(0), &obj1);
-    EXPECT_EQ(game.FindObjectsByPosition(obj1).at(1), &obj2);
+    EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(0), obj1);
+    EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(1), obj2);
 }

@@ -8,7 +8,14 @@ namespace Baba
 {
 Object::Object()
 {
-    // Do nothing
+    static int ObjectID = 0;
+
+    objectID_ = ObjectID++;
+}
+
+int Object::GetID() const
+{
+    return objectID_;
 }
 
 Object& Object::SetType(ObjectType type)
@@ -81,7 +88,7 @@ bool Object::IsDestroyed() const
 
 bool Object::operator==(const Object& other) const
 {
-    return (this == &other);
+    return (objectID_ == other.objectID_);
 }
 
 bool Object::operator!=(const Object& other) const
