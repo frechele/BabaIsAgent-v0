@@ -22,6 +22,23 @@ class Rule
     //! Default destructor
     virtual ~Rule() = default;
 
+    //! Returns target object's type
+    //! \return Target object's type
+    ObjectType GetTarget() const;
+
+    //! Returns object's verb
+    //! \return Object's verb
+    const std::string& GetVerb() const;
+    
+    //! Returns effect's type
+    //! \return Effect's type
+    EffectType GetEffect() const;
+
+    //! Returns Rule's id
+    //! \return Rule's id
+    int GetRuleID() const;
+
+ private:
     ObjectType target;
     std::string verb;
     EffectType effect;

@@ -113,36 +113,36 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.verb == "IS")
+        if (rule.GetVerb() == "IS")
         {
-            auto targets = FindObjectsByType(rule.target);
+            auto targets = FindObjectsByType(rule.GetTarget());
 
             for (auto& target : targets)
             {
                 EffectsBitset bitset;
-                bitset.set(static_cast<std::size_t>(rule.effect));
-                target->enchants.emplace(rule.ruleID, bitset);
+                bitset.set(static_cast<std::size_t>(rule.GetEffect()));
+                target->enchants.emplace(rule.GetRuleID(), bitset);
             }
         }
     }
 
     for (auto& rule : rules)
     {
-        if (rule.verb == "IS")
+        if (rule.GetVerb() == "IS")
         {
-            auto func = effects.at(rule.effect);
-            auto targets = FindObjectsByType(rule.target);
+            auto func = effects.at(rule.GetEffect());
+            auto targets = FindObjectsByType(rule.GetTarget());
 
             for (auto& target : targets)
             {
                 func(*this, *target, rule);
             }  
         }
-        else if (rule.verb == "HAS")
+        else if (rule.GetVerb() == "HAS")
         {
             // Not implemented yet
         }
-        else if (rule.verb == "MAKE")
+        else if (rule.GetVerb() == "MAKE")
         {
             // Not implemented yet
         }

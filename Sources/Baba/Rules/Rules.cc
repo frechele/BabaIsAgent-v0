@@ -27,7 +27,7 @@ int Rules::AddBaseRule(ObjectType target, const std::string_view& verb,
 void Rules::DeleteRule(int ruleID)
 {
     auto predicate = [ruleID](const Rule& rule) -> bool {
-        return rule.ruleID == ruleID;
+        return rule.GetRuleID() == ruleID;
     };
     rules_.erase(std::remove_if(rules_.begin(), rules_.end(), predicate),
                  rules_.end());
