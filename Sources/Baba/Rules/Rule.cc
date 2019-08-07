@@ -5,7 +5,7 @@
 namespace Baba
 {
 Rule::Rule(ObjectType target, VerbType verb, EffectType effect, int ruleID)
-    : target_(target), verb_(verb), effect_(effect), ruleID(ruleID)
+    : target_(target), verb_(verb), effect_(effect), ruleID_(ruleID)
 {
     // Do nothing
 }
@@ -27,6 +27,6 @@ EffectType Rule::GetEffect() const
 
 int Rule::GetRuleID() const
 {
-    return ruleID;
+    return ruleID_;
 }
 }  // namespace Baba

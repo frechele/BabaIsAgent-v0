@@ -43,7 +43,7 @@ class Rule
     VerbType verb_;
     EffectType effect_;
 
-    int ruleID;
+    int ruleID_;
 };
 }  // namespace Baba
 
