@@ -21,8 +21,8 @@ void Effects::ImplementBlockEffects()
         (void)game;
         (void)rule;
 
-        target.type = ObjectType::BABA;
-        target.effectType = EffectType::BABA;
+        target.SetType(ObjectType::BABA);
+        target.SetEffectType(EffectType::BABA);
     };
     effects.emplace(EffectType::BABA, BabaEffect);
 }

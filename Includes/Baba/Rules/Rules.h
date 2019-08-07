@@ -22,6 +22,18 @@ class Rules final
     //! Default destructor
     ~Rules() = default;
 
+    //! Delete copy constructor
+    Rules(const Rules&) = delete;
+
+    //! Delete move constructor
+    Rules(Rules&&) = delete;
+
+    //! Delete copy assignment operator
+    Rules& operator=(const Rules&) = delete;
+
+    //! Delete move assignment operator
+    Rules& operator=(Rules&&) = delete;
+    
     //! Returns a list of all rules.
     //! \return A list of all rules.
     const std::list<Rule>& GetAllRules();
@@ -35,7 +47,7 @@ class Rules final
     //! \param verb verb's type.
     //! \param effect effect's type.
     //! \return id of rule.
-    int AddBaseRule(ObjectType target, const std::string_view& verb, EffectType effect);
+    int AddBaseRule(ObjectType target, VerbType verb, EffectType effect);
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.

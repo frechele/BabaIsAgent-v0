@@ -5,8 +5,7 @@
 #include <Baba/Enums/ObjectType.h>
 #include <Baba/Common/Utils.h>
 #include <Baba/Game/Game.h>
-#include <Baba/Objects/Object.h>
-#include <Baba/Objects/ObjectBuilder.h>
+#include <Baba/Game/Object.h>
 #include <Baba/Rules/Effects.h>
 #include <Baba/Rules/Rule.h>
 #include <Baba/Rules/Rules.h>
@@ -23,12 +22,12 @@ TEST(EnumTest, EffectToObject)
 TEST(GameRulesTest, AddAndDeleteBaseRule)
 {
     Game game(5, 5);
-    const int id = game.gameRules.AddBaseRule(ObjectType::BABA, "IS", EffectType::TEXT);
+    const int id = game.gameRules.AddBaseRule(ObjectType::BABA, VerbType::IS, EffectType::TEXT);
     
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->target, ObjectType::BABA);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->verb, "IS");
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->effect, EffectType::TEXT);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->ruleID, id);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetTarget(), ObjectType::BABA);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), VerbType::IS);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetEffect(), EffectType::TEXT);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetRuleID(), id);
 
     game.gameRules.DeleteRule(id);
 

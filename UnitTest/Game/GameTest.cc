@@ -4,8 +4,7 @@
 
 #include <Baba/Enums/ObjectType.h>
 #include <Baba/Game/Game.h>
-#include <Baba/Objects/Object.h>
-#include <Baba/Objects/ObjectBuilder.h>
+#include <Baba/Game/Object.h>
 
 using namespace Baba;
 
@@ -20,42 +19,28 @@ TEST(GameTest, GetHeighWidth)
 TEST(GameTest, Put)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
-
-    Object obj1 = builder.Init()
-                         .SetObjectType(ObjectType::BABA)
-                         .SetEffectType(EffectType::BABA)
-                         .Build();
-
-    Object obj2 = builder.Init()
-                         .SetObjectType(ObjectType::KEKE)
-                         .SetEffectType(EffectType::KEKE)
-                         .Build();
     
-    game.Put(0, 0, obj1);
-    game.Put(0, 0, obj2);
+    game.Put(0, 0)
+        .SetType(ObjectType::BABA)
+        .SetEffectType(EffectType::BABA);
+    game.Put(0, 0)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
 
-    EXPECT_EQ(game.At(0, 0).at(0)->type, ObjectType::BABA);
-    EXPECT_EQ(game.At(0, 0).at(1)->type, ObjectType::KEKE);
+    EXPECT_EQ(game.At(0, 0).at(0)->GetType(), ObjectType::BABA);
+    EXPECT_EQ(game.At(0, 0).at(1)->GetType(), ObjectType::KEKE);
 }
 
 TEST(GameTest, FindObjectByType)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
 
-    Object obj1 = builder.Init()
-                         .SetObjectType(ObjectType::BABA)
-                         .SetEffectType(EffectType::BABA)
-                         .Build();
-
-    Object obj2 = builder.Init()
-                         .SetObjectType(ObjectType::KEKE)
-                         .SetEffectType(EffectType::KEKE)
-                         .Build();
-    
-    game.Put(0, 0, obj1);
-    game.Put(0, 0, obj2);
+    Object& obj1 = game.Put(0, 0)
+                       .SetType(ObjectType::BABA)
+                       .SetEffectType(EffectType::BABA);
+    Object& obj2 = game.Put(0, 0)
+                       .SetType(ObjectType::KEKE)
+                       .SetEffectType(EffectType::KEKE);
 
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::BABA).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj2);
@@ -64,21 +49,14 @@ TEST(GameTest, FindObjectByType)
 TEST(GameTest, FindObjectsByProperty)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
-
-    Object obj1 = builder.Init()
-                         .SetObjectType(ObjectType::BABA)
-                         .SetEffectType(EffectType::BABA)
-                         .Build();
-
-    Object obj2 = builder.Init()
-                         .SetObjectType(ObjectType::KEKE)
-                         .SetEffectType(EffectType::KEKE)
-                         .SetEffects({ EffectType::TEXT })
-                         .Build();
     
-    game.Put(0, 0, obj1);
-    game.Put(0, 0, obj2);
+    game.Put(0, 0)
+        .SetType(ObjectType::BABA)
+        .SetEffectType(EffectType::BABA);
+    Object& obj2 = game.Put(0, 0)
+                       .SetType(ObjectType::KEKE)
+                       .SetEffectType(EffectType::KEKE)
+                       .SetEffects({ EffectType::TEXT });
 
     EXPECT_EQ(*game.FindObjectsByProperty(EffectType::TEXT).at(0), obj2);
 }
@@ -86,20 +64,13 @@ TEST(GameTest, FindObjectsByProperty)
 TEST(GameTest, FindObjectsByPosition)
 {
     Game game(5, 5);
-    ObjectBuilder builder;
 
-    Object obj1 = builder.Init()
-                          .SetObjectType(ObjectType::BABA)
-                          .SetEffectType(EffectType::BABA)
-                          .Build();
-
-    Object obj2 = builder.Init()
-                          .SetObjectType(ObjectType::KEKE)
-                          .SetEffectType(EffectType::KEKE)
-                          .Build();
-    
-    game.Put(0, 0, obj1);
-    game.Put(0, 0, obj2);
+    Object& obj1 = game.Put(0, 0)
+                       .SetType(ObjectType::BABA)
+                       .SetEffectType(EffectType::BABA);
+    Object& obj2 = game.Put(0, 0)
+                       .SetType(ObjectType::KEKE)
+                       .SetEffectType(EffectType::KEKE);
 
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(1), obj2);

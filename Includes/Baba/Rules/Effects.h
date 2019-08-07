@@ -5,7 +5,7 @@
 
 #include <Baba/Enums/ObjectType.h>
 #include <Baba/Game/Game.h>
-#include <Baba/Objects/Object.h>
+#include <Baba/Game/Object.h>
 #include <Baba/Rules/Rule.h>
 
 #include <functional>
@@ -28,6 +28,18 @@ class Effects
  public:
     //! Default destructor
     ~Effects() = default;
+
+    //! Delete copy constructor
+    Effects(const Effects&) = delete;
+
+    //! Delete move constructor
+    Effects(Effects&&) = delete;
+
+    //! Delete copy assignment operator
+    Effects& operator=(const Effects&) = delete;
+
+    //! Delete move assignment operator
+    Effects& operator=(Effects&&) = delete;
 
     static Effects& GetInstance();
 

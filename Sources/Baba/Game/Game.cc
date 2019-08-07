@@ -13,6 +13,15 @@ Game::Game(std::size_t width, std::size_t height)
     // Do nothing
 }
 
+Game::~Game()
+{
+    for (auto& obj : objects_)
+    {
+        delete obj;
+    }
+    objects_.clear();
+}
+
 std::size_t Game::GetWidth() const
 {
     return width_;
@@ -28,14 +37,12 @@ const Object::Arr& Game::At(std::size_t x, std::size_t y) const
     return map_[x + y * width_];
 }
 
-ObjectBuilder& Game::Builder()
+Object& Game::Put(std::size_t x, std::size_t y)
 {
-    return builder_;
-}
+    objects_.emplace_back(new Object);
+    map_[x + y * width_].emplace_back(objects_.back());
 
-void Game::Put(std::size_t x, std::size_t y, Object& object)
-{
-    map_[x + y * width_].emplace_back(&object);
+    return *map_[x + y * width_].back();
 }
 
 void Game::DestroyObject(Object& object)
@@ -46,7 +53,7 @@ void Game::DestroyObject(Object& object)
         {
             if (**obj == object)
             {
-                (*obj)->isDestroyed = true;
+                (*obj)->Destroy();
                 objs.erase(obj);
                 return;
             }
@@ -62,7 +69,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     {
         for (auto& obj : objs)
         {
-            if (obj->type == type)
+            if (obj->GetType() == type)
             {
                 result.emplace_back(obj);
             }
@@ -113,42 +120,40 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.verb == "IS")
+        if (rule.GetVerb() == VerbType::IS)
         {
-            auto targets = FindObjectsByType(rule.target);
+            auto targets = FindObjectsByType(rule.GetTarget());
 
             for (auto& target : targets)
             {
-                EffectsBitset bitset;
-                bitset.set(static_cast<std::size_t>(rule.effect));
-                target->enchants.emplace(rule.ruleID, bitset);
+                target->SetEffect(rule.GetEffect(), rule.GetRuleID());
             }
         }
     }
 
     for (auto& rule : rules)
     {
-        if (rule.verb == "IS")
+        if (rule.GetVerb() == VerbType::IS)
         {
-            auto func = effects.at(rule.effect);
-            auto targets = FindObjectsByType(rule.target);
+            auto func = effects.at(rule.GetEffect());
+            auto targets = FindObjectsByType(rule.GetTarget());
 
             for (auto& target : targets)
             {
                 func(*this, *target, rule);
-            }  
+            }
         }
-        else if (rule.verb == "HAS")
+        else if (rule.GetVerb() == VerbType::HAS)
         {
             // Not implemented yet
         }
-        else if (rule.verb == "MAKE")
+        else if (rule.GetVerb() == VerbType::MAKE)
         {
             // Not implemented yet
         }
         else
         {
-            // throw 
+            // throw
         }
     }
 }

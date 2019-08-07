@@ -24,6 +24,13 @@ enum class ObjectType
     COUNT,
 };
 
+enum class VerbType
+{
+    IS,
+    HAS,
+    MAKE
+};
+
 enum class EffectType
 {
     INVALID,
@@ -53,8 +60,8 @@ const std::string EFFECT_TYPE_STR[] {
     "INVALID",
     "TEXT",
 #define TEXT(a)
-#define PROPERTY(a) #a,
-#define BLOCK(a) #a,
+#define PROPERTY(a)#a,
+#define BLOCK(a)#a,
 #include "ObjectType.def"
 #undef TEXT
 #undef PROPERTY
