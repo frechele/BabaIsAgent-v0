@@ -50,10 +50,9 @@ TEST(GameTest, FindObjectsByProperty)
 {
     Game game(5, 5);
     
-    [[maybe_unused]]
-    Object& obj1 = game.Put(0, 0)
-                       .SetType(ObjectType::BABA)
-                       .SetEffectType(EffectType::BABA);
+    game.Put(0, 0)
+        .SetType(ObjectType::BABA)
+        .SetEffectType(EffectType::BABA);
     Object& obj2 = game.Put(0, 0)
                        .SetType(ObjectType::KEKE)
                        .SetEffectType(EffectType::KEKE)
