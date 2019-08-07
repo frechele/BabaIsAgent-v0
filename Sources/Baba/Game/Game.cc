@@ -15,13 +15,11 @@ Game::Game(std::size_t width, std::size_t height)
 
 Game::~Game()
 {
-    for (auto& v : map_)
+    for (auto& obj : objects_)
     {
-        for (auto& c : v)
-        {
-            delete c;
-        }
+        delete obj;
     }
+    objects_.clear();
 }
 
 std::size_t Game::GetWidth() const
@@ -41,7 +39,8 @@ const Object::Arr& Game::At(std::size_t x, std::size_t y) const
 
 Object& Game::Put(std::size_t x, std::size_t y)
 {
-    map_[x + y * width_].emplace_back(new Object);
+    objects_.emplace_back(new Object);
+    map_[x + y * width_].emplace_back(objects_.back());
 
     return *map_[x + y * width_].back();
 }

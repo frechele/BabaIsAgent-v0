@@ -79,6 +79,7 @@ class Game final
     Rules gameRules;
  private:
     std::size_t width_, height_;
+    Object::Arr objects_;
     std::vector<Object::Arr> map_;
 };
 }  // namespace Baba
