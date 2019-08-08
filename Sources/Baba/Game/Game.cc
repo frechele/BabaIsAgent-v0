@@ -202,7 +202,7 @@ void Game::ParseRules()
                 type == ObjectType::TEXT_HAS ||
                 type == ObjectType::TEXT_MAKE)
             {
-                if (obj->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)))
+                if (Utils::ValidateWord(*obj))
                 {
                     verbs.emplace_back(obj, GetPositionByObject(*obj));
                 }
@@ -239,8 +239,7 @@ void Game::ParseRules()
 
             for (auto& subject : At(x - dx, y - dy))
             {
-                if (subject->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)) &&
-                    subject->GetWordClass() == WordClass::NOUN)
+                if (Utils::ValidateWord(*subject, {WordClass::NOUN}))
                 {
                     subjects.emplace_back(subject);
                 }
@@ -248,9 +247,7 @@ void Game::ParseRules()
 
             for (auto& complement : At(x + dx, y + dy))
             {
-                if (complement->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)) &&
-                    (complement->GetWordClass() == WordClass::NOUN ||
-                     complement->GetWordClass() == WordClass::PROPERTY))
+                if (Utils::ValidateWord(*complement, {WordClass::NOUN, WordClass::PROPERTY}))
                 {
                     complements.emplace_back(complement);
                 }

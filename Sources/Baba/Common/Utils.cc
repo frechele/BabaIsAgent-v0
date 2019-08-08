@@ -18,4 +18,27 @@ ObjectType EffectToObject(EffectType effectType)
 
     return ObjectType::INVALID;
 }
+
+const bool ValidateWord(const Object& object)
+{
+    return object.GetEffects().test(static_cast<std::size_t>(EffectType::WORD));
+}
+
+const bool ValidateWord(const Object& object, std::vector<WordClass> filteredClasses)
+{
+    if (!ValidateWord(object))
+    {
+        return false;
+    }
+
+    for (auto& cls : filteredClasses)
+    {
+        if (object.GetWordClass() == cls)
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
 }  // namespace Baba
