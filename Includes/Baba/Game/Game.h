@@ -82,6 +82,9 @@ class Game final
     //! \return position of target
     const Pos GetPositionByObject(const Object& target) const;
 
+    //! Check position
+    const bool ValidatePosition(const std::size_t& x, const std::size_t& y) const;
+
     //! Apply all rules 
     void ApplyRules();
 

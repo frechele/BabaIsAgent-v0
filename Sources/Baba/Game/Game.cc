@@ -183,6 +183,11 @@ void Game::ApplyRules()
     }
 }
 
+const bool Game::ValidatePosition(const std::size_t& x, const std::size_t& y) const
+{
+    return x >= 0 && y >= 0 && x < width_ && y < height_;
+}
+
 void Game::ParseRules()
 {
     // Find verbs
@@ -205,8 +210,7 @@ void Game::ParseRules()
         }
     }
 
-    static std::size_t dx[] = {1, 0};
-    static std::size_t dy[] = {0, 1};
+    static std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
 
     // Syntax analyzing
     // The syntax currently implemented is:
@@ -217,14 +221,14 @@ void Game::ParseRules()
     {
         // [i == 0]: Read from left to right
         // [i == 1]: Read from up to down
-        for (std::size_t i = 0; i < 2; ++i)
+        //for (std::size_t i = 0; i < 2; ++i)
+        for (auto [dx, dy] : vec)
         {
             const auto [obj, pos] = verb;
             auto [x, y] = pos;
             
             // Check out of bounds
-            if ((x - dx[i]) < 0 || (y - dy[i]) < 0 ||
-                (x + dx[i]) >= width_ || (y + dy[i]) >= height_)
+            if (!(ValidatePosition(x - dx, y - dy) && ValidatePosition(x + dx, y + dy)))
             {
                 continue;
             }
@@ -233,7 +237,7 @@ void Game::ParseRules()
             Object::Arr subjects;
             Object::Arr complements;
 
-            for (auto& subject : At(x - dx[i], y - dy[i]))
+            for (auto& subject : At(x - dx, y - dy))
             {
                 if (subject->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)) &&
                     subject->GetWordClass() == WordClass::NOUN)
@@ -242,7 +246,7 @@ void Game::ParseRules()
                 }
             }
 
-            for (auto& complement : At(x + dx[i], y + dy[i]))
+            for (auto& complement : At(x + dx, y + dy))
             {
                 if (complement->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)) &&
                     (complement->GetWordClass() == WordClass::NOUN ||
