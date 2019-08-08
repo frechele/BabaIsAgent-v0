@@ -128,8 +128,8 @@ TEST(GameTest, ParseRules_Vertical_Center)
 
     auto& rule = *game.gameRules.GetAllRules().begin();
 
-    EXPECT_EQ(rule.GetTarget(), ObjectType::KEKE);
-    EXPECT_EQ(rule.GetVerb(), VerbType::IS);
+    EXPECT_EQ(rule.GetTarget(), EffectType::KEKE);
+    EXPECT_EQ(rule.GetVerb(), EffectType::IS);
     EXPECT_EQ(rule.GetEffect(), EffectType::BABA);
 
     game.ApplyRules();
@@ -168,8 +168,8 @@ TEST(GameTest, ParseRules_Horizontal_Center)
 
     auto& rule = *game.gameRules.GetAllRules().begin();
 
-    EXPECT_EQ(rule.GetTarget(), ObjectType::KEKE);
-    EXPECT_EQ(rule.GetVerb(), VerbType::IS);
+    EXPECT_EQ(rule.GetTarget(), EffectType::KEKE);
+    EXPECT_EQ(rule.GetVerb(), EffectType::IS);
     EXPECT_EQ(rule.GetEffect(), EffectType::BABA);
 
     game.ApplyRules();

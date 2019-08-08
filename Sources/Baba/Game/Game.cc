@@ -144,9 +144,9 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == VerbType::IS)
+        if (rule.GetVerb() == EffectType::IS)
         {
-            auto targets = FindObjectsByType(rule.GetTarget());
+            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
 
             for (auto& target : targets)
             {
@@ -157,21 +157,21 @@ void Game::ApplyRules()
 
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == VerbType::IS)
+        if (rule.GetVerb() == EffectType::IS)
         {
             auto func = effects.at(rule.GetEffect());
-            auto targets = FindObjectsByType(rule.GetTarget());
+            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
 
             for (auto& target : targets)
             {
                 func(*this, *target, rule);
             }
         }
-        else if (rule.GetVerb() == VerbType::HAS)
+        else if (rule.GetVerb() == EffectType::HAS)
         {
             // Not implemented yet
         }
-        else if (rule.GetVerb() == VerbType::MAKE)
+        else if (rule.GetVerb() == EffectType::MAKE)
         {
             // Not implemented yet
         }
@@ -262,7 +262,8 @@ void Game::ParseRules()
                 for (auto& complement : complements)
                 {
                     // Temporarily written code
-                    gameRules.AddBaseRule(Utils::EffectToObject(subject->GetEffectType()), VerbType::IS, complement->GetEffectType());
+                    gameRules.AddBaseRule(subject->GetEffectType(),
+                        std::get<0>(verb)->GetEffectType(), complement->GetEffectType());
                 }
             }
         }

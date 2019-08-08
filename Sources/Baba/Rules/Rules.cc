@@ -16,7 +16,7 @@ int Rules::GetRuleCount() const
     return ruleCount_;
 }
 
-int Rules::AddBaseRule(ObjectType target, VerbType verb, EffectType effect)
+int Rules::AddBaseRule(EffectType target, EffectType verb, EffectType effect)
 {
     ++ruleCount_;
     rules_.emplace_back(target, verb, effect, ruleCount_);
