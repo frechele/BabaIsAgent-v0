@@ -133,7 +133,7 @@ Object::Arr Game::FilterObjectByFunction(const Object::Arr& objects,
     return result;
 }
 
-const Game::Pos Game::GetPositionByObject(const Object& target) const
+const Game::Point Game::GetPositionByObject(const Object& target) const
 {
     for (std::size_t y = 0; y < GetHeight(); y++)
     {
@@ -207,7 +207,7 @@ bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 void Game::ParseRules()
 {
     // Find verbs
-    std::vector<std::tuple<Object*, Pos>> verbs;
+    std::vector<std::tuple<Object*, Point>> verbs;
 
     for (auto& objs : map_)
     {
@@ -220,7 +220,7 @@ void Game::ParseRules()
         }
     }
 
-    static std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
+    constexpr std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
 
     // Syntax analyzing
     // The syntax currently implemented is:

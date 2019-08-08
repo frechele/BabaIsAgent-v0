@@ -57,7 +57,7 @@ enum class WordClass
     PROPERTY,
 };
 
-const std::string OBJECT_TYPE_STR[] {
+const std::vector<std::string> OBJECT_TYPE_STR {
     "INVALID",
 #define TEXT(a) "TEXT_"#a,
 #define VERB(a) "TEXT_"#a,
@@ -70,12 +70,12 @@ const std::string OBJECT_TYPE_STR[] {
 #undef BLOCK
 };
 
-const std::string EFFECT_TYPE_STR[] {
+const std::vector<std::string> EFFECT_TYPE_STR {
     "INVALID",
 #define TEXT(a)
 #define VERB(a)#a,
-#define PROPERTY(a)#a,
-#define BLOCK(a)#a,
+#define PROPERTY(a) #a,
+#define BLOCK(a) #a,
 #include "ObjectType.def"
 #undef TEXT
 #undef VERB
@@ -88,7 +88,7 @@ const std::vector<std::string> NOUN_TYPE_STR {
 #define TEXT(a)
 #define VERB(a)
 #define PROPERTY(a)
-#define BLOCK(a)#a,
+#define BLOCK(a) #a,
 #include "ObjectType.def"
 #undef TEXT
 #undef VERB
@@ -107,7 +107,7 @@ const std::vector<std::string> PROPERTY_TYPE_STR {
     "INVALID",
 #define TEXT(a)
 #define VERB(a)
-#define PROPERTY(a)#a,
+#define PROPERTY(a) #a,
 #define BLOCK(a)
 #include "ObjectType.def"
 #undef TEXT

@@ -18,9 +18,7 @@ ObjectType EffectToObject(EffectType effectType);
 bool ValidateWord(const Object& object);
 
 //! Check Word
-bool ValidateWord(const Object& object, std::vector<WordClass> classes);
-
-//! Filte
+bool ValidateWord(const Object& object, const std::vector<WordClass>& classes);
 }  // namespace Baba::Utils
 
 #endif  // BABA_UTILS_H
