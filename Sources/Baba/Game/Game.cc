@@ -220,7 +220,7 @@ void Game::ParseRules()
         }
     }
 
-    static std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
+    constexpr std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
 
     // Syntax analyzing
     // The syntax currently implemented is:
