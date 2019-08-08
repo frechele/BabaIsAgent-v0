@@ -18,7 +18,7 @@ class Game final
 {
  public:
     //! Location tuple wrapper
-    using Pos = std::tuple<std::size_t, std::size_t>;
+    using Point = std::tuple<std::size_t, std::size_t>;
 
  public:
     //! Constructor with level shape
@@ -88,7 +88,7 @@ class Game final
     //! Return target's position
     //! \param target target object
     //! \return position of target
-    const Pos GetPositionByObject(const Object& target) const;
+    const Point GetPositionByObject(const Object& target) const;
 
     //! Check position
     bool ValidatePosition(const std::size_t& x, const std::size_t& y) const;

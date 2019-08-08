@@ -133,7 +133,7 @@ Object::Arr Game::FilterObjectByFunction(const Object::Arr& objects,
     return result;
 }
 
-const Game::Pos Game::GetPositionByObject(const Object& target) const
+const Game::Point Game::GetPositionByObject(const Object& target) const
 {
     for (std::size_t y = 0; y < GetHeight(); y++)
     {
@@ -207,7 +207,7 @@ bool Game::ValidatePosition(const std::size_t& x, const std::size_t& y) const
 void Game::ParseRules()
 {
     // Find verbs
-    std::vector<std::tuple<Object*, Pos>> verbs;
+    std::vector<std::tuple<Object*, Point>> verbs;
 
     for (auto& objs : map_)
     {
