@@ -58,7 +58,7 @@ Object& Object::SetEffectType(EffectType type)
         }
     }
 
-    this->effectType_ = type;
+    effectType_ = type;
 
     return *this;
 }
