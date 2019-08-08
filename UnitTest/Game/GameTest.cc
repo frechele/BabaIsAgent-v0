@@ -101,26 +101,21 @@ TEST(GameTest, ParseRules_Vertical_Center)
 {
     Game game(10, 10);
 
-    Object& obj1 = game.Put(1, 1)
-                       .SetType(ObjectType::KEKE)
-                       .SetEffectType(EffectType::KEKE);
-    Object& obj2 = game.Put(5, 5)
-                       .SetType(ObjectType::TEXT_KEKE)
-                       .SetEffectType(EffectType::KEKE)
-                       .SetEffect(EffectType::WORD);
-    Object& obj3 = game.Put(6, 5)
-                       .SetType(ObjectType::TEXT_IS)
-                       .SetEffectType(EffectType::IS)
-                       .SetEffect(EffectType::WORD);
-    Object& obj4 = game.Put(7, 5)
-                       .SetType(ObjectType::TEXT_BABA)
-                       .SetEffectType(EffectType::BABA)
-                       .SetEffect(EffectType::WORD);
-
-    (void)obj1;
-    (void)obj2;
-    (void)obj3;
-    (void)obj4;
+    game.Put(1, 1)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_KEKE)
+        .SetEffectType(EffectType::KEKE)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 5)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(7, 5)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
 
     game.ParseRules();
 
@@ -141,26 +136,21 @@ TEST(GameTest, ParseRules_Horizontal_Center)
 {
     Game game(10, 10);
 
-    Object& obj1 = game.Put(1, 1)
-                       .SetType(ObjectType::KEKE)
-                       .SetEffectType(EffectType::KEKE);
-    Object& obj2 = game.Put(5, 5)
-                       .SetType(ObjectType::TEXT_KEKE)
-                       .SetEffectType(EffectType::KEKE)
-                       .SetEffect(EffectType::WORD);
-    Object& obj3 = game.Put(5, 6)
-                       .SetType(ObjectType::TEXT_IS)
-                       .SetEffectType(EffectType::IS)
-                       .SetEffect(EffectType::WORD);
-    Object& obj4 = game.Put(5, 7)
-                       .SetType(ObjectType::TEXT_BABA)
-                       .SetEffectType(EffectType::BABA)
-                       .SetEffect(EffectType::WORD);
-
-    (void)obj1;
-    (void)obj2;
-    (void)obj3;
-    (void)obj4;
+    game.Put(1, 1)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_KEKE)
+        .SetEffectType(EffectType::KEKE)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 6)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 7)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
 
     game.ParseRules();
 
@@ -181,40 +171,32 @@ TEST(GameTest, ParseRules_Cross)
 {
     Game game(10, 10);
 
-    Object& obj1 = game.Put(1, 1)
-                       .SetType(ObjectType::KEKE)
-                       .SetEffectType(EffectType::KEKE);
-    Object& obj2 = game.Put(5, 4)
-                       .SetType(ObjectType::TEXT_KEKE)
-                       .SetEffectType(EffectType::KEKE)
-                       .SetEffect(EffectType::WORD);
-    Object& obj3 = game.Put(5, 5)
-                       .SetType(ObjectType::TEXT_IS)
-                       .SetEffectType(EffectType::IS)
-                       .SetEffect(EffectType::WORD);
-    Object& obj4 = game.Put(5, 6)
-                       .SetType(ObjectType::TEXT_HOT)
-                       .SetEffectType(EffectType::HOT)
-                       .SetEffect(EffectType::WORD);
-    Object& obj5 = game.Put(4, 5)
-                       .SetType(ObjectType::TEXT_BABA)
-                       .SetEffectType(EffectType::BABA)
-                       .SetEffect(EffectType::WORD);
-    Object& obj6 = game.Put(6, 5)
-                       .SetType(ObjectType::TEXT_MELT)
-                       .SetEffectType(EffectType::MELT)
-                       .SetEffect(EffectType::WORD);      
-    Object& obj7 = game.Put(1, 1)
-                       .SetType(ObjectType::BABA)
-                       .SetEffectType(EffectType::BABA);  
-
-    (void)obj1;
-    (void)obj2;
-    (void)obj3;
-    (void)obj4;
-    (void)obj5;
-    (void)obj6;
-    (void)obj7;
+    game.Put(1, 1)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
+    game.Put(5, 4)
+        .SetType(ObjectType::TEXT_KEKE)
+        .SetEffectType(EffectType::KEKE)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 6)
+        .SetType(ObjectType::TEXT_HOT)
+        .SetEffectType(EffectType::HOT)
+        .SetEffect(EffectType::WORD);
+    game.Put(4, 5)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 5)
+        .SetType(ObjectType::TEXT_MELT)
+        .SetEffectType(EffectType::MELT)
+        .SetEffect(EffectType::WORD);      
+    game.Put(1, 1)
+        .SetType(ObjectType::BABA)
+        .SetEffectType(EffectType::BABA);  
 
     game.ParseRules();
 
