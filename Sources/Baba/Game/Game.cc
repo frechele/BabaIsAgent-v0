@@ -1,9 +1,12 @@
 // Copyright(c) 2019 Junyeong Park, Hyeonsu Kim
 
+#include <Baba/Common/Utils.h>
 #include <Baba/Game/Game.h>
 #include <Baba/Rules/Effects.h>
 #include <Baba/Rules/Rule.h>
 #include <Baba/Rules/Rules.h>
+
+#include <stdexcept>
 
 namespace Baba
 {
@@ -113,6 +116,27 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
     return Object::Arr();
 }
 
+const Game::Pos Game::GetPositionByObject(const Object& target) const
+{
+    for (std::size_t y = 0; y < GetHeight(); y++)
+    {
+        for (std::size_t x = 0; x < GetWidth(); x++)
+        {
+            const auto& objs = map_[x + y * width_];
+            
+            for (auto& obj : objs)
+            {
+                if (*obj == target)
+                {
+                    return {x, y};
+                }
+            }
+        }
+    }
+
+    throw std::runtime_error("Invalid target");
+}
+
 void Game::ApplyRules()
 {
     auto& rules = gameRules.GetAllRules();
@@ -154,6 +178,93 @@ void Game::ApplyRules()
         else
         {
             // throw
+        }
+    }
+}
+
+void Game::ParseRules()
+{
+    // Find verbs
+    std::vector<std::tuple<Object*, Pos>> verbs;
+
+    for (auto& objs : map_)
+    {
+        for (auto& obj : objs)
+        {
+            auto type = obj->GetType();
+            if (type == ObjectType::TEXT_IS || 
+                type == ObjectType::TEXT_HAS ||
+                type == ObjectType::TEXT_MAKE)
+            {
+                if (obj->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)))
+                {
+                    verbs.emplace_back(obj, GetPositionByObject(*obj));
+                }
+            }
+        }
+    }
+
+    static std::size_t dx[] = {1, 0};
+    static std::size_t dy[] = {0, 1};
+
+    // Syntax analyzing
+    // The syntax currently implemented is:
+    // 3 words:
+    // - NOUN VERB NOUN
+    // - NOUN VERB PROPERTY
+    for (auto& verb : verbs)
+    {
+        // [i == 0]: Read from left to right
+        // [i == 1]: Read from up to down
+        for (std::size_t i = 0; i < 2; ++i)
+        {
+            const auto [obj, pos] = verb;
+            auto [x, y] = pos;
+            
+            // Check out of bounds
+            if ((x - dx[i]) < 0 || (y - dy[i]) < 0 ||
+                (x + dx[i]) >= width_ || (y + dy[i]) >= height_)
+            {
+                continue;
+            }
+
+            // Check syntax
+            Object::Arr subjects;
+            Object::Arr complements;
+
+            for (auto& subject : At(x - dx[i], y - dy[i]))
+            {
+                if (subject->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)) &&
+                    subject->GetWordClass() == WordClass::NOUN)
+                {
+                    subjects.emplace_back(subject);
+                }
+            }
+
+            for (auto& complement : At(x + dx[i], y + dy[i]))
+            {
+                if (complement->GetEffects().test(static_cast<std::size_t>(EffectType::WORD)) &&
+                    (complement->GetWordClass() == WordClass::NOUN ||
+                     complement->GetWordClass() == WordClass::PROPERTY))
+                {
+                    complements.emplace_back(complement);
+                }
+            }
+
+            if (subjects.empty() || complements.empty())
+            {
+                continue;
+            }
+
+            // Make rules
+            for (auto& subject : subjects)
+            {
+                for (auto& complement : complements)
+                {
+                    // Temporarily written code
+                    gameRules.AddBaseRule(Utils::EffectToObject(subject->GetEffectType()), VerbType::IS, complement->GetEffectType());
+                }
+            }
         }
     }
 }

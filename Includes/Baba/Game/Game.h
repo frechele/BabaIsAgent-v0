@@ -16,6 +16,10 @@ namespace Baba
 class Game final
 {
  public:
+    //! Location tuple wrapper
+    using Pos = std::tuple<std::size_t, std::size_t>;
+
+ public:
     //! Constructor with level shape
     Game(std::size_t width, std::size_t height);
 
@@ -73,8 +77,16 @@ class Game final
     //! \return Objects havaing the same position as target
     Object::Arr FindObjectsByPosition(const Object& target) const;
 
+    //! Return target's position
+    //! \param target target object
+    //! \return position of target
+    const Pos GetPositionByObject(const Object& target) const;
+
     //! Apply all rules 
     void ApplyRules();
+
+    //! Parse rules
+    void ParseRules();
 
     Rules gameRules;
  private:
