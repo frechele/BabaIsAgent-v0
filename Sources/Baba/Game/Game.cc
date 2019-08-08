@@ -183,7 +183,7 @@ void Game::ApplyRules()
     }
 }
 
-const bool Game::ValidatePosition(const std::size_t& x, const std::size_t& y) const
+bool Game::ValidatePosition(const std::size_t& x, const std::size_t& y) const
 {
     return x >= 0 && y >= 0 && x < width_ && y < height_;
 }

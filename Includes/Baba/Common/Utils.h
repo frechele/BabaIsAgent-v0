@@ -15,10 +15,12 @@ namespace Baba::Utils
 ObjectType EffectToObject(EffectType effectType);
 
 //! Check Word
-const bool ValidateWord(const Object& object);
+bool ValidateWord(const Object& object);
 
 //! Check Word
-const bool ValidateWord(const Object& object, std::vector<WordClass> classes);
+bool ValidateWord(const Object& object, std::vector<WordClass> classes);
+
+//! Filte
 }  // namespace Baba::Utils
 
 #endif  // BABA_UTILS_H

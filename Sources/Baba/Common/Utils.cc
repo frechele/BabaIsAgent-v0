@@ -19,12 +19,12 @@ ObjectType EffectToObject(EffectType effectType)
     return ObjectType::INVALID;
 }
 
-const bool ValidateWord(const Object& object)
+bool ValidateWord(const Object& object)
 {
     return object.GetEffects().test(static_cast<std::size_t>(EffectType::WORD));
 }
 
-const bool ValidateWord(const Object& object, std::vector<WordClass> filteredClasses)
+bool ValidateWord(const Object& object, std::vector<WordClass> filteredClasses)
 {
     if (!ValidateWord(object))
     {
