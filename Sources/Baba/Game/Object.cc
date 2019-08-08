@@ -2,6 +2,7 @@
 
 #include <Baba/Game/Object.h>
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace Baba
