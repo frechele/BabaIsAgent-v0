@@ -6,6 +6,7 @@
 #include <Baba/Rules/Rule.h>
 #include <Baba/Rules/Rules.h>
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace Baba
