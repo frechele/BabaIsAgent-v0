@@ -265,7 +265,7 @@ void Game::ParseRules()
                 {
                     // Temporarily written code
                     gameRules.AddBaseRule(subject->GetEffectType(),
-                        std::get<0>(verb)->GetEffectType(), complement->GetEffectType());
+                        obj->GetEffectType(), complement->GetEffectType());
                 }
             }
         }
