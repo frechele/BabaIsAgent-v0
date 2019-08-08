@@ -6,6 +6,7 @@
 #include <Baba/Game/Object.h>
 #include <Baba/Rules/Rules.h>
 
+#include <functional>
 #include <vector>
 
 namespace Baba
@@ -15,6 +16,10 @@ namespace Baba
 //!
 class Game final
 {
+ public:
+    //! Location tuple wrapper
+    using Point = std::tuple<std::size_t, std::size_t>;
+
  public:
     //! Constructor with level shape
     Game(std::size_t width, std::size_t height);
@@ -73,8 +78,26 @@ class Game final
     //! \return Objects havaing the same position as target
     Object::Arr FindObjectsByPosition(const Object& target) const;
 
+    //! Filter objects by func
+    //! \param objects objects to be filtered
+    //! \param func function to classify objects
+    //! \return filtered objects
+    Object::Arr FilterObjectByFunction(const Object::Arr& objects,
+                                       std::function<bool(Object&)> func) const;
+
+    //! Return target's position
+    //! \param target target object
+    //! \return position of target
+    const Point GetPositionByObject(const Object& target) const;
+
+    //! Check position
+    bool ValidatePosition(const std::size_t& x, const std::size_t& y) const;
+
     //! Apply all rules 
     void ApplyRules();
+
+    //! Parse rules
+    void ParseRules();
 
     Rules gameRules;
  private:

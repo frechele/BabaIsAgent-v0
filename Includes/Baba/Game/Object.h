@@ -47,6 +47,7 @@ class Object
 
     Object& SetEffectType(EffectType type);
     EffectType GetEffectType() const;
+    WordClass GetWordClass() const;
 
     Object& SetEffect(EffectType effect, int ruleID = -1);
     Object& SetEffects(const std::vector<EffectType>& effects);
@@ -63,6 +64,7 @@ class Object
     std::map<std::size_t, EffectsBitset> enchants_;
     ObjectType type_ = ObjectType::INVALID;
     EffectType effectType_ = EffectType::INVALID;
+    WordClass wordClass_ = WordClass::INVALID;
 
     bool isDestroyed_ = false;
 };

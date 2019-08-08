@@ -56,9 +56,9 @@ TEST(GameTest, FindObjectsByProperty)
     Object& obj2 = game.Put(0, 0)
                        .SetType(ObjectType::KEKE)
                        .SetEffectType(EffectType::KEKE)
-                       .SetEffects({ EffectType::TEXT });
+                       .SetEffects({ EffectType::WORD });
 
-    EXPECT_EQ(*game.FindObjectsByProperty(EffectType::TEXT).at(0), obj2);
+    EXPECT_EQ(*game.FindObjectsByProperty(EffectType::WORD).at(0), obj2);
 }
 
 TEST(GameTest, FindObjectsByPosition)
@@ -74,4 +74,136 @@ TEST(GameTest, FindObjectsByPosition)
 
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(1), obj2);
+}
+
+TEST(GameTest, GetPositionByObject)
+{
+    Game game(5, 5);
+
+    Object& obj1 = game.Put(0, 0)
+                       .SetType(ObjectType::BABA)
+                       .SetEffectType(EffectType::BABA);
+
+    Object& obj2 = game.Put(4, 4)
+                       .SetType(ObjectType::BABA)
+                       .SetEffectType(EffectType::BABA);
+
+    auto [x1, y1] = game.GetPositionByObject(obj1);
+    auto [x2, y2] = game.GetPositionByObject(obj2);
+
+    EXPECT_EQ(x1, 0);
+    EXPECT_EQ(y1, 0);
+    EXPECT_EQ(x2, 4);
+    EXPECT_EQ(y2, 4);
+}
+
+TEST(GameTest, ParseRules_Vertical_Center)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_KEKE)
+        .SetEffectType(EffectType::KEKE)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 5)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(7, 5)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
+
+    game.ParseRules();
+
+    EXPECT_EQ(game.gameRules.GetRuleCount(), 1);
+
+    auto& rule = *game.gameRules.GetAllRules().begin();
+
+    EXPECT_EQ(rule.GetTarget(), EffectType::KEKE);
+    EXPECT_EQ(rule.GetVerb(), EffectType::IS);
+    EXPECT_EQ(rule.GetEffect(), EffectType::BABA);
+
+    game.ApplyRules();
+
+    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::BABA);
+}
+
+TEST(GameTest, ParseRules_Horizontal_Center)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_KEKE)
+        .SetEffectType(EffectType::KEKE)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 6)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 7)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
+
+    game.ParseRules();
+
+    EXPECT_EQ(game.gameRules.GetRuleCount(), 1);
+
+    auto& rule = *game.gameRules.GetAllRules().begin();
+
+    EXPECT_EQ(rule.GetTarget(), EffectType::KEKE);
+    EXPECT_EQ(rule.GetVerb(), EffectType::IS);
+    EXPECT_EQ(rule.GetEffect(), EffectType::BABA);
+
+    game.ApplyRules();
+
+    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::BABA);
+}
+
+TEST(GameTest, ParseRules_Cross)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1)
+        .SetType(ObjectType::KEKE)
+        .SetEffectType(EffectType::KEKE);
+    game.Put(5, 4)
+        .SetType(ObjectType::TEXT_KEKE)
+        .SetEffectType(EffectType::KEKE)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 6)
+        .SetType(ObjectType::TEXT_HOT)
+        .SetEffectType(EffectType::HOT)
+        .SetEffect(EffectType::WORD);
+    game.Put(4, 5)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 5)
+        .SetType(ObjectType::TEXT_MELT)
+        .SetEffectType(EffectType::MELT)
+        .SetEffect(EffectType::WORD);      
+    game.Put(1, 1)
+        .SetType(ObjectType::BABA)
+        .SetEffectType(EffectType::BABA);  
+
+    game.ParseRules();
+
+    EXPECT_EQ(game.gameRules.GetRuleCount(), 2);
+
+    game.ApplyRules();
+
+    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::KEKE);
+    EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA).empty());
 }

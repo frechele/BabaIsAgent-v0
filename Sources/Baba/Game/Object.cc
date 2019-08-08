@@ -2,6 +2,7 @@
 
 #include <Baba/Game/Object.h>
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace Baba
@@ -42,7 +43,22 @@ Object& Object::SetEffectType(EffectType type)
         throw std::runtime_error("Invalid effect type");
     }
 
-    this->effectType_ = type;
+    static std::vector wordClasses(
+        {WordClass::NOUN, WordClass::VERB, WordClass::PROPERTY}); 
+    static std::vector wordClassStrs(
+        {NOUN_TYPE_STR, VERB_TYPE_STR, PROPERTY_TYPE_STR});
+
+    auto& str = EFFECT_TYPE_STR[static_cast<std::size_t>(type)];
+
+    for (std::size_t i = 0; i < wordClasses.size(); i++)
+    {
+        if (std::find(wordClassStrs[i].begin(), wordClassStrs[i].end(), str) != wordClassStrs[i].end())
+        {
+            wordClass_= wordClasses[i];
+        }
+    }
+
+    effectType_ = type;
 
     return *this;
 }
@@ -50,6 +66,11 @@ Object& Object::SetEffectType(EffectType type)
 EffectType Object::GetEffectType() const
 {
     return effectType_;
+}
+
+WordClass Object::GetWordClass() const
+{
+    return wordClass_;
 }
 
 Object& Object::SetEffect(EffectType effect, int ruleID)

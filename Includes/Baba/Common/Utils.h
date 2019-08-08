@@ -4,6 +4,7 @@
 #define BABA_UTILS_H
 
 #include <Baba/Enums/ObjectType.h>
+#include <Baba/Game/Object.h>
 
 namespace Baba::Utils
 {
@@ -12,6 +13,12 @@ namespace Baba::Utils
 //! \param effectType EffectType
 //! \return ObjectType
 ObjectType EffectToObject(EffectType effectType);
+
+//! Check Word
+bool ValidateWord(const Object& object);
+
+//! Check Word
+bool ValidateWord(const Object& object, const std::vector<WordClass>& classes);
 }  // namespace Baba::Utils
 
 #endif  // BABA_UTILS_H
