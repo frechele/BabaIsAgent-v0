@@ -117,6 +117,22 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
     return Object::Arr();
 }
 
+Object::Arr Game::FilterObjectByFunction(const Object::Arr& objects,
+                                         std::function<bool(Object&)> func) const
+{
+    Object::Arr result;
+
+    for (auto& obj : objects)
+    {
+        if (func(*obj))
+        {
+            result.emplace_back(obj);
+        }
+    }
+
+    return result;
+}
+
 const Game::Pos Game::GetPositionByObject(const Object& target) const
 {
     for (std::size_t y = 0; y < GetHeight(); y++)
@@ -142,7 +158,7 @@ void Game::ApplyRules()
 {
     auto& rules = gameRules.GetAllRules();
     auto& effects = Effects::GetInstance().effects;
-
+    
     for (auto& rule : rules)
     {
         if (rule.GetVerb() == EffectType::IS)
@@ -197,15 +213,9 @@ void Game::ParseRules()
     {
         for (auto& obj : objs)
         {
-            auto type = obj->GetType();
-            if (type == ObjectType::TEXT_IS || 
-                type == ObjectType::TEXT_HAS ||
-                type == ObjectType::TEXT_MAKE)
+            if (Utils::ValidateWord(*obj, { WordClass::VERB }))
             {
-                if (Utils::ValidateWord(*obj))
-                {
-                    verbs.emplace_back(obj, GetPositionByObject(*obj));
-                }
+                verbs.emplace_back(obj, GetPositionByObject(*obj));
             }
         }
     }
@@ -234,24 +244,15 @@ void Game::ParseRules()
             }
 
             // Check syntax
-            Object::Arr subjects;
-            Object::Arr complements;
+            Object::Arr subjects = FilterObjectByFunction(At(x - dx, y - dy), 
+                [](Object& obj)->bool{
+                return Utils::ValidateWord(obj, { WordClass::NOUN });
+            });
 
-            for (auto& subject : At(x - dx, y - dy))
-            {
-                if (Utils::ValidateWord(*subject, {WordClass::NOUN}))
-                {
-                    subjects.emplace_back(subject);
-                }
-            }
-
-            for (auto& complement : At(x + dx, y + dy))
-            {
-                if (Utils::ValidateWord(*complement, {WordClass::NOUN, WordClass::PROPERTY}))
-                {
-                    complements.emplace_back(complement);
-                }
-            }
+            Object::Arr complements = FilterObjectByFunction(At(x + dx, y + dy), 
+                [](Object& obj)->bool{
+                return Utils::ValidateWord(obj, { WordClass::NOUN, WordClass::PROPERTY });
+            });
 
             if (subjects.empty() || complements.empty())
             {

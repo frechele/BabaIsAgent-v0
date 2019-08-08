@@ -6,6 +6,7 @@
 #include <Baba/Game/Object.h>
 #include <Baba/Rules/Rules.h>
 
+#include <functional>
 #include <vector>
 
 namespace Baba
@@ -76,6 +77,13 @@ class Game final
     //! \param target Object to provide position
     //! \return Objects havaing the same position as target
     Object::Arr FindObjectsByPosition(const Object& target) const;
+
+    //! Filter objects by func
+    //! \param objects objects to be filtered
+    //! \param func function to classify objects
+    //! \return filtered objects
+    Object::Arr FilterObjectByFunction(const Object::Arr& objects,
+                                       std::function<bool(Object&)> func) const;
 
     //! Return target's position
     //! \param target target object
