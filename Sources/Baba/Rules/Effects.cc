@@ -30,6 +30,39 @@ void Effects::ImplementBlockEffects()
 void Effects::ImplementNonBlockEffects()
 {
     // ----------------------------------------------------------------------
+    // YOU
+    // The player can control this object
+    // ----------------------------------------------------------------------
+    auto YouEffect = [](Game& game, Object& target, const Rule& rule) {
+        (void)game;
+        (void)target;
+        (void)rule;
+    };
+    effects.emplace(EffectType::YOU, YouEffect);
+
+    // ----------------------------------------------------------------------
+    // WIN
+    // If a YOU object contacts this object, the level is won.
+    // ----------------------------------------------------------------------
+    auto WinEffect = [](Game& game, Object& target, const Rule& rule) {
+        (void)game;
+        (void)target;
+        (void)rule;
+    };
+    effects.emplace(EffectType::WIN, WinEffect);
+
+    // ----------------------------------------------------------------------
+    // STOP
+    // If a YOU object contacts this object, the level is won.
+    // ----------------------------------------------------------------------
+    auto StopEffect = [](Game& game, Object& target, const Rule& rule) {
+        (void)game;
+        (void)target;
+        (void)rule;
+    };
+    effects.emplace(EffectType::STOP, StopEffect);
+
+    // ----------------------------------------------------------------------
     // MELT
     // Enchant target with MELT.
     // ----------------------------------------------------------------------
