@@ -13,23 +13,17 @@
 using namespace Baba;
 using namespace Utils;
 
-TEST(EnumTest, EffectToObject)
-{
-    EXPECT_EQ(EffectToObject(EffectType::BABA), ObjectType::BABA);
-    EXPECT_EQ(EffectToObject(EffectType::KEKE), ObjectType::KEKE);
-}
-
-TEST(GameRulesTest, AddAndDeleteBaseRule)
-{
-    Game game(5, 5);
-    const int id = game.gameRules.AddBaseRule(EffectType::BABA, EffectType::IS, EffectType::WORD);
+// TEST(GameRulesTest, AddAndDeleteBaseRule)
+// {
+//     Game game(5, 5);
+//     const int id = game.gameRules.AddBaseRule(ObjectName::BABA, ObjectName::IS, ObjectName::WORD);
     
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetTarget(), EffectType::BABA);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), EffectType::IS);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetEffect(), EffectType::WORD);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetRuleID(), id);
+//     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetTarget(), ObjectName::BABA);
+//     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), ObjectName::IS);
+//     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetEffect(), ObjectName::WORD);
+//     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetRuleID(), id);
 
-    game.gameRules.DeleteRule(id);
+//     game.gameRules.DeleteRule(id);
 
-    EXPECT_TRUE(game.gameRules.GetAllRules().empty());
-}
+//     EXPECT_TRUE(game.gameRules.GetAllRules().empty());
+// }

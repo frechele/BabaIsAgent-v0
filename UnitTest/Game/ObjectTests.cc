@@ -17,34 +17,49 @@ TEST(ObjectTest, ID)
     EXPECT_EQ(obj1 != obj2, true);
 }
 
-TEST(ObjectTest, SetType)
+TEST(ObjectTest, SetName)
 {
     using namespace Baba;
 
     Object object;
-    EXPECT_EQ(object.SetType(ObjectType::BABA).GetType(), ObjectType::BABA);
-    EXPECT_EQ(object.SetType(ObjectType::KEKE).GetType(), ObjectType::KEKE);
-    EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
+
+    EXPECT_EQ(object.SetName(ObjectName::BABA).GetName(), ObjectName::BABA);
+    EXPECT_EQ(object.SetName(ObjectName::KEKE).GetName(), ObjectName::KEKE);
+    EXPECT_ANY_THROW(object.SetName(ObjectName::INVALID));
 }
 
-TEST(ObjectTest, SetEffectType)
+TEST(ObjectTest, GetInfo)
 {
     using namespace Baba;
 
-    Object obj1;
-    Object obj2;
-    Object obj3;
+    BlockInfo info = {ObjectName::BABA, WordClass::NOUN};
+    Object object(info);
+    
+    EXPECT_EQ(object.GetName(), ObjectName::BABA);
+    EXPECT_EQ(object.GetWordClass(), WordClass::NOUN);
+    EXPECT_FALSE(object.IsText());
+}
 
-    obj1.SetEffectType(EffectType::ALGAE);
-    obj2.SetEffectType(EffectType::IS);
-    obj3.SetEffectType(EffectType::HOT);
-
-    EXPECT_EQ(obj1.GetWordClass(), WordClass::NOUN);
-    EXPECT_EQ(obj2.GetWordClass(), WordClass::VERB);
-    EXPECT_EQ(obj3.GetWordClass(), WordClass::PROPERTY);
+TEST(ObjectTest, GetProperty)
+{
+    using namespace Baba;
 
     Object object;
-    EXPECT_ANY_THROW(object.SetEffectType(EffectType::INVALID));
+    EXPECT_TRUE(object.GetProperty().none());
+}
+
+TEST(ObjectTest, AddRemoveEnchant)
+{
+    using namespace Baba;
+
+    Object object;
+    object.AddEnchant(ObjectName::BABA, 0);
+    
+    EXPECT_TRUE(object.GetProperty().test(static_cast<std::size_t>(ObjectName::BABA)));
+
+    object.RemoveEnchant(0);
+
+    EXPECT_FALSE(object.GetProperty().test(static_cast<std::size_t>(ObjectName::BABA)));
 }
 
 TEST(ObjectTest, Destroy)
