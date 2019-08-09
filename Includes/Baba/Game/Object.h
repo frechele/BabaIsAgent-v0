@@ -11,7 +11,14 @@
 
 namespace Baba
 {
-using EffectsBitset = std::bitset<static_cast<std::size_t>(EffectType::COUNT)>;
+struct BlockInfo
+{
+    ObjectName name = ObjectName::INVALID;
+    WordClass wordClass = WordClass::INVALID;
+    bool isTextObject;
+};
+
+using PropertyBitset = std::bitset<static_cast<std::size_t>(ObjectName::COUNT)>;
 //!
 //! \brief Object that conists level
 //!
@@ -23,7 +30,7 @@ class Object
 
  public:
     //! Constructor
-    Object();
+    Object(BlockInfo info);
 
     //! Default destructor
     ~Object() = default;
@@ -42,29 +49,21 @@ class Object
 
     int GetID() const;
 
-    Object& SetType(ObjectType type);
-    ObjectType GetType() const;
-
-    Object& SetEffectType(EffectType type);
-    EffectType GetEffectType() const;
+    ObjectName GetName() const;
     WordClass GetWordClass() const;
-
-    Object& SetEffect(EffectType effect, int ruleID = -1);
-    Object& SetEffects(const std::vector<EffectType>& effects);
-    const EffectsBitset GetEffects() const;
+    PropertyBitset GetProperty() const;
 
     void Destroy();
     bool IsDestroyed() const;
+    bool IsText() const;
 
     bool operator==(const Object& other) const;
     bool operator!=(const Object& other) const;
 
  private:
     int objectID_;
-    std::map<std::size_t, EffectsBitset> enchants_;
-    ObjectType type_ = ObjectType::INVALID;
-    EffectType effectType_ = EffectType::INVALID;
-    WordClass wordClass_ = WordClass::INVALID;
+    std::map<std::size_t, PropertyBitset> enchants_;
+    BlockInfo info_;
 
     bool isDestroyed_ = false;
 };
