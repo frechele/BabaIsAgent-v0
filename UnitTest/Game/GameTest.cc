@@ -19,13 +19,9 @@ TEST(GameTest, GetHeighWidth)
 TEST(GameTest, Put)
 {
     Game game(5, 5);
-    
-    game.Put(0, 0)
-        .SetType(ObjectType::BABA)
-        .SetEffectType(EffectType::BABA);
-    game.Put(0, 0)
-        .SetType(ObjectType::KEKE)
-        .SetEffectType(EffectType::KEKE);
+
+    game.Put(0, 0).SetType(ObjectType::BABA).SetEffectType(EffectType::BABA);
+    game.Put(0, 0).SetType(ObjectType::KEKE).SetEffectType(EffectType::KEKE);
 
     EXPECT_EQ(game.At(0, 0).at(0)->GetType(), ObjectType::BABA);
     EXPECT_EQ(game.At(0, 0).at(1)->GetType(), ObjectType::KEKE);
@@ -49,10 +45,8 @@ TEST(GameTest, FindObjectByType)
 TEST(GameTest, FindObjectsByProperty)
 {
     Game game(5, 5);
-    
-    game.Put(0, 0)
-        .SetType(ObjectType::BABA)
-        .SetEffectType(EffectType::BABA);
+
+    game.Put(0, 0).SetType(ObjectType::BABA).SetEffectType(EffectType::BABA);
     Object& obj2 = game.Put(0, 0)
                        .SetType(ObjectType::KEKE)
                        .SetEffectType(EffectType::KEKE)
@@ -74,6 +68,9 @@ TEST(GameTest, FindObjectsByPosition)
 
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(1), obj2);
+
+    Object invalid;
+    EXPECT_EQ(game.FindObjectsByPosition(invalid).empty(), true);
 }
 
 TEST(GameTest, GetPositionByObject)
@@ -95,15 +92,16 @@ TEST(GameTest, GetPositionByObject)
     EXPECT_EQ(y1, 0);
     EXPECT_EQ(x2, 4);
     EXPECT_EQ(y2, 4);
+
+    Object invalid;
+    EXPECT_ANY_THROW(game.GetPositionByObject(invalid));
 }
 
 TEST(GameTest, ParseRules_Vertical_Center)
 {
     Game game(10, 10);
 
-    game.Put(1, 1)
-        .SetType(ObjectType::KEKE)
-        .SetEffectType(EffectType::KEKE);
+    game.Put(1, 1).SetType(ObjectType::KEKE).SetEffectType(EffectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::TEXT_KEKE)
         .SetEffectType(EffectType::KEKE)
@@ -136,9 +134,7 @@ TEST(GameTest, ParseRules_Horizontal_Center)
 {
     Game game(10, 10);
 
-    game.Put(1, 1)
-        .SetType(ObjectType::KEKE)
-        .SetEffectType(EffectType::KEKE);
+    game.Put(1, 1).SetType(ObjectType::KEKE).SetEffectType(EffectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::TEXT_KEKE)
         .SetEffectType(EffectType::KEKE)
@@ -171,9 +167,7 @@ TEST(GameTest, ParseRules_Cross)
 {
     Game game(10, 10);
 
-    game.Put(1, 1)
-        .SetType(ObjectType::KEKE)
-        .SetEffectType(EffectType::KEKE);
+    game.Put(1, 1).SetType(ObjectType::KEKE).SetEffectType(EffectType::KEKE);
     game.Put(5, 4)
         .SetType(ObjectType::TEXT_KEKE)
         .SetEffectType(EffectType::KEKE)
@@ -193,10 +187,8 @@ TEST(GameTest, ParseRules_Cross)
     game.Put(6, 5)
         .SetType(ObjectType::TEXT_MELT)
         .SetEffectType(EffectType::MELT)
-        .SetEffect(EffectType::WORD);      
-    game.Put(1, 1)
-        .SetType(ObjectType::BABA)
-        .SetEffectType(EffectType::BABA);  
+        .SetEffect(EffectType::WORD);
+    game.Put(1, 1).SetType(ObjectType::BABA).SetEffectType(EffectType::BABA);
 
     game.ParseRules();
 
