@@ -2,6 +2,22 @@ language: cpp
 
 matrix:
   include:
+    - name: Ubuntu 16.04 + gcc-7 + codecov
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      dist: xenial
+      sudo: required
+      compiler: gcc
+      env:
+        - BUILD_TYPE=Debug
+      script:
+        sh Scripts/travis_build_codecov.sh
+
     - name: Ubuntu 18.04 + gcc
       os: linux
       dist: trusty
@@ -9,6 +25,7 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh
+
     - name: Ubuntu 18.10 + gcc
       os: linux
       dist: trusty
@@ -16,6 +33,7 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.cosmic cosmic
+
     - name: Ubuntu 19.04 + gcc
       os: linux
       dist: trusty
@@ -23,6 +41,7 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco disco
+
     - name: Ubuntu 19.04 + gcc-latest
       os: linux
       dist: trusty
@@ -30,12 +49,14 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco.gcc-latest disco-gcc-latest
+
     - name: Ubuntu 19.04 + clang-latest
       os: linux
       dist: trusty
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco.clang-latest disco-clang-latest
+        
     - name: OS X 10.14 + Xcode 10.2 + clang
       os: osx
       osx_image: xcode10.2

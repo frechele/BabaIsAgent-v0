@@ -75,3 +75,18 @@ set(DEFAULT_LINKER_OPTIONS)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
     set(DEFAULT_LINKER_OPTIONS -pthread -lstdc++fs)
 endif()
+
+# Code coverage
+if(CMAKE_BUILD_TYPE MATCHES Debug AND (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
+        -g
+        -O0
+        -fprofile-arcs
+        -ftest-coverage
+    )
+
+    set(DEFAULT_LINKER_OPTIONS ${DEFAULT_LINKER_OPTIONS}
+        -fprofile-arcs
+        -ftest-coverage
+    )
+endif()
