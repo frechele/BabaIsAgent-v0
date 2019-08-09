@@ -37,7 +37,7 @@ enum class RuleState
     INVALID,
     VALID,
     NEW,
-}
+};
 }  // namespace Baba
 
 #endif  // BABA_ENUMS_GAME_H
