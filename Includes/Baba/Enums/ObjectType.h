@@ -34,6 +34,21 @@ enum class WordClass
     UNIQUE,
 };
 
+const std::vector<std::string> OBJECT_NAME_STR {
+    "INVALID",
+#define TEXT(a)
+#define VERB(a)#a,
+#define UNIQUE(a)#a,
+#define PROPERTY(a)#a,
+#define BLOCK(a)#a,
+#include "ObjectType.def"
+#undef TEXT
+#undef VERB
+#undef UNIQUE
+#undef PROPERTY
+#undef BLOCK
+};
+
 const std::vector<std::string> NOUN_TYPE_STR {
     "INVALID",
 #define TEXT(a)
