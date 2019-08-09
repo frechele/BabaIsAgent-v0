@@ -6,9 +6,9 @@ namespace Baba::Utils
 {
 ObjectType EffectToObject(EffectType effectType)
 {
-    std::string_view str(EFFECT_TYPE_STR[static_cast<std::size_t>(effectType)]);
+    const std::string& str= EFFECT_TYPE_STR[static_cast<std::size_t>(effectType)];
 
-    for (int i = 0; i < static_cast<int>(ObjectType::COUNT); ++i)
+    for (size_t i = 0; i < static_cast<std::size_t>(ObjectType::COUNT); ++i)
     {
         if (OBJECT_TYPE_STR[i] == str)
         {
@@ -24,7 +24,8 @@ bool ValidateWord(const Object& object)
     return object.GetEffects().test(static_cast<std::size_t>(EffectType::WORD));
 }
 
-bool ValidateWord(const Object& object, const std::vector<WordClass>& filteredClasses)
+bool ValidateWord(const Object& object,
+                  const std::vector<WordClass>& filteredClasses)
 {
     if (!ValidateWord(object))
     {
@@ -38,7 +39,7 @@ bool ValidateWord(const Object& object, const std::vector<WordClass>& filteredCl
             return true;
         }
     }
-    
+
     return false;
 }
-}  // namespace Baba
+}  // namespace Baba::Utils
