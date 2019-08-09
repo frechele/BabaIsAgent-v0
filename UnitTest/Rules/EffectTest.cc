@@ -33,6 +33,16 @@ TEST(EffectTest, BABA)
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 }
 
+TEST(EffectTest, YOU)
+{
+    // Not implemented yet
+}
+
+TEST(EffectTest, WIN)
+{
+    // Do nothing
+}
+
 TEST(EffectTest, MELT)
 {
     Game game(5, 5);

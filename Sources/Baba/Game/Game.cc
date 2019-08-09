@@ -1,6 +1,7 @@
 // Copyright(c) 2019 Junyeong Park, Hyeonsu Kim
 
 #include <Baba/Common/Utils.h>
+#include <Baba/Enums/Game.h>
 #include <Baba/Game/Game.h>
 #include <Baba/Rules/Effects.h>
 #include <Baba/Rules/Rule.h>
@@ -271,5 +272,37 @@ void Game::ParseRules()
             }
         }
     }
+}
+
+void Game::DetermineResult()
+{
+    auto targets = FindObjectsByProperty(EffectType::YOU);
+    
+    if (targets.empty())
+    {
+        gameResult_ = GameResult::DEFEAT;
+        return;
+    }
+
+    for (auto& target : targets)
+    {
+        auto objs = FindObjectsByPosition(*target);
+
+        for (auto& obj : objs)
+        {
+            if (obj->GetEffects().test(static_cast<std::size_t>(EffectType::WIN)))
+            {
+                gameResult_ = GameResult::WIN;
+                return;
+            }
+        }
+    }
+
+    gameResult_ = GameResult::INVALID;
+}
+
+GameResult Game::GetGameResult() const
+{
+    return gameResult_;
 }
 }  // namespace Baba
