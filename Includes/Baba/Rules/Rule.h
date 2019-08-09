@@ -17,31 +17,31 @@ class Rule
 {
  public:
     //! Constructor
-    Rule(EffectType target, EffectType verb, EffectType effect, int ruleID);
+    Rule(Object& target, Object& verb, Object& effect, int ruleID);
 
     //! Default destructor
     virtual ~Rule() = default;
 
     //! Returns target object's type
     //! \return Target object's type
-    EffectType GetTarget() const;
+    Object& GetTarget() const;
 
     //! Returns object's verb
     //! \return Object's verb
-    EffectType GetVerb() const;
+    Object& GetVerb() const;
     
     //! Returns effect's type
     //! \return Effect's type
-    EffectType GetEffect() const;
+    Object& GetEffect() const;
 
     //! Returns Rule's id
     //! \return Rule's id
     int GetRuleID() const;
 
  private:
-    EffectType target_;
-    EffectType verb_;
-    EffectType effect_;
+    Object* target_;
+    Object* verb_;
+    Object* effect_;
 
     int ruleID_;
 };
