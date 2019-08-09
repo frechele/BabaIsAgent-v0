@@ -298,7 +298,7 @@ void Game::DetermineResult()
         }
     }
 
-    gameResult_ = GameResult::NONE;
+    gameResult_ = GameResult::INVALID;
 }
 
 GameResult Game::GetGameResult() const

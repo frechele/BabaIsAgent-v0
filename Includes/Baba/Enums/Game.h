@@ -27,7 +27,6 @@ enum class GameStep
 enum class GameResult
 {
     INVALID,
-    NONE,
     WIN,
     DEFEAT,
     COUNT,

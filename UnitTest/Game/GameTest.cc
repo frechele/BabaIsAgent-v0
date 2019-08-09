@@ -251,7 +251,7 @@ TEST(GameTest, DetermineResult_DEFEAT)
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
 
-TEST(GameTest, DetermineResult_NONE)
+TEST(GameTest, DetermineResult_INVALID)
 {
     Game game(10, 10);
 
@@ -273,5 +273,5 @@ TEST(GameTest, DetermineResult_NONE)
     game.ApplyRules();
     game.DetermineResult();
 
-    EXPECT_EQ(game.GetGameResult(), GameResult::NONE);
+    EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
 }
