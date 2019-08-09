@@ -30,6 +30,10 @@ class Object
 
  public:
     //! Constructor
+    Object();
+
+    //! Constructor with BlockInfo
+    //! \param info Blockinfo
     Object(BlockInfo info);
 
     //! Default destructor
