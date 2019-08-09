@@ -47,7 +47,7 @@ class Rules final
     //! \param verb verb's type.
     //! \param effect effect's type.
     //! \return id of rule.
-    int AddBaseRule(EffectType target, EffectType verb, EffectType effect);
+    int AddBaseRule(Object& target, Object& verb, Object& effect);
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.
