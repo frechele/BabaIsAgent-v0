@@ -52,17 +52,6 @@ void Effects::ImplementNonBlockEffects()
     effects.emplace(EffectType::WIN, WinEffect);
 
     // ----------------------------------------------------------------------
-    // STOP
-    // If a YOU object contacts this object, the level is won.
-    // ----------------------------------------------------------------------
-    auto StopEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)game;
-        (void)target;
-        (void)rule;
-    };
-    effects.emplace(EffectType::STOP, StopEffect);
-
-    // ----------------------------------------------------------------------
     // MELT
     // Enchant target with MELT.
     // ----------------------------------------------------------------------

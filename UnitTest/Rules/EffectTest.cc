@@ -43,11 +43,6 @@ TEST(EffectTest, WIN)
     // Do nothing
 }
 
-TEST(EffectTest, STOP)
-{
-    // Not implemented yet
-}
-
 TEST(EffectTest, MELT)
 {
     Game game(5, 5);
