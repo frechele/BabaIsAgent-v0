@@ -15,7 +15,7 @@ struct BlockInfo
 {
     ObjectName name = ObjectName::INVALID;
     WordClass wordClass = WordClass::INVALID;
-    bool isTextObject;
+    bool isTextObject = false;
 };
 
 using PropertyBitset = std::bitset<static_cast<std::size_t>(ObjectName::COUNT)>;
@@ -48,10 +48,14 @@ class Object
     Object& operator=(Object&&) = delete;
 
     int GetID() const;
-
+    
+    Object& SetName(ObjectName name);
     ObjectName GetName() const;
     WordClass GetWordClass() const;
     PropertyBitset GetProperty() const;
+
+    Object& AddEnchant(ObjectName effect, int ruleID);
+    void RemoveEnchant(int ruleID);
 
     void Destroy();
     bool IsDestroyed() const;

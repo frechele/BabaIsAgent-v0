@@ -14,6 +14,11 @@ Object::Object(BlockInfo info) : info_(info)
     objectID_ = ObjectID++;
 }
 
+Object& Object::SetName(ObjectName name)
+{
+    info_.name = name;
+}
+
 int Object::GetID() const
 {
     return objectID_;
@@ -39,6 +44,19 @@ PropertyBitset Object::GetProperty() const
     }
 
     return result;
+}
+
+Object& Object::AddEnchant(ObjectName effect, int ruleID)
+{
+    PropertyBitset bitset;
+    bitset.set(static_cast<int>(effect));
+    enchants_.emplace(ruleID, bitset);
+
+    return *this;
+}
+void Object::RemoveEnchant(int ruleID)
+{
+    enchants_.erase(ruleID);
 }
 
 void Object::Destroy()
