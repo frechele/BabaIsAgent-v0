@@ -3,6 +3,7 @@
 #ifndef BABA_GAME_H
 #define BABA_GAME_H
 
+#include <Baba/Enums/Game.h>
 #include <Baba/Game/Object.h>
 #include <Baba/Rules/Rules.h>
 
@@ -99,11 +100,21 @@ class Game final
     //! Parse rules
     void ParseRules();
 
+    //! Determine game result
+    void DetermineResult();
+
+    //! Get game result;
+    //! \return GameResult
+    GameResult GetGameResult() const;
+
     Rules gameRules;
+
  private:
     std::size_t width_, height_;
     Object::Arr objects_;
     std::vector<Object::Arr> map_;
+    GameResult gameResult_ = GameResult::INVALID;
+    GameStep nowStep_ = GameStep::INVALID;
 };
 }  // namespace Baba
 
