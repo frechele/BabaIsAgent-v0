@@ -31,7 +31,7 @@ enum class GameResult
     WIN,
     DEFEAT,
     COUNT,
-}
+};
 }  // namespace Baba
 
 #endif  // BABA_ENUMS_GAME_H
