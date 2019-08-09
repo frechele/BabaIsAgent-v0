@@ -7,6 +7,11 @@
 
 namespace Baba
 {
+Object::Object() : Object(BlockInfo())
+{
+    // Do nothing
+}
+
 Object::Object(BlockInfo info) : info_(info)
 {
     static int ObjectID = 0;
@@ -16,7 +21,13 @@ Object::Object(BlockInfo info) : info_(info)
 
 Object& Object::SetName(ObjectName name)
 {
+    if (name == ObjectName::INVALID)
+    {
+        throw std::runtime_error("Invalid object name");
+    }
+
     info_.name = name;
+    return *this;
 }
 
 int Object::GetID() const
@@ -54,6 +65,7 @@ Object& Object::AddEnchant(ObjectName effect, int ruleID)
 
     return *this;
 }
+
 void Object::RemoveEnchant(int ruleID)
 {
     enchants_.erase(ruleID);
