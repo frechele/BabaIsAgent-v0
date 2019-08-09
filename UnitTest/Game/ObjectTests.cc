@@ -12,6 +12,19 @@ TEST(ObjectTest, ID)
     Object obj2;
 
     EXPECT_EQ(obj2.GetID(), obj1.GetID() + 1);
+
+    EXPECT_EQ(obj1 == obj1, true);
+    EXPECT_EQ(obj1 != obj2, true);
+}
+
+TEST(ObjectTest, SetType)
+{
+    using namespace Baba;
+
+    Object object;
+    EXPECT_EQ(object.SetType(ObjectType::BABA).GetType(), ObjectType::BABA);
+    EXPECT_EQ(object.SetType(ObjectType::KEKE).GetType(), ObjectType::KEKE);
+    EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
 }
 
 TEST(ObjectTest, SetEffectType)
@@ -29,4 +42,18 @@ TEST(ObjectTest, SetEffectType)
     EXPECT_EQ(obj1.GetWordClass(), WordClass::NOUN);
     EXPECT_EQ(obj2.GetWordClass(), WordClass::VERB);
     EXPECT_EQ(obj3.GetWordClass(), WordClass::PROPERTY);
+
+    Object object;
+    EXPECT_ANY_THROW(object.SetEffectType(EffectType::INVALID));
+}
+
+TEST(ObjectTest, Destroy)
+{
+    using namespace Baba;
+
+    Object object;
+
+    EXPECT_NO_THROW(object.Destroy());
+    EXPECT_EQ(object.IsDestroyed(), true);
+    EXPECT_ANY_THROW(object.Destroy());
 }
