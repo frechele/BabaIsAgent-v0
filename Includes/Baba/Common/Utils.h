@@ -8,12 +8,6 @@
 
 namespace Baba::Utils
 {
-
-//! Cast EffectType to ObjectType
-//! \param effectType EffectType
-//! \return ObjectType
-ObjectType EffectToObject(EffectType effectType);
-
 //! Check Word
 bool ValidateWord(const Object& object);
 

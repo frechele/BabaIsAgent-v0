@@ -4,24 +4,9 @@
 
 namespace Baba::Utils
 {
-ObjectType EffectToObject(EffectType effectType)
-{
-    const std::string& str= EFFECT_TYPE_STR[static_cast<std::size_t>(effectType)];
-
-    for (size_t i = 0; i < static_cast<std::size_t>(ObjectType::COUNT); ++i)
-    {
-        if (OBJECT_TYPE_STR[i] == str)
-        {
-            return ObjectType(i);
-        }
-    }
-
-    return ObjectType::INVALID;
-}
-
 bool ValidateWord(const Object& object)
 {
-    return object.GetEffects().test(static_cast<std::size_t>(EffectType::WORD));
+    return object.GetProperty().test(static_cast<std::size_t>(ObjectName::WORD));
 }
 
 bool ValidateWord(const Object& object,
