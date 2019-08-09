@@ -49,7 +49,7 @@ class Effects
     //! Implement effects of the texts that don't exist block.
     void ImplementNonBlockEffects();
 
-    std::map<EffectType, EffectFunc> effects;
+    std::map<ObjectName, EffectFunc> effects;
 };
 }  // namespace Baba
 

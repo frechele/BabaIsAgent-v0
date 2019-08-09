@@ -51,6 +51,17 @@ void Effects::ImplementNonBlockEffects()
     effects.emplace(ObjectName::WIN, WinEffect);
 
     // ----------------------------------------------------------------------
+    // PUSH
+    // This object can be pushed.
+    // ----------------------------------------------------------------------
+    auto PushEffect = [](Game& game, Object& target, const Rule& rule) {
+        (void)game;
+        (void)target;
+        (void)rule;
+    };
+    effects.emplace(ObjectName::WIN, PushEffect);
+
+    // ----------------------------------------------------------------------
     // MELT
     // Enchant target with MELT.
     // ----------------------------------------------------------------------
