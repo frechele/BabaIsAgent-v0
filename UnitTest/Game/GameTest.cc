@@ -199,3 +199,79 @@ TEST(GameTest, ParseRules_Cross)
     EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::KEKE);
     EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA).empty());
 }
+
+TEST(GameTest, DetermineResult_WIN)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA).SetEffectType(EffectType::BABA);
+    game.Put(1, 1).SetType(ObjectType::FLAG).SetEffectType(EffectType::FLAG);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 6)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 7)
+        .SetType(ObjectType::TEXT_YOU)
+        .SetEffectType(EffectType::YOU)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 5)
+        .SetType(ObjectType::TEXT_FLAG)
+        .SetEffectType(EffectType::FLAG)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 6)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(6, 7)
+        .SetType(ObjectType::TEXT_WIN)
+        .SetEffectType(EffectType::WIN)
+        .SetEffect(EffectType::WORD);
+
+    game.ParseRules();
+    game.ApplyRules();
+    game.DetermineResult();
+
+    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
+}
+
+TEST(GameTest, DetermineResult_DEFEAT)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA).SetEffectType(EffectType::BABA);
+
+    game.ParseRules();
+    game.ApplyRules();
+    game.DetermineResult();
+
+    EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
+}
+
+TEST(GameTest, DetermineResult_NONE)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA).SetEffectType(EffectType::BABA);
+    game.Put(5, 5)
+        .SetType(ObjectType::TEXT_BABA)
+        .SetEffectType(EffectType::BABA)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 6)
+        .SetType(ObjectType::TEXT_IS)
+        .SetEffectType(EffectType::IS)
+        .SetEffect(EffectType::WORD);
+    game.Put(5, 7)
+        .SetType(ObjectType::TEXT_YOU)
+        .SetEffectType(EffectType::YOU)
+        .SetEffect(EffectType::WORD);
+
+    game.ParseRules();
+    game.ApplyRules();
+    game.DetermineResult();
+
+    EXPECT_EQ(game.GetGameResult(), GameResult::NONE);
+}
