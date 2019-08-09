@@ -58,21 +58,31 @@ class Game final
     //! \param x x position
     //! \param y y position
     //! \return Created object
-    Object& Put(std::size_t x, std::size_t y);
+    Object& Put(std::size_t x, std::size_t y, std::string_view name);
 
     //! Destory object
     //! \param object Object will be destroyed
     void DestroyObject(Object& object);
 
-    //! Find objects by type
-    //! \param Object's type
-    //! \return Objects having the same \p type
-    Object::Arr FindObjectsByType(ObjectType type) const;
+    //! Find objects by Name
+    //! \param Object's Name
+    //! \return Objects having the same \p name
+    Object::Arr FindObjectsByName(ObjectName name) const;
+
+    //! Find only blocks by Name
+    //! \param Object's Name
+    //! \return Objects having the same \p name
+    Object::Arr FindBlocksByName(ObjectName property) const;
+
+    //! Find objects by Unique Name
+    //! \param Object's Unique Name
+    //! \return Objects having the same \p Unique name
+    Object::Arr FindObjectsByUnique(ObjectName name) const;
     
     //! Find objects by Property
     //! \param property Object's property
     //! \return Objects having the same \p property
-    Object::Arr FindObjectsByProperty(EffectType property) const;
+    Object::Arr FindObjectsByProperty(ObjectName property) const;
 
     //! Find objects by Position of target
     //! \param target Object to provide position
@@ -93,7 +103,7 @@ class Game final
 
     //! Check position
     bool ValidatePosition(std::size_t x, std::size_t y) const;
-
+    
     //! Apply all rules 
     void ApplyRules();
 
@@ -113,6 +123,7 @@ class Game final
     std::size_t width_, height_;
     Object::Arr objects_;
     std::vector<Object::Arr> map_;
+    std::map<std::size_t, RuleState> validRules_;
     GameResult gameResult_ = GameResult::INVALID;
     GameStep nowStep_ = GameStep::INVALID;
 };

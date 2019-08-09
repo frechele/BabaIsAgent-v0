@@ -9,6 +9,8 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <string_view>
+#include <map>
 
 namespace Baba
 {
@@ -42,9 +44,46 @@ const Object::Arr& Game::At(std::size_t x, std::size_t y) const
     return map_[x + y * width_];
 }
 
-Object& Game::Put(std::size_t x, std::size_t y)
+Object& Game::Put(std::size_t x, std::size_t y, std::string_view name)
 {
-    objects_.emplace_back(new Object);
+    BlockInfo info;
+   
+    // Find TEXT_
+    if (name.find("TEXT_") != std::string_view::npos)
+    {
+        info.isTextObject = true;
+        name.remove_prefix(5);
+    }
+
+    for (std::size_t i = 0; i < static_cast<std::size_t>(ObjectName::COUNT); ++i)
+    {
+        if (name == OBJECT_NAME_STR[i])
+        {
+            info.name = ObjectName(i);
+        }
+    }
+
+    static std::vector wordClasses(
+        {WordClass::NOUN, WordClass::VERB, WordClass::PROPERTY, WordClass::UNIQUE}); 
+    static std::vector wordClassStrs(
+        {NOUN_TYPE_STR, VERB_TYPE_STR, PROPERTY_TYPE_STR, UNIQUE_TYPE_STR});
+
+    for (std::size_t i = 0; i < wordClasses.size(); i++)
+    {
+        if (std::find(wordClassStrs[i].begin(), wordClassStrs[i].end(), name) != wordClassStrs[i].end())
+        {
+            info.wordClass = wordClasses[i];
+        }
+    }
+
+    objects_.emplace_back(new Object(info));
+
+    if (objects_.back()->IsText())
+    {
+        objects_.back()->AddEnchant(ObjectName::WORD, -1);
+        objects_.back()->AddEnchant(ObjectName::PUSH, -2);
+    }
+
     map_[x + y * width_].emplace_back(objects_.back());
 
     return *map_[x + y * width_].back();
@@ -66,7 +105,7 @@ void Game::DestroyObject(Object& object)
     }
 }
 
-Object::Arr Game::FindObjectsByType(ObjectType type) const
+Object::Arr Game::FindObjectsByName(ObjectName name) const
 {
     Object::Arr result;
 
@@ -74,7 +113,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     {
         for (auto& obj : objs)
         {
-            if (obj->GetType() == type)
+            if (obj->GetName() == name)
             {
                 result.emplace_back(obj);
             }
@@ -84,7 +123,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     return result;
 }
 
-Object::Arr Game::FindObjectsByProperty(EffectType property) const
+Object::Arr Game::FindBlocksByName(ObjectName name) const
 {
     Object::Arr result;
 
@@ -92,7 +131,47 @@ Object::Arr Game::FindObjectsByProperty(EffectType property) const
     {
         for (auto& obj : objs)
         {
-            if (obj->GetEffects().test(static_cast<std::size_t>(property)))
+            if (obj->GetName() == name &&
+                !obj->IsText())
+            {
+                result.emplace_back(obj);
+            }
+        }
+    }
+
+    return result;
+}
+
+Object::Arr Game::FindObjectsByUnique(ObjectName name) const
+{
+    Object::Arr result;
+
+    if (name == ObjectName::TEXT)
+    {
+        for (auto& objs : map_)
+        {
+            for (auto& obj : objs)
+            {
+                if (obj->IsText())
+                {
+                    result.emplace_back(obj);
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+Object::Arr Game::FindObjectsByProperty(ObjectName property) const
+{
+    Object::Arr result;
+
+    for (auto& objs : map_)
+    {
+        for (auto& obj : objs)
+        {
+            if (obj->GetProperty().test(static_cast<std::size_t>(property)))
             {
                 result.emplace_back(obj);
             }
@@ -160,42 +239,72 @@ void Game::ApplyRules()
     auto& rules = gameRules.GetAllRules();
     auto& effects = Effects::GetInstance().effects;
     
+    auto GetTargets = [&](auto rule)->auto{
+        std::vector<Object*> targets;
+
+        if (rule.GetTarget().GetWordClass() == WordClass::UNIQUE)
+        {
+            targets = FindObjectsByUnique(rule.GetTarget().GetName());
+        }
+        else
+        {
+            targets = FindBlocksByName(rule.GetTarget().GetName());
+        }
+
+        return targets;
+    };
+
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == EffectType::IS)
-        {
-            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
+        auto ruleID = rule.GetRuleID();
 
+        if (validRules_.at(ruleID) == RuleState::VALID)
+        {
+            continue;
+        }
+
+        if (rule.GetVerb().GetName() == ObjectName::IS)
+        {
+            std::vector<Object*> targets = GetTargets(rule);
+            
             for (auto& target : targets)
             {
-                target->SetEffect(rule.GetEffect(), rule.GetRuleID());
+                if (validRules_.at(ruleID) == RuleState::NEW)
+                {
+                    target->AddEnchant(rule.GetEffect().GetName(), ruleID);
+                }
+                else
+                {
+                    target->RemoveEnchant(ruleID);
+                    gameRules.DeleteRule(ruleID);
+                }
             }
         }
     }
 
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == EffectType::IS)
+        if (rule.GetVerb().GetName() == ObjectName::IS)
         {
-            auto func = effects.at(rule.GetEffect());
-            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
+            std::vector<Object*> targets = GetTargets(rule);
 
             for (auto& target : targets)
             {
+                auto func = effects.at(rule.GetEffect().GetName());
                 func(*this, *target, rule);
             }
         }
-        else if (rule.GetVerb() == EffectType::HAS)
+    }
+
+    for (auto i = validRules_.begin(); i != validRules_.end();)
+    {
+        if (i->second == RuleState::INVALID)
         {
-            // Not implemented yet
-        }
-        else if (rule.GetVerb() == EffectType::MAKE)
-        {
-            // Not implemented yet
+            i = validRules_.erase(i);
         }
         else
         {
-            // throw
+            ++i;
         }
     }
 }
@@ -207,6 +316,12 @@ bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 
 void Game::ParseRules()
 {
+    // Init validRules_
+    for (auto& rule : validRules_)
+    {
+        rule.second = RuleState::INVALID;
+    }
+
     // Find verbs
     std::vector<std::tuple<Object*, Point>> verbs;
 
@@ -260,14 +375,29 @@ void Game::ParseRules()
                 continue;
             }
 
-            // Make rules
+            // Validate rule or Make new rule
             for (auto& subject : subjects)
             {
+                bool validateFlag = false;
                 for (auto& complement : complements)
                 {
-                    // Temporarily written code
-                    gameRules.AddBaseRule(subject->GetEffectType(),
-                        obj->GetEffectType(), complement->GetEffectType());
+                    // Check aleady existing
+                    for (const auto& rule : gameRules.GetAllRules())
+                    {
+                        if (rule.GetTarget() == *subject &&
+                            rule.GetVerb() == *obj &&
+                            rule.GetEffect() == *complement)
+                        {
+                            validateFlag = true;
+                            validRules_.at(rule.GetRuleID()) = RuleState::VALID;   
+                        }
+                    }
+                    if (validateFlag)
+                    {
+                        break;
+                    }
+                    auto id = gameRules.AddBaseRule(*subject, *obj, *complement);
+                    validRules_.emplace(id, RuleState::NEW);
                 }
             }
         }
@@ -276,7 +406,7 @@ void Game::ParseRules()
 
 void Game::DetermineResult()
 {
-    auto targets = FindObjectsByProperty(EffectType::YOU);
+    auto targets = FindObjectsByProperty(ObjectName::YOU);
     
     if (targets.empty())
     {
@@ -290,7 +420,7 @@ void Game::DetermineResult()
 
         for (auto& obj : objs)
         {
-            if (obj->GetEffects().test(static_cast<std::size_t>(EffectType::WIN)))
+            if (obj->GetProperty().test(static_cast<std::size_t>(ObjectName::WIN)))
             {
                 gameResult_ = GameResult::WIN;
                 return;
