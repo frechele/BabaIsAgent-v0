@@ -27,26 +27,6 @@ TEST(ObjectTest, SetType)
     EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
 }
 
-TEST(ObjectTest, SetEffectType)
-{
-    using namespace Baba;
-
-    Object obj1;
-    Object obj2;
-    Object obj3;
-
-    obj1.SetEffectType(EffectType::ALGAE);
-    obj2.SetEffectType(EffectType::IS);
-    obj3.SetEffectType(EffectType::HOT);
-
-    EXPECT_EQ(obj1.GetWordClass(), WordClass::NOUN);
-    EXPECT_EQ(obj2.GetWordClass(), WordClass::VERB);
-    EXPECT_EQ(obj3.GetWordClass(), WordClass::PROPERTY);
-
-    Object object;
-    EXPECT_ANY_THROW(object.SetEffectType(EffectType::INVALID));
-}
-
 TEST(ObjectTest, Destroy)
 {
     using namespace Baba;

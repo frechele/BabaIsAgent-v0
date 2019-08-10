@@ -3,7 +3,6 @@
 #include "gtest/gtest.h"
 
 #include <Baba/Enums/ObjectType.h>
-#include <Baba/Common/Utils.h>
 #include <Baba/Game/Game.h>
 #include <Baba/Game/Object.h>
 #include <Baba/Rules/Effects.h>
@@ -11,22 +10,29 @@
 #include <Baba/Rules/Rules.h>
 
 using namespace Baba;
-using namespace Utils;
 
-TEST(EnumTest, EffectToObject)
+TEST(EnumTest, ObjectToProperty)
 {
-    EXPECT_EQ(EffectToObject(EffectType::BABA), ObjectType::BABA);
-    EXPECT_EQ(EffectToObject(EffectType::KEKE), ObjectType::KEKE);
+    EXPECT_EQ(ObjectToProperty(ObjectType::BABA), PropertyType::INVALID);
+    EXPECT_EQ(ObjectToProperty(ObjectType::MELT), PropertyType::MELT);
+}
+
+TEST(EnumTest, PropertyToObject)
+{
+    EXPECT_EQ(PropertyToObject(PropertyType::MELT), ObjectType::MELT);
+    EXPECT_EQ(PropertyToObject(PropertyType::HOT), ObjectType::HOT);
 }
 
 TEST(GameRulesTest, AddAndDeleteBaseRule)
 {
     Game game(5, 5);
-    const int id = game.gameRules.AddBaseRule(EffectType::BABA, EffectType::IS, EffectType::WORD);
-    
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetTarget(), EffectType::BABA);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), EffectType::IS);
-    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetEffect(), EffectType::WORD);
+    auto id = game.gameRules.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::WORD);
+
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetTarget(),
+              ObjectType::BABA);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetVerb(), ObjectType::IS);
+    EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetEffect(),
+              ObjectType::WORD);
     EXPECT_EQ(game.gameRules.GetAllRules().begin()->GetRuleID(), id);
 
     game.gameRules.DeleteRule(id);

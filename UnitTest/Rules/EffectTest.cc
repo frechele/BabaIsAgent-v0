@@ -15,17 +15,13 @@ TEST(EffectTest, BABA)
 {
     Game game(5, 5);
 
-    Object& obj1 = game.Put(0, 0)
-                       .SetType(ObjectType::KEKE)
-                       .SetEffectType(EffectType::KEKE);
-    Object& obj2 = game.Put(1, 1)
-                       .SetType(ObjectType::STAR)
-                       .SetEffectType(EffectType::STAR);
+    Object& obj1 = game.Put(0, 0).SetType(ObjectType::KEKE);
+    Object& obj2 = game.Put(1, 1).SetType(ObjectType::STAR);
 
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 
-    game.gameRules.AddBaseRule(EffectType::KEKE, EffectType::IS, EffectType::BABA);
+    game.gameRules.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::BABA);
 
     game.ApplyRules();
 
@@ -47,34 +43,28 @@ TEST(EffectTest, MELT)
 {
     Game game(5, 5);
 
-    Object& obj1 = game.Put(0, 0)
-                       .SetType(ObjectType::BABA)
-                       .SetEffectType(EffectType::BABA);
+    Object& obj1 = game.Put(0, 0).SetType(ObjectType::BABA);
 
-    game.gameRules.AddBaseRule(EffectType::BABA, EffectType::IS, EffectType::MELT);
+    game.gameRules.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
 
     game.ApplyRules();
 
-    EXPECT_EQ(*game.FindObjectsByProperty(EffectType::MELT).at(0), obj1);
+    EXPECT_EQ(*game.FindObjectsByProperty(PropertyType::MELT).at(0), obj1);
 }
 
 TEST(EffectTest, HOT)
 {
     Game game(5, 5);
     
-    game.Put(0, 0)
-        .SetType(ObjectType::BABA)
-        .SetEffectType(EffectType::BABA);
-    game.Put(0, 0)
-        .SetType(ObjectType::KEKE)
-        .SetEffectType(EffectType::KEKE);
+    game.Put(0, 0).SetType(ObjectType::BABA);
+    game.Put(0, 0).SetType(ObjectType::KEKE);
    
-    game.gameRules.AddBaseRule(EffectType::BABA, EffectType::IS, EffectType::MELT);
-    game.gameRules.AddBaseRule(EffectType::KEKE, EffectType::IS, EffectType::HOT);
+    game.gameRules.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
+    game.gameRules.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::HOT);
 
     game.ApplyRules();
 
-    EXPECT_TRUE(game.FindObjectsByProperty(EffectType::MELT).empty());
+    EXPECT_TRUE(game.FindObjectsByProperty(PropertyType::MELT).empty());
     EXPECT_EQ(game.At(0, 0).size(), 1);
     EXPECT_EQ(game.At(0, 0).at(0)->GetType(), ObjectType::KEKE);
 }
