@@ -34,6 +34,10 @@ class Rules final
     //! Delete move assignment operator
     Rules& operator=(Rules&&) = delete;
     
+    //! Returns count of all rules.
+    //! \return Count of all rules.
+    std::size_t GetRuleCount() const;
+
     //! Returns a list of all rules.
     //! \return A list of all rules.
     const std::list<Rule>& GetAllRules();
@@ -47,7 +51,7 @@ class Rules final
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.
-    void DeleteRule(int ruleID);
+    void DeleteRule(std::int64_t ruleID);
 
  private:
     std::list<Rule> rules_;

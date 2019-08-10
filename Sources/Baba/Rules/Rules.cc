@@ -11,13 +11,18 @@ const std::list<Rule>& Rules::GetAllRules()
     return rules_;
 }
 
+std::size_t Rules::GetRuleCount() const
+{
+    return rules_.size();
+}
+
 std::int64_t Rules::AddBaseRule(ObjectType target, ObjectType verb, ObjectType effect)
 {
     rules_.emplace_back(target, verb, effect);
     return rules_.back().GetRuleID();
 }
 
-void Rules::DeleteRule(int ruleID)
+void Rules::DeleteRule(std::int64_t ruleID)
 {
     auto predicate = [ruleID](const Rule& rule) -> bool {
         return rule.GetRuleID() == ruleID;
