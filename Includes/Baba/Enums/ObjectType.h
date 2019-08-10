@@ -14,107 +14,56 @@ namespace Baba
 enum class ObjectType
 {
     INVALID,
-#define TEXT(a) TEXT_##a,
-#define VERB(a) TEXT_##a,
-#define PROPERTY(a) TEXT_##a,
-#define BLOCK(a) a, TEXT_##a,
+#define X(a) a,
+    OBJECT_TYPE,
 #include "ObjectType.def"
-#undef TEXT
-#undef VERB
-#undef PROPERTY
-#undef BLOCK
+    VERB_TYPE,
+#include "VerbType.def"
+    TEXT_TYPE,
+#include "TextType.def"
+    PROP_TYPE,
+#include "PropertyType.def"
+#undef X
     COUNT,
 };
 
 enum class VerbType
 {
     INVALID,
-    IS,
-    HAS,
-    MAKE
-};
-
-enum class EffectType
-{
-    INVALID,
-#define TEXT(a)
-#define VERB(a) a,
-#define BLOCK(a) a,
-#define PROPERTY(a) a,
-#include "ObjectType.def"
-#undef TEXT
-#undef VERB
-#undef PROPERTY
-#undef BLOCK
+#define X(a) a,
+#include "VerbType.def"
+#undef X
     COUNT,
 };
 
-enum class WordClass
+enum class PropertyType
 {
     INVALID,
-    NOUN,
-    VERB,
-    PROPERTY,
+#define X(a) a,
+#include "PropertyType.def"
+#undef a
+    COUNT,
 };
 
-const std::vector<std::string> OBJECT_TYPE_STR {
-    "INVALID",
-#define TEXT(a) "TEXT_"#a,
-#define VERB(a) "TEXT_"#a,
-#define PROPERTY(a) "TEXT_"#a,
-#define BLOCK(a) #a, "TEXT_"#a,
-#include "ObjectType.def"
-#undef TEXT
-#undef VERB
-#undef PROPERTY
-#undef BLOCK
-};
+constexpr bool IsObjectType(ObjectType type)
+{
+    return (type > ObjectType::OBJECT_TYPE && type < ObjectType::VERB_TYPE);
+}
 
-const std::vector<std::string> EFFECT_TYPE_STR {
-    "INVALID",
-#define TEXT(a)
-#define VERB(a)#a,
-#define PROPERTY(a) #a,
-#define BLOCK(a) #a,
-#include "ObjectType.def"
-#undef TEXT
-#undef VERB
-#undef PROPERTY
-#undef BLOCK
-};
+constexpr bool IsVerbType(ObjectType type)
+{
+    return (type > ObjectType::VERB_TYPE && type < ObjectType::TEXT_TYPE);
+}
 
-const std::vector<std::string> NOUN_TYPE_STR {
-    "INVALID",
-#define TEXT(a)
-#define VERB(a)
-#define PROPERTY(a)
-#define BLOCK(a) #a,
-#include "ObjectType.def"
-#undef TEXT
-#undef VERB
-#undef PROPERTY
-#undef BLOCK
-};
+constexpr bool IsTextType(ObjectType type)
+{
+    return (type > ObjectType::TEXT_TYPE && type < ObjectType::PROP_TYPE);
+}
 
-const std::vector<std::string> VERB_TYPE_STR {
-    "INVALID",
-    "IS",
-    "HAS",
-    "MAKE",
-};
-
-const std::vector<std::string> PROPERTY_TYPE_STR {
-    "INVALID",
-#define TEXT(a)
-#define VERB(a)
-#define PROPERTY(a) #a,
-#define BLOCK(a)
-#include "ObjectType.def"
-#undef TEXT
-
-#undef PROPERTY
-#undef BLOCK
-};
+constexpr bool IsPropertyType(ObjectType type)
+{
+    return (type > ObjectType::PROP_TYPE && type < ObjectType::COUNT);
+}
 }  // namespace Baba
 
 #endif  // BABA_OBJECT_TYPE_H
