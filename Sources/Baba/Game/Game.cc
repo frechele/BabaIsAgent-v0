@@ -1,6 +1,5 @@
 // Copyright(c) 2019 Junyeong Park, Hyeonsu Kim
 
-#include <Baba/Common/Utils.h>
 #include <Baba/Enums/Game.h>
 #include <Baba/Game/Game.h>
 #include <Baba/Rules/Effects.h>
@@ -84,7 +83,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     return result;
 }
 
-Object::Arr Game::FindObjectsByProperty(EffectType property) const
+Object::Arr Game::FindObjectsByProperty(PropertyType property) const
 {
     Object::Arr result;
 
@@ -92,7 +91,7 @@ Object::Arr Game::FindObjectsByProperty(EffectType property) const
     {
         for (auto& obj : objs)
         {
-            if (obj->GetEffects().test(static_cast<std::size_t>(property)))
+            if (obj->HasProperty(property))
             {
                 result.emplace_back(obj);
             }
@@ -158,38 +157,38 @@ const Game::Point Game::GetPositionByObject(const Object& target) const
 void Game::ApplyRules()
 {
     auto& rules = gameRules.GetAllRules();
-    auto& effects = Effects::GetInstance().effects;
+    auto& effects = Effects::GetInstance().GetEffects();
     
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == EffectType::IS)
+        if (rule.GetVerb() == ObjectType::IS)
         {
-            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
+            auto targets = FindObjectsByType(rule.GetTarget());
 
             for (auto& target : targets)
             {
-                target->SetEffect(rule.GetEffect(), rule.GetRuleID());
+                target->AddProperty(ObjectToProperty(rule.GetEffect()));
             }
         }
     }
 
     for (auto& rule : rules)
     {
-        if (rule.GetVerb() == EffectType::IS)
+        if (rule.GetVerb() == ObjectType::IS)
         {
-            auto func = effects.at(rule.GetEffect());
-            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
+            auto func = effects.at(ObjectToProperty(rule.GetEffect()));
+            auto targets = FindObjectsByType(rule.GetTarget());
 
             for (auto& target : targets)
             {
                 func(*this, *target, rule);
             }
         }
-        else if (rule.GetVerb() == EffectType::HAS)
+        else if (rule.GetVerb() == ObjectType::HAS)
         {
             // Not implemented yet
         }
-        else if (rule.GetVerb() == EffectType::MAKE)
+        else if (rule.GetVerb() == ObjectType::MAKE)
         {
             // Not implemented yet
         }
@@ -207,76 +206,11 @@ bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 
 void Game::ParseRules()
 {
-    // Find verbs
-    std::vector<std::tuple<Object*, Point>> verbs;
-
-    for (auto& objs : map_)
-    {
-        for (auto& obj : objs)
-        {
-            if (Utils::ValidateWord(*obj, { WordClass::VERB }))
-            {
-                verbs.emplace_back(obj, GetPositionByObject(*obj));
-            }
-        }
-    }
-
-    constexpr std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
-
-    // Syntax analyzing
-    // The syntax currently implemented is:
-    // 3 words:
-    // - NOUN VERB NOUN
-    // - NOUN VERB PROPERTY
-    for (auto& verb : verbs)
-    {
-        // [i == 0]: Read from left to right
-        // [i == 1]: Read from up to down
-        //for (std::size_t i = 0; i < 2; ++i)
-        for (auto [dx, dy] : vec)
-        {
-            const auto [obj, pos] = verb;
-            auto [x, y] = pos;
-            
-            // Check out of bounds
-            if (!(ValidatePosition(x - dx, y - dy) && ValidatePosition(x + dx, y + dy)))
-            {
-                continue;
-            }
-
-            // Check syntax
-            Object::Arr subjects = FilterObjectByFunction(At(x - dx, y - dy), 
-                [](Object& obj)->bool{
-                return Utils::ValidateWord(obj, { WordClass::NOUN });
-            });
-
-            Object::Arr complements = FilterObjectByFunction(At(x + dx, y + dy), 
-                [](Object& obj)->bool{
-                return Utils::ValidateWord(obj, { WordClass::NOUN, WordClass::PROPERTY });
-            });
-
-            if (subjects.empty() || complements.empty())
-            {
-                continue;
-            }
-
-            // Make rules
-            for (auto& subject : subjects)
-            {
-                for (auto& complement : complements)
-                {
-                    // Temporarily written code
-                    gameRules.AddBaseRule(subject->GetEffectType(),
-                        obj->GetEffectType(), complement->GetEffectType());
-                }
-            }
-        }
-    }
 }
 
 void Game::DetermineResult()
 {
-    auto targets = FindObjectsByProperty(EffectType::YOU);
+    auto targets = FindObjectsByProperty(PropertyType::YOU);
     
     if (targets.empty())
     {
@@ -290,7 +224,7 @@ void Game::DetermineResult()
 
         for (auto& obj : objs)
         {
-            if (obj->GetEffects().test(static_cast<std::size_t>(EffectType::WIN)))
+            if (obj->HasProperty(PropertyType::WIN))
             {
                 gameResult_ = GameResult::WIN;
                 return;

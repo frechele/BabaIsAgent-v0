@@ -72,7 +72,7 @@ class Game final
     //! Find objects by Property
     //! \param property Object's property
     //! \return Objects having the same \p property
-    Object::Arr FindObjectsByProperty(EffectType property) const;
+    Object::Arr FindObjectsByProperty(PropertyType property) const;
 
     //! Find objects by Position of target
     //! \param target Object to provide position
