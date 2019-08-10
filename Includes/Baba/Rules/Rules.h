@@ -38,23 +38,18 @@ class Rules final
     //! \return A list of all rules.
     const std::list<Rule>& GetAllRules();
 
-    //! Returns count of rules.
-    //! \return Count of rules.
-    int GetRuleCount() const;
-
     //! Add base rule.
     //! \param target target's type.
     //! \param verb verb's type.
     //! \param effect effect's type.
     //! \return id of rule.
-    int AddBaseRule(EffectType target, EffectType verb, EffectType effect);
+    std::int64_t AddBaseRule(ObjectType target, ObjectType verb, ObjectType effect);
 
     //! Delete rule.
     //! \param ruleID id of rule to delete.
     void DeleteRule(int ruleID);
 
  private:
-    int ruleCount_ = 0;
     std::list<Rule> rules_;
 };
 }  // namespace Baba

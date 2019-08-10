@@ -11,16 +11,10 @@ const std::list<Rule>& Rules::GetAllRules()
     return rules_;
 }
 
-int Rules::GetRuleCount() const
+std::int64_t Rules::AddBaseRule(ObjectType target, ObjectType verb, ObjectType effect)
 {
-    return ruleCount_;
-}
-
-int Rules::AddBaseRule(EffectType target, EffectType verb, EffectType effect)
-{
-    ++ruleCount_;
-    rules_.emplace_back(target, verb, effect, ruleCount_);
-    return ruleCount_;
+    rules_.emplace_back(target, verb, effect);
+    return rules_.back().GetRuleID();
 }
 
 void Rules::DeleteRule(int ruleID)
