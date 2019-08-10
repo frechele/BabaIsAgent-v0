@@ -39,6 +39,7 @@ enum class VerbType
 enum class PropertyType
 {
     INVALID,
+    DECLARE,
 #define X(a) a,
 #include "PropertyType.def"
 #undef a

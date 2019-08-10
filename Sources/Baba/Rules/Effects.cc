@@ -14,17 +14,16 @@ Effects& Effects::GetInstance()
 void Effects::ImplementBlockEffects()
 {
     // ----------------------------------------------------------------------
-    // BABA
-    // Change target's type to BABA
+    // DECLARE
+    // Change target's type
     // ----------------------------------------------------------------------
-    auto BabaEffect = [](Game& game, Object& target, const Rule& rule) {
+    auto DeclareEffect = [](Game& game, Object& target, const Rule& rule) {
         (void)game;
         (void)rule;
 
-        target.SetType(ObjectType::BABA);
-        target.SetEffectType(EffectType::BABA);
+        target.SetType(rule.GetEffect());
     };
-    effects.emplace(EffectType::BABA, BabaEffect);
+    effects_.emplace(PropertyType::DECLARE, DeclareEffect);
 }
 
 void Effects::ImplementNonBlockEffects()
@@ -38,7 +37,7 @@ void Effects::ImplementNonBlockEffects()
         (void)target;
         (void)rule;
     };
-    effects.emplace(EffectType::YOU, YouEffect);
+    effects_.emplace(PropertyType::YOU, YouEffect);
 
     // ----------------------------------------------------------------------
     // WIN
@@ -49,7 +48,7 @@ void Effects::ImplementNonBlockEffects()
         (void)target;
         (void)rule;
     };
-    effects.emplace(EffectType::WIN, WinEffect);
+    effects_.emplace(PropertyType::WIN, WinEffect);
 
     // ----------------------------------------------------------------------
     // MELT
@@ -60,7 +59,7 @@ void Effects::ImplementNonBlockEffects()
         (void)target;
         (void)rule;
     };
-    effects.emplace(EffectType::MELT, MeltEffect);
+    effects_.emplace(PropertyType::MELT, MeltEffect);
 
     // ----------------------------------------------------------------------
     // HOT
@@ -73,14 +72,13 @@ void Effects::ImplementNonBlockEffects()
 
         for (auto& object : objects)
         {
-            if (object->GetEffects().test(
-                    static_cast<std::size_t>(EffectType::MELT)))
+            if (object->HasProperty(PropertyType::MELT))
             {
                 game.DestroyObject(*object);
             }
         }
     };
-    effects.emplace(EffectType::HOT, HotEffect);
+    effects_.emplace(PropertyType::HOT, HotEffect);
 }
 
 Effects::Effects()
