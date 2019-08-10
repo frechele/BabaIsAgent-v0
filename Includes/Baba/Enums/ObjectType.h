@@ -3,6 +3,7 @@
 #ifndef BABA_OBJECT_TYPE_H
 #define BABA_OBJECT_TYPE_H
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -64,6 +65,27 @@ constexpr bool IsTextType(ObjectType type)
 constexpr bool IsPropertyType(ObjectType type)
 {
     return (type > ObjectType::PROP_TYPE && type < ObjectType::COUNT);
+}
+
+constexpr PropertyType ObjectToProperty(ObjectType type)
+{
+    if (IsPropertyType(type))
+    {
+        return static_cast<PropertyType>(
+            static_cast<std::size_t>(type) -
+            static_cast<std::size_t>(ObjectType::PROP_TYPE) - 1u);
+    }
+    else
+    {
+        return PropertyType::INVALID;
+    }
+}
+
+constexpr ObjectType PropertyToObject(PropertyType type)
+{
+    return static_cast<ObjectType>(
+        static_cast<std::size_t>(type) +
+        static_cast<std::size_t>(ObjectType::PROP_TYPE) + 1u);
 }
 }  // namespace Baba
 
