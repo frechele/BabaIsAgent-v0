@@ -67,7 +67,7 @@ void Effects::ImplementNonBlockEffects()
     // ----------------------------------------------------------------------
     auto HotEffect = [](Game& game, Object& target, const Rule& rule) {
         (void)rule;
-        
+
         auto objects = game.FindObjectsByPosition(target);
 
         for (auto& object : objects)
@@ -85,5 +85,10 @@ Effects::Effects()
 {
     ImplementBlockEffects();
     ImplementNonBlockEffects();
+}
+
+const std::map<PropertyType, Effects::EffectFunc>& Effects::GetEffects() const
+{
+    return effects_;
 }
 }  // namespace Baba

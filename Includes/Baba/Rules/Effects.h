@@ -51,7 +51,7 @@ class Effects
 
     //! Returns map of properties
     //! \return Map of properties
-    const std::map<PropertyType, EffectFunc> GetEffects();
+    const std::map<PropertyType, EffectFunc>& GetEffects() const;
 
  private:
     std::map<PropertyType, EffectFunc> effects_;
