@@ -154,11 +154,38 @@ const Game::Point Game::GetPositionByObject(const Object& target) const
     throw std::runtime_error("Invalid target");
 }
 
-void Game::ApplyRules()
+bool Game::ValidatePosition(std::size_t x, std::size_t y) const
+{
+    return x < width_ && y < height_;
+}
+
+void Game::Update(Action action)
+{
+    parseRules();
+    if (action != Action::STAY)
+    {
+        // Do nothing
+    }
+
+    applyRules();
+
+    determineResult();
+}
+
+GameResult Game::GetGameResult() const
+{
+    return gameResult_;
+}
+
+void Game::parseRules()
+{
+}
+
+void Game::applyRules()
 {
     auto& rules = gameRules.GetAllRules();
     auto& effects = Effects::GetInstance().GetEffects();
-    
+
     for (auto& rule : rules)
     {
         if (rule.GetVerb() == ObjectType::IS)
@@ -199,19 +226,10 @@ void Game::ApplyRules()
     }
 }
 
-bool Game::ValidatePosition(std::size_t x, std::size_t y) const
-{
-    return x < width_ && y < height_;
-}
-
-void Game::ParseRules()
-{
-}
-
-void Game::DetermineResult()
+void Game::determineResult()
 {
     auto targets = FindObjectsByProperty(PropertyType::YOU);
-    
+
     if (targets.empty())
     {
         gameResult_ = GameResult::DEFEAT;
@@ -233,10 +251,5 @@ void Game::DetermineResult()
     }
 
     gameResult_ = GameResult::INVALID;
-}
-
-GameResult Game::GetGameResult() const
-{
-    return gameResult_;
 }
 }  // namespace Baba

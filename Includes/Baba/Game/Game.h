@@ -3,6 +3,7 @@
 #ifndef BABA_GAME_H
 #define BABA_GAME_H
 
+#include <Baba/Enums/Action.h>
 #include <Baba/Enums/Game.h>
 #include <Baba/Game/Object.h>
 #include <Baba/Rules/Rules.h>
@@ -94,20 +95,20 @@ class Game final
     //! Check position
     bool ValidatePosition(std::size_t x, std::size_t y) const;
 
-    //! Apply all rules 
-    void ApplyRules();
-
-    //! Parse rules
-    void ParseRules();
-
-    //! Determine game result
-    void DetermineResult();
+    //! Update game
+    //! \param action Player's action
+    void Update(Action action = Action::STAY);
 
     //! Get game result;
     //! \return GameResult
     GameResult GetGameResult() const;
 
     Rules gameRules;
+
+ private:
+    void parseRules();
+    void applyRules();
+    void determineResult();
 
  private:
     std::size_t width_, height_;
