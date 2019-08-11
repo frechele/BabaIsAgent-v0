@@ -86,97 +86,84 @@ TEST(GameTest, GetPositionByObject)
 
 TEST(GameTest, ParseRules_Vertical_Center)
 {
-    /*Game game(10, 10);
+    Game game(10, 10);
 
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::KEKE)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(6, 5)
-        .SetType(ObjectType::IS)
-        .AddProperty(PropertyType::WORD);
+    game.Put(6, 5).SetType(ObjectType::IS).AddProperty(PropertyType::WORD);
     game.Put(7, 5)
         .SetType(ObjectType::BABA)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
 
-    game.ParseRules();
+    game.Update();
 
-    EXPECT_EQ(game.gameRules.GetRuleCount(), 1);
+    EXPECT_EQ(game.GetRules().size(), 1u);
 
-    auto& rule = *game.gameRules.GetAllRules().begin();
+    auto& rule = *game.GetRules().begin();
 
     EXPECT_EQ(rule.GetTarget(), ObjectType::KEKE);
     EXPECT_EQ(rule.GetVerb(), ObjectType::IS);
     EXPECT_EQ(rule.GetEffect(), ObjectType::BABA);
 
-    game.ApplyRules();
-
-    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::BABA);*/
+    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::BABA);
 }
 
 TEST(GameTest, ParseRules_Horizontal_Center)
 {
-    /*Game game(10, 10);
+    Game game(10, 10);
 
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::KEKE)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(5, 6)
-        .SetType(ObjectType::IS)
-        .AddProperty(PropertyType::WORD);
+    game.Put(5, 6).SetType(ObjectType::IS).AddProperty(PropertyType::WORD);
     game.Put(5, 7)
         .SetType(ObjectType::BABA)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
 
-    game.ParseRules();
+    game.Update();
 
-    EXPECT_EQ(game.gameRules.GetRuleCount(), 1);
+    EXPECT_EQ(game.GetRules().size(), 1u);
 
-    auto& rule = *game.gameRules.GetAllRules().begin();
+    auto& rule = *game.GetRules().begin();
 
     EXPECT_EQ(rule.GetTarget(), ObjectType::KEKE);
     EXPECT_EQ(rule.GetVerb(), ObjectType::IS);
     EXPECT_EQ(rule.GetEffect(), ObjectType::BABA);
 
-    game.ApplyRules();
-
-    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::BABA);*/
+    EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::BABA);
 }
 
 TEST(GameTest, ParseRules_Cross)
 {
- /*   Game game(10, 10);
+    Game game(10, 10);
 
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 4)
         .SetType(ObjectType::KEKE)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(5, 5)
-        .SetType(ObjectType::IS);
-    game.Put(5, 6)
-        .SetType(ObjectType::HOT);
+    game.Put(5, 5).SetType(ObjectType::IS);
+    game.Put(5, 6).SetType(ObjectType::HOT);
     game.Put(4, 5)
         .SetType(ObjectType::BABA)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(6, 5)
-        .SetType(ObjectType::MELT);
+    game.Put(6, 5).SetType(ObjectType::MELT);
     game.Put(1, 1).SetType(ObjectType::BABA);
 
-    game.ParseRules();
+    game.Update();
 
-    EXPECT_EQ(game.gameRules.GetRuleCount(), 2);
-
-    game.ApplyRules();
+    EXPECT_EQ(game.GetRules().size(), 2u);
 
     EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::KEKE);
-    EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA).empty());*/
+    EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA, true).empty());
 }
 
 TEST(GameTest, DetermineResult_WIN)
@@ -189,22 +176,35 @@ TEST(GameTest, DetermineResult_WIN)
         .SetType(ObjectType::BABA)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(5, 6)
-        .SetType(ObjectType::IS);
-    game.Put(5, 7)
-        .SetType(ObjectType::YOU);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(5, 7).SetType(ObjectType::YOU);
     game.Put(6, 5)
         .SetType(ObjectType::FLAG)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(6, 6)
-        .SetType(ObjectType::IS);
-    game.Put(6, 7)
-        .SetType(ObjectType::WIN);
+    game.Put(6, 6).SetType(ObjectType::IS);
+    game.Put(6, 7).SetType(ObjectType::WIN);
 
     game.Update();
 
     EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
+}
+
+TEST(GameTest, AddOrRemoveRule)
+{
+    Game game(5, 5);
+
+    std::int64_t id = game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
+    EXPECT_EQ(game.GetRules().size(), 1u);
+
+    EXPECT_EQ(game.GetRules().begin()->GetRuleID(), id);
+
+    EXPECT_EQ(game.GetRules().begin()->GetTarget(), ObjectType::BABA);
+    EXPECT_EQ(game.GetRules().begin()->GetVerb(), ObjectType::IS);
+    EXPECT_EQ(game.GetRules().begin()->GetEffect(), ObjectType::YOU);
+
+    game.DeleteRule(id);
+    EXPECT_EQ(game.GetRules().size(), 0u);
 }
 
 TEST(GameTest, DetermineResult_DEFEAT)
@@ -227,10 +227,8 @@ TEST(GameTest, DetermineResult_INVALID)
         .SetType(ObjectType::BABA)
         .SetText(true)
         .AddProperty(PropertyType::WORD);
-    game.Put(5, 6)
-        .SetType(ObjectType::IS);
-    game.Put(5, 7)
-        .SetType(ObjectType::YOU);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(5, 7).SetType(ObjectType::YOU);
 
     game.Update();
 

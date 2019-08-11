@@ -63,7 +63,8 @@ void Game::DestroyObject(Object& object)
     }
 }
 
-Object::Arr Game::FindObjects(std::function<bool(const Object&)> func) const
+Object::Arr Game::FindObjects(std::function<bool(const Object&)> func,
+                              bool excludeText) const
 {
     Object::Arr result;
 
@@ -73,7 +74,10 @@ Object::Arr Game::FindObjects(std::function<bool(const Object&)> func) const
         {
             if (func(*obj))
             {
-                result.emplace_back(obj);
+                if (!excludeText || !obj->IsText())
+                {
+                    result.emplace_back(obj);
+                }
             }
         }
     }
@@ -81,19 +85,23 @@ Object::Arr Game::FindObjects(std::function<bool(const Object&)> func) const
     return result;
 }
 
-Object::Arr Game::FindObjectsByType(ObjectType type) const
+Object::Arr Game::FindObjectsByType(ObjectType type, bool excludeText) const
 {
     return FindObjects(
-        [type](const Object& obj) { return obj.GetType() == type; });
+        [type](const Object& obj) { return obj.GetType() == type; },
+        excludeText);
 }
 
-Object::Arr Game::FindObjectsByProperty(PropertyType property) const
+Object::Arr Game::FindObjectsByProperty(PropertyType property,
+                                        bool excludeText) const
 {
     return FindObjects(
-        [property](const Object& obj) { return obj.HasProperty(property); });
+        [property](const Object& obj) { return obj.HasProperty(property); },
+        excludeText);
 }
 
-Object::Arr Game::FindObjectsByPosition(const Object& target) const
+Object::Arr Game::FindObjectsByPosition(const Object& target,
+                                        bool excludeText) const
 {
     for (auto& objs : map_)
     {
@@ -101,7 +109,21 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
         {
             if (*obj == target)
             {
-                return objs;
+                if (excludeText)
+                {
+                    Object::Arr arr;
+
+                    for (auto& o : objs)
+                    {
+                        arr.emplace_back(o);
+                    }
+
+                    return arr;
+                }
+                else
+                {
+                    return objs;
+                }
             }
         }
     }

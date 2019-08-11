@@ -68,23 +68,27 @@ class Game final
 
     //! FInd objects by func
     //! \param func function to classify objects
+    //! \param excludeTest Exclude text option
     //! \return Objects that satisfy func
-    Object::Arr FindObjects(std::function<bool(const Object&)> func) const;
+    Object::Arr FindObjects(std::function<bool(const Object&)> func, bool excludeText = false) const;
 
     //! Find objects by type
     //! \param Object's type
+    //! \param excludeTest Exclude text option
     //! \return Objects having the same \p type
-    Object::Arr FindObjectsByType(ObjectType type) const;
+    Object::Arr FindObjectsByType(ObjectType type, bool excludeText = false) const;
     
     //! Find objects by Property
     //! \param property Object's property
+    //! \param excludeTest Exclude text option
     //! \return Objects having the same \p property
-    Object::Arr FindObjectsByProperty(PropertyType property) const;
+    Object::Arr FindObjectsByProperty(PropertyType property, bool excludeText = false) const;
 
     //! Find objects by Position of target
     //! \param target Object to provide position
+    //! \param excludeTest Exclude text option
     //! \return Objects havaing the same position as target
-    Object::Arr FindObjectsByPosition(const Object& target) const;
+    Object::Arr FindObjectsByPosition(const Object& target, bool excludeText = false) const;
 
     //! Filter objects by func
     //! \param objects objects to be filtered
