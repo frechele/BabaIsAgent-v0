@@ -24,27 +24,43 @@ TEST(ObjectTest, SetType)
     Object object;
     EXPECT_EQ(object.SetType(ObjectType::BABA).GetType(), ObjectType::BABA);
     EXPECT_EQ(object.SetType(ObjectType::KEKE).GetType(), ObjectType::KEKE);
+
+    EXPECT_TRUE(object.SetType(ObjectType::YOU).IsText());
+    EXPECT_TRUE(object.HasProperty(PropertyType::WORD));
+
     EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
 }
 
-TEST(ObjectTest, SetEffectType)
+TEST(ObjectTest, SetText)
 {
     using namespace Baba;
 
-    Object obj1;
-    Object obj2;
-    Object obj3;
+    Object object;
+    object.SetType(ObjectType::BABA);
 
-    obj1.SetEffectType(EffectType::ALGAE);
-    obj2.SetEffectType(EffectType::IS);
-    obj3.SetEffectType(EffectType::HOT);
+    EXPECT_FALSE(object.IsText());
 
-    EXPECT_EQ(obj1.GetWordClass(), WordClass::NOUN);
-    EXPECT_EQ(obj2.GetWordClass(), WordClass::VERB);
-    EXPECT_EQ(obj3.GetWordClass(), WordClass::PROPERTY);
+    object.SetText(true);
+    EXPECT_TRUE(object.IsText());
+
+    object.SetType(ObjectType::IS);
+    EXPECT_TRUE(object.IsText());
+
+    EXPECT_ANY_THROW(object.SetText(false));
+}
+
+TEST(ObjectTest, Property)
+{
+    using namespace Baba;
 
     Object object;
-    EXPECT_ANY_THROW(object.SetEffectType(EffectType::INVALID));
+    object.AddProperty(PropertyType::MELT);
+
+    EXPECT_TRUE(object.HasProperty(PropertyType::MELT));
+
+    object.RemoveProperty(PropertyType::MELT);
+
+    EXPECT_FALSE(object.HasProperty(PropertyType::MELT));
 }
 
 TEST(ObjectTest, Destroy)

@@ -5,13 +5,10 @@
 
 #include <Baba/Enums/ObjectType.h>
 
-#include <bitset>
-#include <map>
-#include <vector>
+#include <set>
 
 namespace Baba
 {
-using EffectsBitset = std::bitset<static_cast<std::size_t>(EffectType::COUNT)>;
 //!
 //! \brief Object that conists level
 //!
@@ -42,16 +39,15 @@ class Object
 
     int GetID() const;
 
+    bool IsText() const;
+    Object& SetText(bool value);
+    
     Object& SetType(ObjectType type);
     ObjectType GetType() const;
 
-    Object& SetEffectType(EffectType type);
-    EffectType GetEffectType() const;
-    WordClass GetWordClass() const;
-
-    Object& SetEffect(EffectType effect, int ruleID = -1);
-    Object& SetEffects(const std::vector<EffectType>& effects);
-    const EffectsBitset GetEffects() const;
+    Object& AddProperty(PropertyType type);
+    void RemoveProperty(PropertyType type);
+    bool HasProperty(PropertyType type) const;
 
     void Destroy();
     bool IsDestroyed() const;
@@ -61,10 +57,9 @@ class Object
 
  private:
     int objectID_;
-    std::map<std::size_t, EffectsBitset> enchants_;
+    std::set<PropertyType> properties_;
     ObjectType type_ = ObjectType::INVALID;
-    EffectType effectType_ = EffectType::INVALID;
-    WordClass wordClass_ = WordClass::INVALID;
+    bool isText_ = false;
 
     bool isDestroyed_ = false;
 };

@@ -5,9 +5,6 @@
 
 #include <Baba/Game/Object.h>
 
-#include <string>
-#include <string_view>
-
 namespace Baba
 {
 //!
@@ -17,33 +14,40 @@ class Rule
 {
  public:
     //! Constructor
-    Rule(EffectType target, EffectType verb, EffectType effect, int ruleID);
+    Rule(ObjectType target, ObjectType verb, ObjectType effect);
 
     //! Default destructor
     virtual ~Rule() = default;
 
     //! Returns target object's type
     //! \return Target object's type
-    EffectType GetTarget() const;
+    ObjectType GetTarget() const;
 
     //! Returns object's verb
     //! \return Object's verb
-    EffectType GetVerb() const;
+    ObjectType GetVerb() const;
     
     //! Returns effect's type
     //! \return Effect's type
-    EffectType GetEffect() const;
+    ObjectType GetEffect() const;
 
     //! Returns Rule's id
     //! \return Rule's id
-    int GetRuleID() const;
+    std::int64_t GetRuleID() const;
+
+    //! Get Rule's id
+    //! \param target Rule target
+    //! \param verb Rule verb
+    //! \param effect Rule effect
+    //! \return Rule's id
+    static std::int64_t GetRuleID(ObjectType target, ObjectType verb, ObjectType effect);
+
+    bool operator<(const Rule& other) const;
 
  private:
-    EffectType target_;
-    EffectType verb_;
-    EffectType effect_;
-
-    int ruleID_;
+    ObjectType target_;
+    ObjectType verb_;
+    ObjectType effect_;
 };
 }  // namespace Baba
 

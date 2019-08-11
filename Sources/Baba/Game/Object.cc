@@ -19,11 +19,34 @@ int Object::GetID() const
     return objectID_;
 }
 
+bool Object::IsText() const
+{
+    return isText_;
+}
+
+Object& Object::SetText(bool val)
+{
+    if ((IsTextType(type_) || IsVerbType(type_) || IsPropertyType(type_)) && !val)
+    {
+        throw std::logic_error("Cannot set to not text");
+    }
+
+    isText_ = val;
+
+    return *this;
+}
+
 Object& Object::SetType(ObjectType type)
 {
     if (type == ObjectType::INVALID)
     {
         throw std::runtime_error("Invalid object type");
+    }
+
+    if (IsTextType(type) || IsVerbType(type) || IsPropertyType(type))
+    {
+        isText_ = true;
+        AddProperty(PropertyType::WORD);
     }
 
     type_ = type;
@@ -36,72 +59,27 @@ ObjectType Object::GetType() const
     return type_;
 }
 
-Object& Object::SetEffectType(EffectType type)
+Object& Object::AddProperty(PropertyType type)
 {
-    if (type == EffectType::INVALID)
-    {
-        throw std::runtime_error("Invalid effect type");
-    }
-
-    static std::vector wordClasses(
-        {WordClass::NOUN, WordClass::VERB, WordClass::PROPERTY}); 
-    static std::vector wordClassStrs(
-        {NOUN_TYPE_STR, VERB_TYPE_STR, PROPERTY_TYPE_STR});
-
-    auto& str = EFFECT_TYPE_STR[static_cast<std::size_t>(type)];
-
-    for (std::size_t i = 0; i < wordClasses.size(); i++)
-    {
-        if (std::find(wordClassStrs[i].begin(), wordClassStrs[i].end(), str) != wordClassStrs[i].end())
-        {
-            wordClass_= wordClasses[i];
-        }
-    }
-
-    effectType_ = type;
+    properties_.emplace(type);
 
     return *this;
 }
 
-EffectType Object::GetEffectType() const
+void Object::RemoveProperty(PropertyType type)
 {
-    return effectType_;
-}
+    auto it = std::find(properties_.begin(), properties_.end(), type);
 
-WordClass Object::GetWordClass() const
-{
-    return wordClass_;
-}
-
-Object& Object::SetEffect(EffectType effect, int ruleID)
-{
-    EffectsBitset bitset;
-    bitset.set(static_cast<int>(effect));
-    enchants_.emplace(ruleID, bitset);
-
-    return *this;
-}
-
-Object& Object::SetEffects(const std::vector<EffectType>& effects)
-{
-    for (auto& effect : effects)
+    if (it != properties_.end())
     {
-        SetEffect(effect);
+        properties_.erase(it);
     }
-
-    return *this;
 }
 
-const EffectsBitset Object::GetEffects() const
+bool Object::HasProperty(PropertyType type) const
 {
-    EffectsBitset result;
-
-    for (const auto& enchant : enchants_)
-    {
-        result |= enchant.second;
-    }
-
-    return result;
+    return std::find(properties_.begin(), properties_.end(), type) !=
+           properties_.end();
 }
 
 void Object::Destroy()

@@ -1,11 +1,8 @@
 // Copyright(c) 2019 Junyeong Park, Hyeonsu Kim
 
-#include <Baba/Common/Utils.h>
 #include <Baba/Enums/Game.h>
 #include <Baba/Game/Game.h>
 #include <Baba/Rules/Effects.h>
-#include <Baba/Rules/Rule.h>
-#include <Baba/Rules/Rules.h>
 
 #include <algorithm>
 #include <stdexcept>
@@ -66,7 +63,8 @@ void Game::DestroyObject(Object& object)
     }
 }
 
-Object::Arr Game::FindObjectsByType(ObjectType type) const
+Object::Arr Game::FindObjects(std::function<bool(const Object&)> func,
+                              bool excludeText) const
 {
     Object::Arr result;
 
@@ -74,9 +72,12 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     {
         for (auto& obj : objs)
         {
-            if (obj->GetType() == type)
+            if (func(*obj))
             {
-                result.emplace_back(obj);
+                if (!excludeText || !obj->IsText())
+                {
+                    result.emplace_back(obj);
+                }
             }
         }
     }
@@ -84,25 +85,23 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     return result;
 }
 
-Object::Arr Game::FindObjectsByProperty(EffectType property) const
+Object::Arr Game::FindObjectsByType(ObjectType type, bool excludeText) const
 {
-    Object::Arr result;
-
-    for (auto& objs : map_)
-    {
-        for (auto& obj : objs)
-        {
-            if (obj->GetEffects().test(static_cast<std::size_t>(property)))
-            {
-                result.emplace_back(obj);
-            }
-        }
-    }
-
-    return result;
+    return FindObjects(
+        [type](const Object& obj) { return obj.GetType() == type; },
+        excludeText);
 }
 
-Object::Arr Game::FindObjectsByPosition(const Object& target) const
+Object::Arr Game::FindObjectsByProperty(PropertyType property,
+                                        bool excludeText) const
+{
+    return FindObjects(
+        [property](const Object& obj) { return obj.HasProperty(property); },
+        excludeText);
+}
+
+Object::Arr Game::FindObjectsByPosition(const Object& target,
+                                        bool excludeText) const
 {
     for (auto& objs : map_)
     {
@@ -110,7 +109,24 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
         {
             if (*obj == target)
             {
-                return objs;
+                if (excludeText)
+                {
+                    Object::Arr arr;
+
+                    for (auto& o : objs)
+                    {
+                        if (!o->IsText())
+                        {
+                            arr.emplace_back(o);
+                        }
+                    }
+
+                    return arr;
+                }
+                else
+                {
+                    return objs;
+                }
             }
         }
     }
@@ -118,8 +134,8 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
     return Object::Arr();
 }
 
-Object::Arr Game::FilterObjectByFunction(const Object::Arr& objects,
-                                         std::function<bool(Object&)> func) const
+Object::Arr Game::FilterObjectByFunction(
+    const Object::Arr& objects, std::function<bool(const Object&)> func) const
 {
     Object::Arr result;
 
@@ -141,12 +157,12 @@ const Game::Point Game::GetPositionByObject(const Object& target) const
         for (std::size_t x = 0; x < GetWidth(); x++)
         {
             const auto& objs = map_[x + y * width_];
-            
+
             for (auto& obj : objs)
             {
                 if (*obj == target)
                 {
-                    return {x, y};
+                    return { x, y };
                 }
             }
         }
@@ -155,129 +171,155 @@ const Game::Point Game::GetPositionByObject(const Object& target) const
     throw std::runtime_error("Invalid target");
 }
 
-void Game::ApplyRules()
-{
-    auto& rules = gameRules.GetAllRules();
-    auto& effects = Effects::GetInstance().effects;
-    
-    for (auto& rule : rules)
-    {
-        if (rule.GetVerb() == EffectType::IS)
-        {
-            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
-
-            for (auto& target : targets)
-            {
-                target->SetEffect(rule.GetEffect(), rule.GetRuleID());
-            }
-        }
-    }
-
-    for (auto& rule : rules)
-    {
-        if (rule.GetVerb() == EffectType::IS)
-        {
-            auto func = effects.at(rule.GetEffect());
-            auto targets = FindObjectsByType(Utils::EffectToObject(rule.GetTarget()));
-
-            for (auto& target : targets)
-            {
-                func(*this, *target, rule);
-            }
-        }
-        else if (rule.GetVerb() == EffectType::HAS)
-        {
-            // Not implemented yet
-        }
-        else if (rule.GetVerb() == EffectType::MAKE)
-        {
-            // Not implemented yet
-        }
-        else
-        {
-            // throw
-        }
-    }
-}
-
 bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 {
     return x < width_ && y < height_;
 }
 
-void Game::ParseRules()
+void Game::Update(Action action)
 {
-    // Find verbs
-    std::vector<std::tuple<Object*, Point>> verbs;
-
-    for (auto& objs : map_)
+    parseRules();
+    if (action != Action::STAY)
     {
-        for (auto& obj : objs)
-        {
-            if (Utils::ValidateWord(*obj, { WordClass::VERB }))
-            {
-                verbs.emplace_back(obj, GetPositionByObject(*obj));
-            }
-        }
+        // Do nothing
     }
 
-    constexpr std::tuple<std::size_t, std::size_t> vec[] = {{1, 0}, {0, 1}};
+    applyRules();
 
-    // Syntax analyzing
-    // The syntax currently implemented is:
-    // 3 words:
-    // - NOUN VERB NOUN
-    // - NOUN VERB PROPERTY
+    determineResult();
+}
+
+GameResult Game::GetGameResult() const
+{
+    return gameResult_;
+}
+
+std::int64_t Game::AddRule(ObjectType target, ObjectType verb,
+                           ObjectType effect)
+{
+    rules_.emplace(target, verb, effect);
+
+    return Rule::GetRuleID(target, verb, effect);
+}
+
+void Game::DeleteRule(std::int64_t id)
+{
+    auto it =
+        std::find_if(rules_.begin(), rules_.end(),
+                     [id](const Rule& rule) { return rule.GetRuleID() == id; });
+    if (it != rules_.end())
+    {
+        rules_.erase(it);
+    }
+}
+
+const std::set<Rule>& Game::GetRules() const
+{
+    return rules_;
+}
+
+void Game::parseRules()
+{
+    auto verbs = FindObjects(
+        [](const Object& obj) { return IsVerbType(obj.GetType()); });
+
     for (auto& verb : verbs)
     {
-        // [i == 0]: Read from left to right
-        // [i == 1]: Read from up to down
-        //for (std::size_t i = 0; i < 2; ++i)
-        for (auto [dx, dy] : vec)
-        {
-            const auto [obj, pos] = verb;
-            auto [x, y] = pos;
-            
-            // Check out of bounds
-            if (!(ValidatePosition(x - dx, y - dy) && ValidatePosition(x + dx, y + dy)))
+        auto [x, y] = GetPositionByObject(*verb);
+
+        const auto addRules = [&, x = x, y = y](std::size_t dx,
+                                                std::size_t dy) {
+            if (ValidatePosition(x - dx, y - dy) &&
+                ValidatePosition(x + dx, y + dy))
             {
-                continue;
-            }
+                auto targets = FilterObjectByFunction(
+                    At(x - dx, y - dy),
+                    [](const Object& obj) { return obj.IsText(); });
+                auto effects = FilterObjectByFunction(
+                    At(x + dx, y + dy),
+                    [](const Object& obj) { return obj.IsText(); });
 
-            // Check syntax
-            Object::Arr subjects = FilterObjectByFunction(At(x - dx, y - dy), 
-                [](Object& obj)->bool{
-                return Utils::ValidateWord(obj, { WordClass::NOUN });
-            });
-
-            Object::Arr complements = FilterObjectByFunction(At(x + dx, y + dy), 
-                [](Object& obj)->bool{
-                return Utils::ValidateWord(obj, { WordClass::NOUN, WordClass::PROPERTY });
-            });
-
-            if (subjects.empty() || complements.empty())
-            {
-                continue;
-            }
-
-            // Make rules
-            for (auto& subject : subjects)
-            {
-                for (auto& complement : complements)
+                for (auto& target : targets)
                 {
-                    // Temporarily written code
-                    gameRules.AddBaseRule(subject->GetEffectType(),
-                        obj->GetEffectType(), complement->GetEffectType());
+                    for (auto& effect : effects)
+                    {
+                        AddRule(target->GetType(), verb->GetType(),
+                                effect->GetType());
+                    }
+                }
+            }
+        };
+
+        addRules(1, 0);
+        addRules(0, 1);
+    }
+}
+
+void Game::applyRules()
+{
+    auto& effects = Effects::GetInstance().GetEffects();
+
+    for (auto& rule : rules_)
+    {
+        if (IsPropertyType(rule.GetEffect()))
+        {
+            auto targets = FindObjectsByType(rule.GetTarget());
+
+            for (auto& target : targets)
+            {
+                if (!target->IsText())
+                {
+                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
                 }
             }
         }
     }
+
+    for (auto& rule : rules_)
+    {
+        if (rule.GetVerb() == ObjectType::IS)
+        {
+            auto targets = FindObjectsByType(rule.GetTarget());
+
+            if (IsObjectType(rule.GetEffect()))
+            {
+                for (auto& target : targets)
+                {
+                    if (!target->IsText())
+                    {
+                        target->SetType(rule.GetEffect());
+                    }
+                }
+            }
+            else
+            {
+                auto func = effects.at(ObjectToProperty(rule.GetEffect()));
+
+                for (auto& target : targets)
+                {
+                    func(*this, *target, rule);
+                }
+            }
+        }
+        // else if (rule.GetVerb() == ObjectType::HAS)
+        //{
+        //    // Not implemented yet
+        //}
+        // else if (rule.GetVerb() == ObjectType::MAKE)
+        //{
+        //    // Not implemented yet
+        //}
+        // else
+        //{
+        //    // throw
+        //}
+    }
 }
 
-void Game::DetermineResult()
+void Game::determineResult()
 {
-    auto targets = FindObjectsByProperty(EffectType::YOU);
-    
+    auto targets = FindObjectsByProperty(PropertyType::YOU);
+
     if (targets.empty())
     {
         gameResult_ = GameResult::DEFEAT;
@@ -290,7 +332,7 @@ void Game::DetermineResult()
 
         for (auto& obj : objs)
         {
-            if (obj->GetEffects().test(static_cast<std::size_t>(EffectType::WIN)))
+            if (obj->HasProperty(PropertyType::WIN))
             {
                 gameResult_ = GameResult::WIN;
                 return;
@@ -299,10 +341,5 @@ void Game::DetermineResult()
     }
 
     gameResult_ = GameResult::INVALID;
-}
-
-GameResult Game::GetGameResult() const
-{
-    return gameResult_;
 }
 }  // namespace Baba

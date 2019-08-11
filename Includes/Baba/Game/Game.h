@@ -3,12 +3,14 @@
 #ifndef BABA_GAME_H
 #define BABA_GAME_H
 
+#include <Baba/Enums/Action.h>
 #include <Baba/Enums/Game.h>
 #include <Baba/Game/Object.h>
-#include <Baba/Rules/Rules.h>
+#include <Baba/Rules/Rule.h>
 
 #include <functional>
 #include <vector>
+#include <set>
 
 namespace Baba
 {
@@ -64,27 +66,36 @@ class Game final
     //! \param object Object will be destroyed
     void DestroyObject(Object& object);
 
+    //! Find objects by func
+    //! \param func function to classify objects
+    //! \param excludeTest Exclude text option
+    //! \return Objects that satisfy func
+    Object::Arr FindObjects(std::function<bool(const Object&)> func, bool excludeText = false) const;
+
     //! Find objects by type
     //! \param Object's type
+    //! \param excludeTest Exclude text option
     //! \return Objects having the same \p type
-    Object::Arr FindObjectsByType(ObjectType type) const;
+    Object::Arr FindObjectsByType(ObjectType type, bool excludeText = false) const;
     
     //! Find objects by Property
     //! \param property Object's property
+    //! \param excludeTest Exclude text option
     //! \return Objects having the same \p property
-    Object::Arr FindObjectsByProperty(EffectType property) const;
+    Object::Arr FindObjectsByProperty(PropertyType property, bool excludeText = false) const;
 
     //! Find objects by Position of target
     //! \param target Object to provide position
+    //! \param excludeTest Exclude text option
     //! \return Objects havaing the same position as target
-    Object::Arr FindObjectsByPosition(const Object& target) const;
+    Object::Arr FindObjectsByPosition(const Object& target, bool excludeText = false) const;
 
     //! Filter objects by func
     //! \param objects objects to be filtered
     //! \param func function to classify objects
     //! \return filtered objects
     Object::Arr FilterObjectByFunction(const Object::Arr& objects,
-                                       std::function<bool(Object&)> func) const;
+                                       std::function<bool(const Object&)> func) const;
 
     //! Return target's position
     //! \param target target object
@@ -94,25 +105,30 @@ class Game final
     //! Check position
     bool ValidatePosition(std::size_t x, std::size_t y) const;
 
-    //! Apply all rules 
-    void ApplyRules();
-
-    //! Parse rules
-    void ParseRules();
-
-    //! Determine game result
-    void DetermineResult();
+    //! Update game
+    //! \param action Player's action
+    void Update(Action action = Action::STAY);
 
     //! Get game result;
     //! \return GameResult
     GameResult GetGameResult() const;
 
-    Rules gameRules;
+    std::int64_t AddRule(ObjectType target, ObjectType verb, ObjectType effect);
+    void DeleteRule(std::int64_t id);
+    const std::set<Rule>& GetRules() const;
+
+ private:
+    void parseRules();
+    void applyRules();
+    void determineResult();
 
  private:
     std::size_t width_, height_;
     Object::Arr objects_;
     std::vector<Object::Arr> map_;
+
+    std::set<Rule> rules_;
+
     GameResult gameResult_ = GameResult::INVALID;
     GameStep nowStep_ = GameStep::INVALID;
 };
