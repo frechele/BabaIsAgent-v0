@@ -60,6 +60,13 @@ TEST(GameTest, FindObjectsByPosition)
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByPosition(obj1).at(1), obj2);
 
+    game.Put(0, 0)
+        .SetType(ObjectType::ME)
+        .SetText(true)
+        .AddProperty(PropertyType::WORD);
+
+    EXPECT_EQ(game.FindObjectsByPosition(obj1, true).size(), 2u);
+
     Object invalid;
     EXPECT_EQ(game.FindObjectsByPosition(invalid).empty(), true);
 }

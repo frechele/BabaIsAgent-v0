@@ -298,18 +298,18 @@ void Game::applyRules()
                 }
             }
         }
-        else if (rule.GetVerb() == ObjectType::HAS)
-        {
-            // Not implemented yet
-        }
-        else if (rule.GetVerb() == ObjectType::MAKE)
-        {
-            // Not implemented yet
-        }
-        else
-        {
-            // throw
-        }
+        //else if (rule.GetVerb() == ObjectType::HAS)
+        //{
+        //    // Not implemented yet
+        //}
+        //else if (rule.GetVerb() == ObjectType::MAKE)
+        //{
+        //    // Not implemented yet
+        //}
+        //else
+        //{
+        //    // throw
+        //}
     }
 }
 
