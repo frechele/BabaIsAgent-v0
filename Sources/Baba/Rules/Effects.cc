@@ -17,13 +17,13 @@ void Effects::ImplementBlockEffects()
     // DECLARE
     // Change target's type
     // ----------------------------------------------------------------------
-    auto DeclareEffect = [](Game& game, Object& target, const Rule& rule) {
+    /*auto DeclareEffect = [](Game& game, Object& target, const Rule& rule) {
         (void)game;
         (void)rule;
 
         target.SetType(rule.GetEffect());
     };
-    effects_.emplace(PropertyType::DECLARE, DeclareEffect);
+    effects_.emplace(PropertyType::DECLARE, DeclareEffect);*/
 }
 
 void Effects::ImplementNonBlockEffects()

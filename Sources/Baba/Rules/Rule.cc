@@ -27,8 +27,19 @@ ObjectType Rule::GetEffect() const
 
 std::int64_t Rule::GetRuleID() const
 {
-    return (static_cast<std::int64_t>(target_) << 40) 
-        | (static_cast<std::int64_t>(verb_) << 10) 
-        | (static_cast<std::int64_t>(effect_) << 0);
+    return Rule::GetRuleID(target_, verb_, effect_);
+}
+
+std::int64_t Rule::GetRuleID(ObjectType target, ObjectType verb,
+                             ObjectType effect)
+{
+    return (static_cast<std::int64_t>(target) << 40) |
+           (static_cast<std::int64_t>(verb) << 10) |
+           (static_cast<std::int64_t>(effect) << 0);
+}
+
+bool Rule::operator<(const Rule& other) const
+{
+    return (GetRuleID() < other.GetRuleID());
 }
 }  // namespace Baba

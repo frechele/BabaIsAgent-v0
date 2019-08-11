@@ -6,10 +6,11 @@
 #include <Baba/Enums/Action.h>
 #include <Baba/Enums/Game.h>
 #include <Baba/Game/Object.h>
-#include <Baba/Rules/Rules.h>
+#include <Baba/Rules/Rule.h>
 
 #include <functional>
 #include <vector>
+#include <set>
 
 namespace Baba
 {
@@ -108,7 +109,8 @@ class Game final
     //! \return GameResult
     GameResult GetGameResult() const;
 
-    Rules gameRules;
+    std::int64_t AddRule(ObjectType target, ObjectType verb, ObjectType effect);
+    void DeleteRule(std::int64_t id);
 
  private:
     void parseRules();
@@ -119,6 +121,9 @@ class Game final
     std::size_t width_, height_;
     Object::Arr objects_;
     std::vector<Object::Arr> map_;
+
+    std::set<Rule> rules_;
+
     GameResult gameResult_ = GameResult::INVALID;
     GameStep nowStep_ = GameStep::INVALID;
 };

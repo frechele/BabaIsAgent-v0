@@ -7,7 +7,6 @@
 #include <Baba/Game/Object.h>
 #include <Baba/Rules/Effects.h>
 #include <Baba/Rules/Rule.h>
-#include <Baba/Rules/Rules.h>
 
 using namespace Baba;
 
@@ -21,7 +20,7 @@ TEST(EffectTest, BABA)
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 
-    game.gameRules.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::BABA);
+    game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::BABA);
 
     game.Update();
 
@@ -45,7 +44,7 @@ TEST(EffectTest, MELT)
 
     Object& obj1 = game.Put(0, 0).SetType(ObjectType::BABA);
 
-    game.gameRules.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
+    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
 
     game.Update();
 
@@ -59,8 +58,8 @@ TEST(EffectTest, HOT)
     game.Put(0, 0).SetType(ObjectType::BABA);
     game.Put(0, 0).SetType(ObjectType::KEKE);
    
-    game.gameRules.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
-    game.gameRules.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::HOT);
+    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
+    game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::HOT);
 
     game.Update();
 

@@ -3,8 +3,6 @@
 #include <Baba/Enums/Game.h>
 #include <Baba/Game/Game.h>
 #include <Baba/Rules/Effects.h>
-#include <Baba/Rules/Rule.h>
-#include <Baba/Rules/Rules.h>
 
 #include <algorithm>
 #include <stdexcept>
@@ -89,7 +87,8 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
         [type](const Object& obj) { return obj.GetType() == type; });
 }
 
-Object::Arr Game::FindObjectsByProperty(PropertyType property) const {
+Object::Arr Game::FindObjectsByProperty(PropertyType property) const
+{
     return FindObjects(
         [property](const Object& obj) { return obj.HasProperty(property); });
 }
@@ -170,38 +169,55 @@ GameResult Game::GetGameResult() const
     return gameResult_;
 }
 
+std::int64_t Game::AddRule(ObjectType target, ObjectType verb,
+                           ObjectType effect)
+{
+    rules_.emplace(target, verb, effect);
+
+    return Rule::GetRuleID(target, verb, effect);
+}
+
+void Game::DeleteRule(std::int64_t id)
+{
+    auto it =
+        std::find_if(rules_.begin(), rules_.end(),
+                     [id](const Rule& rule) { return rule.GetRuleID() == id; });
+    if (it != rules_.end())
+    {
+        rules_.erase(it);
+    }
+}
+
 void Game::parseRules()
 {
 }
 
 void Game::applyRules()
 {
-    auto& rules = gameRules.GetAllRules();
     auto& effects = Effects::GetInstance().GetEffects();
 
-    for (auto& rule : rules)
+    for (auto& rule : rules_)
     {
         if (rule.GetVerb() == ObjectType::IS)
         {
             auto targets = FindObjectsByType(rule.GetTarget());
 
-            for (auto& target : targets)
+            if (IsObjectType(rule.GetEffect()))
             {
-                target->AddProperty(ObjectToProperty(rule.GetEffect()));
+                for (auto& target : targets)
+                {
+                    target->SetType(rule.GetEffect());
+                }
             }
-        }
-    }
-
-    for (auto& rule : rules)
-    {
-        if (rule.GetVerb() == ObjectType::IS)
-        {
-            auto func = effects.at(ObjectToProperty(rule.GetEffect()));
-            auto targets = FindObjectsByType(rule.GetTarget());
-
-            for (auto& target : targets)
+            else
             {
-                func(*this, *target, rule);
+                auto func = effects.at(ObjectToProperty(rule.GetEffect()));
+
+                for (auto& target : targets)
+                {
+                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
+                    func(*this, *target, rule);
+                }
             }
         }
         else if (rule.GetVerb() == ObjectType::HAS)

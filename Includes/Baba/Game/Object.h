@@ -5,7 +5,7 @@
 
 #include <Baba/Enums/ObjectType.h>
 
-#include <vector>
+#include <set>
 
 namespace Baba
 {
@@ -57,7 +57,7 @@ class Object
 
  private:
     int objectID_;
-    std::vector<PropertyType> properties_;
+    std::set<PropertyType> properties_;
     ObjectType type_ = ObjectType::INVALID;
     bool isText_ = false;
 

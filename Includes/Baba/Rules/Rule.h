@@ -35,6 +35,15 @@ class Rule
     //! \return Rule's id
     std::int64_t GetRuleID() const;
 
+    //! Get Rule's id
+    //! \param target Rule target
+    //! \param verb Rule verb
+    //! \param effect Rule effect
+    //! \return Rule's id
+    static std::int64_t GetRuleID(ObjectType target, ObjectType verb, ObjectType effect);
+
+    bool operator<(const Rule& other) const;
+
  private:
     ObjectType target_;
     ObjectType verb_;

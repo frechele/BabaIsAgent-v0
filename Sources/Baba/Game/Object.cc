@@ -61,7 +61,7 @@ ObjectType Object::GetType() const
 
 Object& Object::AddProperty(PropertyType type)
 {
-    properties_.emplace_back(type);
+    properties_.emplace(type);
 
     return *this;
 }
