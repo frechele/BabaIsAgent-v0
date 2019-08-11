@@ -24,6 +24,10 @@ TEST(ObjectTest, SetType)
     Object object;
     EXPECT_EQ(object.SetType(ObjectType::BABA).GetType(), ObjectType::BABA);
     EXPECT_EQ(object.SetType(ObjectType::KEKE).GetType(), ObjectType::KEKE);
+
+    EXPECT_EQ(object.SetType(ObjectType::YOU).IsText(), true);
+    EXPECT_EQ(object.HasProperty(PropertyType::WORD), true);
+
     EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
 }
 

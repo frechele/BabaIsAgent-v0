@@ -26,6 +26,11 @@ bool Object::IsText() const
 
 Object& Object::SetText(bool val)
 {
+    if ((IsTextType(type_) || IsVerbType(type_) || IsPropertyType(type_)) && val)
+    {
+        throw std::logic_error("Cannot set to not text");
+    }
+
     isText_ = val;
 
     return *this;
@@ -36,6 +41,12 @@ Object& Object::SetType(ObjectType type)
     if (type == ObjectType::INVALID)
     {
         throw std::runtime_error("Invalid object type");
+    }
+
+    if (IsTextType(type) || IsVerbType(type) || IsPropertyType(type))
+    {
+        isText_ = true;
+        AddProperty(PropertyType::WORD);
     }
 
     type_ = type;
