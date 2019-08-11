@@ -150,7 +150,7 @@ TEST(GameTest, ParseRules_Horizontal_Center)
 
 TEST(GameTest, ParseRules_Cross)
 {
-    Game game(10, 10);
+ /*   Game game(10, 10);
 
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 4)
@@ -176,7 +176,7 @@ TEST(GameTest, ParseRules_Cross)
     game.ApplyRules();
 
     EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::KEKE);
-    EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA).empty());
+    EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA).empty());*/
 }
 
 TEST(GameTest, DetermineResult_WIN)

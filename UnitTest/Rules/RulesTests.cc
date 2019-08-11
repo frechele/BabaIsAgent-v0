@@ -11,18 +11,6 @@
 
 using namespace Baba;
 
-TEST(EnumTest, ObjectToProperty)
-{
-    EXPECT_EQ(ObjectToProperty(ObjectType::BABA), PropertyType::INVALID);
-    EXPECT_EQ(ObjectToProperty(ObjectType::MELT), PropertyType::MELT);
-}
-
-TEST(EnumTest, PropertyToObject)
-{
-    EXPECT_EQ(PropertyToObject(PropertyType::MELT), ObjectType::MELT);
-    EXPECT_EQ(PropertyToObject(PropertyType::HOT), ObjectType::HOT);
-}
-
 TEST(GameRulesTest, AddAndDeleteBaseRule)
 {
     Game game(5, 5);
