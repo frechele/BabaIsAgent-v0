@@ -115,7 +115,10 @@ Object::Arr Game::FindObjectsByPosition(const Object& target,
 
                     for (auto& o : objs)
                     {
-                        arr.emplace_back(o);
+                        if (!o->IsText())
+                        {
+                            arr.emplace_back(o);
+                        }
                     }
 
                     return arr;
@@ -298,15 +301,15 @@ void Game::applyRules()
                 }
             }
         }
-        //else if (rule.GetVerb() == ObjectType::HAS)
+        // else if (rule.GetVerb() == ObjectType::HAS)
         //{
         //    // Not implemented yet
         //}
-        //else if (rule.GetVerb() == ObjectType::MAKE)
+        // else if (rule.GetVerb() == ObjectType::MAKE)
         //{
         //    // Not implemented yet
         //}
-        //else
+        // else
         //{
         //    // throw
         //}
