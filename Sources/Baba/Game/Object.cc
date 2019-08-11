@@ -26,7 +26,7 @@ bool Object::IsText() const
 
 Object& Object::SetText(bool val)
 {
-    if ((IsTextType(type_) || IsVerbType(type_) || IsPropertyType(type_)) && val)
+    if ((IsTextType(type_) || IsVerbType(type_) || IsPropertyType(type_)) && !val)
     {
         throw std::logic_error("Cannot set to not text");
     }
