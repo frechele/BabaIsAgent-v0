@@ -190,6 +190,37 @@ void Game::DeleteRule(std::int64_t id)
 
 void Game::parseRules()
 {
+    auto verbs = FindObjects(
+        [](const Object& obj) { return IsVerbType(obj.GetType()); });
+
+    for (auto& verb : verbs)
+    {
+        auto [x, y] = GetPositionByObject(*verb);
+
+        const auto addRules = [&](std::size_t dx, std::size_t dy) {
+            if (ValidatePosition(x - dx, y - dy) && ValidatePosition(x + dx, y + dy))
+            {
+                auto targets = FilterObjectByFunction(
+                    At(x - dx, y - dy),
+                    [](const Object& obj) { return obj.IsText(); });
+                auto effects = FilterObjectByFunction(
+                    At(x + dx, y + dy),
+                    [](const Object& obj) { return obj.IsText(); });
+
+                for (auto& target : targets)
+                {
+                    for (auto& effect : effects)
+                    {
+                        AddRule(target->GetType(), verb->GetType(),
+                                effect->GetType());
+                    }
+                }
+            }
+        };
+
+        addRules(1, 0);
+        addRules(0, 1);
+    }
 }
 
 void Game::applyRules()
