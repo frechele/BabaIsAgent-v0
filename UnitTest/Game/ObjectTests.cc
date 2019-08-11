@@ -31,6 +31,38 @@ TEST(ObjectTest, SetType)
     EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
 }
 
+TEST(ObjectTest, SetText)
+{
+    using namespace Baba;
+
+    Object object;
+    object.SetType(ObjectType::BABA);
+
+    EXPECT_FALSE(object.IsText());
+
+    object.SetText(true);
+    EXPECT_TRUE(object.IsText());
+
+    object.SetType(ObjectType::IS);
+    EXPECT_TRUE(object.IsText());
+
+    EXPECT_ANY_THROW(object.SetText(false));
+}
+
+TEST(ObjectTest, Property)
+{
+    using namespace Baba;
+
+    Object object;
+    object.AddProperty(PropertyType::MELT);
+
+    EXPECT_TRUE(object.HasProperty(PropertyType::MELT));
+
+    object.RemoveProperty(PropertyType::MELT);
+
+    EXPECT_FALSE(object.HasProperty(PropertyType::MELT));
+}
+
 TEST(ObjectTest, Destroy)
 {
     using namespace Baba;
