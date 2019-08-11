@@ -34,7 +34,7 @@ std::int64_t Rule::GetRuleID(ObjectType target, ObjectType verb,
                              ObjectType effect)
 {
     return (static_cast<std::int64_t>(target) << 40) |
-           (static_cast<std::int64_t>(verb) << 10) |
+           (static_cast<std::int64_t>(verb) << 20) |
            (static_cast<std::int64_t>(effect) << 0);
 }
 
