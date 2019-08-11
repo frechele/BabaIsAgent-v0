@@ -18,4 +18,6 @@ TEST(EnumTest, PropertyToObject)
 
     EXPECT_EQ(PropertyToObject(PropertyType::MELT), ObjectType::MELT);
     EXPECT_EQ(PropertyToObject(PropertyType::HOT), ObjectType::HOT);
+
+    EXPECT_EQ(PropertyToObject(PropertyType::INVALID), ObjectType::INVALID);
 }

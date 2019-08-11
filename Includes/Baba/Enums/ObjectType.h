@@ -82,9 +82,11 @@ constexpr PropertyType ObjectToProperty(ObjectType type)
 
 constexpr ObjectType PropertyToObject(PropertyType type)
 {
-    return static_cast<ObjectType>(
-        static_cast<std::size_t>(type) +
-        static_cast<std::size_t>(ObjectType::PROP_TYPE));
+    return (type <= PropertyType::INVALID || type >= PropertyType::COUNT)
+               ? ObjectType::INVALID
+               : static_cast<ObjectType>(
+                     static_cast<std::size_t>(type) +
+                     static_cast<std::size_t>(ObjectType::PROP_TYPE));
 }
 }  // namespace Baba
 
