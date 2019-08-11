@@ -197,7 +197,7 @@ void Game::parseRules()
     {
         auto [x, y] = GetPositionByObject(*verb);
 
-        const auto addRules = [&, x, y](std::size_t dx, std::size_t dy) {
+        const auto addRules = [&, x=x, y=y](std::size_t dx, std::size_t dy) {
             if (ValidatePosition(x - dx, y - dy) && ValidatePosition(x + dx, y + dy))
             {
                 auto targets = FilterObjectByFunction(
