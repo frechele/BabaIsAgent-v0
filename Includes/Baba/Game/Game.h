@@ -66,7 +66,7 @@ class Game final
     //! \param object Object will be destroyed
     void DestroyObject(Object& object);
 
-    //! FInd objects by func
+    //! Find objects by func
     //! \param func function to classify objects
     //! \param excludeTest Exclude text option
     //! \return Objects that satisfy func
