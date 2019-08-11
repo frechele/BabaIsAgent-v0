@@ -202,9 +202,7 @@ TEST(GameTest, DetermineResult_WIN)
     game.Put(6, 7)
         .SetType(ObjectType::WIN);
 
-    game.ParseRules();
-    game.ApplyRules();
-    game.DetermineResult();
+    game.Update();
 
     EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
 }
@@ -215,9 +213,7 @@ TEST(GameTest, DetermineResult_DEFEAT)
 
     game.Put(1, 1).SetType(ObjectType::BABA);
 
-    game.ParseRules();
-    game.ApplyRules();
-    game.DetermineResult();
+    game.Update();
 
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
@@ -236,9 +232,7 @@ TEST(GameTest, DetermineResult_INVALID)
     game.Put(5, 7)
         .SetType(ObjectType::YOU);
 
-    game.ParseRules();
-    game.ApplyRules();
-    game.DetermineResult();
+    game.Update();
 
     EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
 }

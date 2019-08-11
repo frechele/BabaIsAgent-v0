@@ -65,7 +65,7 @@ void Game::DestroyObject(Object& object)
     }
 }
 
-Object::Arr Game::FindObjectsByType(ObjectType type) const
+Object::Arr Game::FindObjects(std::function<bool(const Object&)> func) const
 {
     Object::Arr result;
 
@@ -73,7 +73,7 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     {
         for (auto& obj : objs)
         {
-            if (obj->GetType() == type)
+            if (func(*obj))
             {
                 result.emplace_back(obj);
             }
@@ -83,22 +83,15 @@ Object::Arr Game::FindObjectsByType(ObjectType type) const
     return result;
 }
 
-Object::Arr Game::FindObjectsByProperty(PropertyType property) const
+Object::Arr Game::FindObjectsByType(ObjectType type) const
 {
-    Object::Arr result;
+    return FindObjects(
+        [type](const Object& obj) { return obj.GetType() == type; });
+}
 
-    for (auto& objs : map_)
-    {
-        for (auto& obj : objs)
-        {
-            if (obj->HasProperty(property))
-            {
-                result.emplace_back(obj);
-            }
-        }
-    }
-
-    return result;
+Object::Arr Game::FindObjectsByProperty(PropertyType property) const {
+    return FindObjects(
+        [property](const Object& obj) { return obj.HasProperty(property); });
 }
 
 Object::Arr Game::FindObjectsByPosition(const Object& target) const
@@ -117,8 +110,8 @@ Object::Arr Game::FindObjectsByPosition(const Object& target) const
     return Object::Arr();
 }
 
-Object::Arr Game::FilterObjectByFunction(const Object::Arr& objects,
-                                         std::function<bool(Object&)> func) const
+Object::Arr Game::FilterObjectByFunction(
+    const Object::Arr& objects, std::function<bool(const Object&)> func) const
 {
     Object::Arr result;
 
@@ -140,12 +133,12 @@ const Game::Point Game::GetPositionByObject(const Object& target) const
         for (std::size_t x = 0; x < GetWidth(); x++)
         {
             const auto& objs = map_[x + y * width_];
-            
+
             for (auto& obj : objs)
             {
                 if (*obj == target)
                 {
-                    return {x, y};
+                    return { x, y };
                 }
             }
         }

@@ -65,6 +65,11 @@ class Game final
     //! \param object Object will be destroyed
     void DestroyObject(Object& object);
 
+    //! FInd objects by func
+    //! \param func function to classify objects
+    //! \return Objects that satisfy func
+    Object::Arr FindObjects(std::function<bool(const Object&)> func) const;
+
     //! Find objects by type
     //! \param Object's type
     //! \return Objects having the same \p type
@@ -85,7 +90,7 @@ class Game final
     //! \param func function to classify objects
     //! \return filtered objects
     Object::Arr FilterObjectByFunction(const Object::Arr& objects,
-                                       std::function<bool(Object&)> func) const;
+                                       std::function<bool(const Object&)> func) const;
 
     //! Return target's position
     //! \param target target object
