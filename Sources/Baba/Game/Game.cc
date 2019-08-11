@@ -188,6 +188,11 @@ void Game::DeleteRule(std::int64_t id)
     }
 }
 
+const std::set<Rule>& Game::GetRules() const
+{
+    return rules_;
+}
+
 void Game::parseRules()
 {
     auto verbs = FindObjects(
@@ -197,8 +202,10 @@ void Game::parseRules()
     {
         auto [x, y] = GetPositionByObject(*verb);
 
-        const auto addRules = [&, x=x, y=y](std::size_t dx, std::size_t dy) {
-            if (ValidatePosition(x - dx, y - dy) && ValidatePosition(x + dx, y + dy))
+        const auto addRules = [&, x = x, y = y](std::size_t dx,
+                                                std::size_t dy) {
+            if (ValidatePosition(x - dx, y - dy) &&
+                ValidatePosition(x + dx, y + dy))
             {
                 auto targets = FilterObjectByFunction(
                     At(x - dx, y - dy),
@@ -229,6 +236,22 @@ void Game::applyRules()
 
     for (auto& rule : rules_)
     {
+        if (IsPropertyType(rule.GetEffect()))
+        {
+            auto targets = FindObjectsByType(rule.GetTarget());
+
+            for (auto& target : targets)
+            {
+                if (!target->IsText())
+                {
+                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
+                }
+            }
+        }
+    }
+
+    for (auto& rule : rules_)
+    {
         if (rule.GetVerb() == ObjectType::IS)
         {
             auto targets = FindObjectsByType(rule.GetTarget());
@@ -237,7 +260,10 @@ void Game::applyRules()
             {
                 for (auto& target : targets)
                 {
-                    target->SetType(rule.GetEffect());
+                    if (!target->IsText())
+                    {
+                        target->SetType(rule.GetEffect());
+                    }
                 }
             }
             else
@@ -246,7 +272,6 @@ void Game::applyRules()
 
                 for (auto& target : targets)
                 {
-                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
                     func(*this, *target, rule);
                 }
             }

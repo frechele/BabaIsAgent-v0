@@ -111,6 +111,7 @@ class Game final
 
     std::int64_t AddRule(ObjectType target, ObjectType verb, ObjectType effect);
     void DeleteRule(std::int64_t id);
+    const std::set<Rule>& GetRules() const;
 
  private:
     void parseRules();

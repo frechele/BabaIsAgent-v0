@@ -72,7 +72,7 @@ void Effects::ImplementNonBlockEffects()
 
         for (auto& object : objects)
         {
-            if (object->HasProperty(PropertyType::MELT))
+            if (!object->IsText() && object->HasProperty(PropertyType::MELT))
             {
                 game.DestroyObject(*object);
             }
