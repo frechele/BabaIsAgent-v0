@@ -35,6 +35,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         /W4
         ${WARN_AS_ERROR_FLAGS}
 
+		/wd4819
+
         $<$<CONFIG:Release>:
         /Gw
         /Gs-
