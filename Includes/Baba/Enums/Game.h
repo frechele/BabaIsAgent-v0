@@ -36,4 +36,16 @@ enum class GameResult
 };
 }  // namespace Baba
 
+//!
+//! \brief Enumerator of direction
+//!
+enum class Direction
+{
+    INVALID,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+};
+
 #endif  // BABA_ENUMS_GAME_H
