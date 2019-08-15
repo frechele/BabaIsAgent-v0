@@ -36,6 +36,7 @@ add_subdirectory(Sources/Baba)
 add_subdirectory(UnitTest)
 
 add_subdirectory(Extension/BabaGUI)
+add_subdirectory(Extension/BabaAgent)
 
 # Code coverage
 option(BUILD_COVERAGE "Build code coverage" OFF)
