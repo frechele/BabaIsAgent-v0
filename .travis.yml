@@ -2,6 +2,32 @@ language: cpp
 
 matrix:
   include:
+    - name: Ubuntu 16.04 + gcc-7 + codecov + (sonarcloud)
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+        sonarcloud:
+          organization: "jypark09-github"
+          token:
+            secure: "XyWS1JiY0jbn5EDMj7uB9DW+Ii6UYljuFzK3sGld5oJ9UK/7y+tXUdn+AfD0ry0HnCGK3KHWkAydAnQxDq/GiKKBdJfWYkCWsDJS4Nu5NqmI1Ux6n7FUyitWXB2+v2XXXA3/MCI/Sh74AGzL7tFOw05NIomAkqskkbHz1OvxR4b2eqJNiXapKyTs0qsg/vS8o4CKnrMLZdqWwIIjrxJRDnIP44/WAfyUOn5OWWtklYvSu9PNKxLBIHwUh4gMNM2EMGTwoDIj4LM4/hXAh/2irzbQ2bgXrucwrNkpG8J3GoR6exQY4cLVR/pG5PnlI+7q7CXEdo8G7qqXhVjzoHBHRBqO4D6wX08xjfAj2ugvY7yXX502RyNMIBz1XMfoywulZ991eebMh4Rfh9egxXaSLFJzrq6R3czZwCeRZj8xy5kfI7Fm9fP8D5a6VmFCnvK/AZqi0/6d0QtrhbGPMPjo66dqNZwIOoor6mo8RqbFKmwFm47/QHExgTpHYSPKlwlHJJZQ5iXRgP5H4QyisEt1N9iY0VlEkO+EoLp6ThsOnMHXIrgonA9PMSBSmwA80rQkHhLixy4flw2Eex/ex38yOIDUNPTVQXTCFu48ld1yxHgQ2G5ymHIP09xlz4luqNHMxiIQSBTnrC4kLx0TD0wzbR8J99ocGEupdcGIUXrD7bQ="
+      dist: xenial
+      sudo: required
+      compiler: gcc
+      env:
+        - BUILD_TYPE=Debug
+      script:
+        - |
+          if [[ -n "${TRAVIS_PULL_REQUEST_SLUG}" && "${TRAVIS_PULL_REQUEST_SLUG}" != "${TRAVIS_REPO_SLUG}" ]]; then
+            echo "The pull request from ${TRAVIS_PULL_REQUEST_SLUG} is an EXTERNAL pull request. Skip sonar analysis."
+            sh Scripts/travis_build_codecov.sh
+          else
+            sh Scripts/travis_build_codecov_sonar.sh
+          fi
+
     - name: Ubuntu 18.04 + gcc
       os: linux
       dist: trusty
@@ -9,6 +35,7 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh
+
     - name: Ubuntu 18.10 + gcc
       os: linux
       dist: trusty
@@ -16,6 +43,7 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.cosmic cosmic
+
     - name: Ubuntu 19.04 + gcc
       os: linux
       dist: trusty
@@ -23,6 +51,7 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco disco
+
     - name: Ubuntu 19.04 + gcc-latest
       os: linux
       dist: trusty
@@ -30,12 +59,14 @@ matrix:
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco.gcc-latest disco-gcc-latest
+
     - name: Ubuntu 19.04 + clang-latest
       os: linux
       dist: trusty
       services: docker
       script:
         - sh Scripts/travis_build_docker.sh Scripts/Dockerfile.disco.clang-latest disco-clang-latest
+
     - name: OS X 10.14 + Xcode 10.2 + clang
       os: osx
       osx_image: xcode10.2
@@ -47,4 +78,3 @@ matrix:
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
     - eval "${MATRIX_EVAL}"
-      
