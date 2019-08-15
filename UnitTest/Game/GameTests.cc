@@ -210,7 +210,7 @@ TEST(GameTest, AddOrRemoveRule)
     EXPECT_EQ(game.GetRules().begin()->GetVerb(), ObjectType::IS);
     EXPECT_EQ(game.GetRules().begin()->GetEffect(), ObjectType::YOU);
 
-    game.DeleteRule(id);
+    game.RemoveRule(id);
     EXPECT_EQ(game.GetRules().size(), 0u);
 }
 

@@ -10,7 +10,7 @@
 namespace Baba
 {
 //!
-//! \brief Object that conists level
+//! \brief Object that consists level
 //!
 class Object
 {
@@ -37,19 +37,42 @@ class Object
     //! Delete move assignment operator
     Object& operator=(Object&&) = delete;
 
+    //! Get object id
+    //! \return ID of object
     int GetID() const;
 
+    //! Check object is text
+    //! \return Whether object is text
     bool IsText() const;
+    //! Set object text status
+    //! \param value Whether object is text
+    //! \return This object
     Object& SetText(bool value);
     
+    //! Set object type
+    //! \param type Object type
+    //! \return This object
     Object& SetType(ObjectType type);
+    //! Get object type
+    //! \return Object type
     ObjectType GetType() const;
 
+    //! Add property to object
+    //! \param type Property type to add
+    //! \return This object
     Object& AddProperty(PropertyType type);
+    //! Remove property from object
+    //! \param type Property type to remove
     void RemoveProperty(PropertyType type);
+    //! Check object has property
+    //! \param type Property type
+    //! \return Whether object has property type
     bool HasProperty(PropertyType type) const;
 
+    //! Destroy object
     void Destroy();
+    //! Check object is destroyed
+    //! \return Whether object is destroyed
     bool IsDestroyed() const;
 
     bool operator==(const Object& other) const;

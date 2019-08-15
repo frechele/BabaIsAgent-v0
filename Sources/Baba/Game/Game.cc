@@ -202,7 +202,7 @@ std::int64_t Game::AddRule(ObjectType target, ObjectType verb,
     return Rule::GetRuleID(target, verb, effect);
 }
 
-void Game::DeleteRule(std::int64_t id)
+void Game::RemoveRule(std::int64_t id)
 {
     auto it =
         std::find_if(rules_.begin(), rules_.end(),

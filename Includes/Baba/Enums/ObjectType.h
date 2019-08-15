@@ -10,7 +10,7 @@
 namespace Baba
 {
 //!
-//! \brief Enumerator of entity types
+//! \brief Enumerator of object types
 //!
 enum class ObjectType
 {
@@ -28,6 +28,9 @@ enum class ObjectType
     COUNT,
 };
 
+//!
+//! \brief Enumerator of verb types
+//!
 enum class VerbType
 {
     INVALID,
@@ -37,6 +40,9 @@ enum class VerbType
     COUNT,
 };
 
+//!
+//! \brief Enumerator of property types
+//! 
 enum class PropertyType
 {
     INVALID,
@@ -46,26 +52,41 @@ enum class PropertyType
     COUNT,
 };
 
+//! Check \p type is object type
+//! \param type Object type
+//! \return Whether type is object type
 constexpr bool IsObjectType(ObjectType type)
 {
     return (type > ObjectType::OBJECT_TYPE && type < ObjectType::VERB_TYPE);
 }
 
+//! Check \p type is verb type
+//! \param type Object type
+//! \return Whether type is verb type
 constexpr bool IsVerbType(ObjectType type)
 {
     return (type > ObjectType::VERB_TYPE && type < ObjectType::TEXT_TYPE);
 }
 
+//! Check \p type is text type
+//! \param type Object type
+//! \return Whether type is text type
 constexpr bool IsTextType(ObjectType type)
 {
     return (type > ObjectType::TEXT_TYPE && type < ObjectType::PROP_TYPE);
 }
 
+//! Check \p type is property type
+//! \param type Object tyep
+//! \return Whether type is property type
 constexpr bool IsPropertyType(ObjectType type)
 {
     return (type > ObjectType::PROP_TYPE && type < ObjectType::COUNT);
 }
 
+//! Convert object type to property type
+//! \param type Object type
+//! \return Converted type
 constexpr PropertyType ObjectToProperty(ObjectType type)
 {
     if (IsPropertyType(type))
@@ -80,6 +101,9 @@ constexpr PropertyType ObjectToProperty(ObjectType type)
     }
 }
 
+//! Convert property type toobject tyep
+//! \param type Property type
+//! \return Converted type
 constexpr ObjectType PropertyToObject(PropertyType type)
 {
     return (type <= PropertyType::INVALID || type >= PropertyType::COUNT)
