@@ -102,7 +102,10 @@ class Game final
     //! \return position of target
     const Point GetPositionByObject(const Object& target) const;
 
-    //! Check position
+    //! Check position is valid
+    //! \param x x position
+    //! \param y y position
+    //! \return Whether position is valid
     bool ValidatePosition(std::size_t x, std::size_t y) const;
 
     //! Update game
@@ -113,8 +116,17 @@ class Game final
     //! \return GameResult
     GameResult GetGameResult() const;
 
+    //! Add rule
+    //! \param target Target of rule
+    //! \param verb Verb of rule
+    //! \param effect Effect of rule
+    //! \return ID of added rule
     std::int64_t AddRule(ObjectType target, ObjectType verb, ObjectType effect);
-    void DeleteRule(std::int64_t id);
+    //! Remove rule
+    //! \param id ID of rule to remove
+    void RemoveRule(std::int64_t id);
+    //! Get set of rules
+    //! \return Set of rules
     const std::set<Rule>& GetRules() const;
 
  private:

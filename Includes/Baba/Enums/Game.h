@@ -6,7 +6,7 @@
 namespace Baba
 {
 //!
-//! \brief Game steps
+//! \brief Enumerator of game steps
 //!
 enum class GameStep
 {
@@ -24,6 +24,9 @@ enum class GameStep
     COUNT,
 };
 
+//!
+//! \brief Enumerator of game results
+//!
 enum class GameResult
 {
     INVALID,

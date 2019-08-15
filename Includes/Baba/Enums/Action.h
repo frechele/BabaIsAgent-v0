@@ -6,7 +6,7 @@
 namespace Baba
 {
 //!
-//! \brief Action types
+//! \brief Enumerator of action types
 //!
 enum class Action
 {
