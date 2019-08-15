@@ -1,10 +1,10 @@
 // Copyright(C) 2019 Junyeong Park
 
-#include <agents.h>
+#include <BabaAgent/agent.h>
 
 namespace Baba
 {
-Action RLAgent::GetAction(const Game& state)
+Action RLAgent::GetAction([[maybe_unused]]const Game& state)
 {
     return Action::STAY;
 }

@@ -23,6 +23,8 @@ set(SFML_BUILD_AUDIO FALSE)
 add_subdirectory(Libraries/SFML)
 add_subdirectory(Libraries/spdlog)
 add_subdirectory(Libraries/random)
+include_directories(Libraries/pybind11/include)
+add_subdirectory(Libraries/pybind11)
 
 # Includes
 include_directories(Includes)
