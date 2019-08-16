@@ -23,12 +23,12 @@ set(SFML_BUILD_AUDIO FALSE)
 add_subdirectory(Libraries/SFML)
 add_subdirectory(Libraries/spdlog)
 add_subdirectory(Libraries/random)
-include_directories(Libraries/pybind11/include)
 add_subdirectory(Libraries/pybind11)
 
 # Includes
 include_directories(Includes)
 include_directories(Libraries/SFML/include)
+include_directories(Libraries/pybind11/include)
 
 # Compile options
 include(CMake/CompileOptions.cmake)
@@ -38,7 +38,7 @@ add_subdirectory(Sources/Baba)
 add_subdirectory(UnitTest)
 
 add_subdirectory(Extension/BabaGUI)
-add_subdirectory(Extension/BabaAgent)
+add_subdirectory(Extension/pyBaba)
 
 # Code coverage
 option(BUILD_COVERAGE "Build code coverage" OFF)
