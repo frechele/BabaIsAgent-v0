@@ -29,6 +29,7 @@ add_subdirectory(Libraries/pybind11)
 include_directories(Includes)
 include_directories(Libraries/SFML/include)
 include_directories(Libraries/pybind11/include)
+include_directories(Libraries/random/include)
 
 # Compile options
 include(CMake/CompileOptions.cmake)
