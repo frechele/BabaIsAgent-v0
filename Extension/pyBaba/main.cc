@@ -1,6 +1,7 @@
 // Copyright(C) 2019 Junyeong Park
 
 #include <pyBaba/Enums.h>
+#include <pyBaba/Agent.h>
 #include <pyBaba/Game.h>
 
 PYBIND11_MODULE(pyBaba, m)
@@ -14,6 +15,7 @@ PYBIND11_MODULE(pyBaba, m)
     buildPropertyTypeEnum(m);
     buildTypeUtilities(m);
 
+    buildAgents(m);
     buildObject(m);
     buildRule(m);
     buildGame(m);
