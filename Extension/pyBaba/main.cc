@@ -15,5 +15,6 @@ PYBIND11_MODULE(pyBaba, m)
     buildTypeUtilities(m);
 
     buildObject(m);
+    buildRule(m);
     buildGame(m);
 }

@@ -1,6 +1,8 @@
 // Copyrigh(C) 2019 Junyeong Park
 
 #include <pyBaba/Game.h>
+#include <pybind11/stl.h>
+#include <pybind11/functional.h>
 
 #include <Baba/Game/Game.h>
 
@@ -21,6 +23,17 @@ void buildObject(py::module& m)
         .def("HasProperty", &Object::HasProperty)
         .def("Destroy", &Object::Destroy)
         .def("IsDestroyed", &Object::IsDestroyed);
+}
+
+void buildRule(py::module& m)
+{
+    py::class_<Rule>(m, "Rule")
+        .def(py::init<ObjectType, ObjectType, ObjectType>())
+        .def("GetTarget", &Rule::GetTarget)
+        .def("GetVerb", &Rule::GetVerb)
+        .def("GetEffect", &Rule::GetEffect)
+        .def("GetRuleID", &Rule::GetRuleID)
+        .def_static("CalculateRuleID", &Rule::CalcRuleID);
 }
 
 void buildGame(py::module& m)
