@@ -27,10 +27,10 @@ ObjectType Rule::GetEffect() const
 
 std::int64_t Rule::GetRuleID() const
 {
-    return Rule::GetRuleID(target_, verb_, effect_);
+    return Rule::CalcRuleID(target_, verb_, effect_);
 }
 
-std::int64_t Rule::GetRuleID(ObjectType target, ObjectType verb,
+std::int64_t Rule::CalcRuleID(ObjectType target, ObjectType verb,
                              ObjectType effect)
 {
     return (static_cast<std::int64_t>(target) << 40) |
