@@ -16,4 +16,5 @@ target_link_libraries(${target}
 	Baba
 	${DEFAULT_LINKER_OPTIONS}
 	spdlog::spdlog
+	effolkronium_random
 )
