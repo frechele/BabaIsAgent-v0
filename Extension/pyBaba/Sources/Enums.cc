@@ -23,21 +23,6 @@ void buildActionEnum(py::module& m)
 
 void buildGameEnum(py::module& m)
 {
-    py::enum_<GameStep>(m, "GameStep")
-        .value("INVALID", GameStep::INVALID)
-        .value("START_BEGIN", GameStep::START_BEGIN)
-        .value("START_LOAD_MAP", GameStep::START_LOAD_MAP)
-        .value("MAIN_INIT", GameStep::MAIN_INIT)
-        .value("MAIN_PARSE_RULES", GameStep::MAIN_PARSE_RULES)
-        .value("MAIN_APPLY_RULES", GameStep::MAIN_APPLY_RULES)
-        .value("MAIN_DETERMINE_RESULT", GameStep::MAIN_DETERMINE_RESULT)
-        .value("MAIN_WAIT_ACTION", GameStep::MAIN_WAIT_ACTION)
-        .value("MAIN_DO_ACTION", GameStep::MAIN_DO_ACTION)
-        .value("END_WIN", GameStep::END_WIN)
-        .value("END_DEFEAT", GameStep::END_DEFEAT)
-        .value("COUNT", GameStep::COUNT)
-        .export_values();
-
     py::enum_<GameResult>(m, "GameResult")
         .value("INVALID", GameResult::INVALID)
         .value("WIN", GameResult::WIN)
