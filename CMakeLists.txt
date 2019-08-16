@@ -19,6 +19,10 @@ set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 add_subdirectory(Libraries/googletest)
 
+cmake_policy(SET CMP0063 NEW)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
 set(SFML_BUILD_AUDIO FALSE)
 add_subdirectory(Libraries/SFML)
 add_subdirectory(Libraries/spdlog)
