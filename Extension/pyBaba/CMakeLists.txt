@@ -11,6 +11,11 @@ target_include_directories(${target}
 	${CMAKE_CURRENT_SOURCE_DIR}/Includes
 )
 
+set_target_properties(${target}
+	PROPERTIES
+	${DEFAULT_PROJECT_OPTIONS}
+)
+
 target_link_libraries(${target}
 	PRIVATE
 	Baba

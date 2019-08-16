@@ -16,6 +16,11 @@ target_compile_options(${target}
     INTERFACE
 )
 
+set_target_properties(${target}
+	PROPERTIES
+	${DEFAULT_PROJECT_OPTIONS}
+)
+
 target_link_libraries(${target}
 	PRIVATE
 

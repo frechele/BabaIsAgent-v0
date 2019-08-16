@@ -1,9 +1,6 @@
 # CMake version
 cmake_minimum_required(VERSION 3.8.2 FATAL_ERROR)
 
-# C++ standard
-set(CMAKE_CXX_STANDARD 17)
-
 # Declare project
 project(BabaIsAgent)
 
@@ -25,6 +22,8 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 set(SFML_BUILD_AUDIO FALSE)
 add_subdirectory(Libraries/SFML)
+
+set(BUILD_SHARED_LIBS FALSE)
 add_subdirectory(Libraries/spdlog)
 add_subdirectory(Libraries/pybind11)
 
