@@ -132,7 +132,7 @@ class Game final
 
     //! Remove rule
     //! \param id ID of rule to remove
-    void RemoveRule(std::int64_t id);
+    std::set<Rule>::iterator RemoveRule(std::int64_t id);
 
     //! Tie
     Object::Arr TieStuckMoveableObjects(Object& pusher, Direction dir) const;

@@ -223,7 +223,7 @@ std::int64_t Game::AddBaseRule(ObjectType target, ObjectType verb,
     return Rule::CalcRuleID(target, verb, effect);
 }
 
-void Game::RemoveRule(std::int64_t id)
+std::set<Rule>::iterator Game::RemoveRule(std::int64_t id)
 {
     auto it = std::find_if(rules_.begin(), rules_.end(),
                           [id](const Rule& rule) { return rule.GetRuleID() == id; });
@@ -241,9 +241,10 @@ void Game::RemoveRule(std::int64_t id)
                 std::cout << "statement 3" << std::endl;
             }
         }
-        rules_.erase(it);
+        return rules_.erase(it);
         std::cout << "statement 4" << std::endl;
     }
+    return it;
 }
 
 const std::set<Rule>& Game::GetRules() const
@@ -253,10 +254,11 @@ const std::set<Rule>& Game::GetRules() const
 
 void Game::parseRules()
 {
-    for (auto& rule : rules_)
+    for (auto it = rules_.begin(); it != rules_.end();)
     {
-        RemoveRule(rule.GetRuleID());
+        it = RemoveRule(it->GetRuleID());
     }
+
     std::cout << "statement 5" << std::endl;
 
     auto verbs = FindObjects(
