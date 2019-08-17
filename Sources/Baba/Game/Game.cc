@@ -234,10 +234,10 @@ void Game::parseRules()
             {
                 auto targets = FilterObjectByFunction(
                     At(x - dx, y - dy),
-                    [](const Object& obj) { return obj.IsText(); });
+                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
                 auto effects = FilterObjectByFunction(
                     At(x + dx, y + dy),
-                    [](const Object& obj) { return obj.IsText(); });
+                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
 
                 for (auto& target : targets)
                 {
