@@ -178,6 +178,8 @@ bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 
 void Game::Update(Action action)
 {
+    gameResult_ = GameResult::DEFEAT;
+
     parseRules();
     if (action != Action::STAY)
     {
@@ -185,8 +187,6 @@ void Game::Update(Action action)
     }
 
     applyRules();
-
-    determineResult();
 }
 
 GameResult Game::GetGameResult() const
@@ -314,33 +314,6 @@ void Game::applyRules()
         //    // throw
         //}
     }
-}
-
-void Game::determineResult()
-{
-    auto targets = FindObjectsByProperty(PropertyType::YOU);
-
-    if (targets.empty())
-    {
-        gameResult_ = GameResult::DEFEAT;
-        return;
-    }
-
-    for (auto& target : targets)
-    {
-        auto objs = FindObjectsByPosition(*target);
-
-        for (auto& obj : objs)
-        {
-            if (obj->HasProperty(PropertyType::WIN))
-            {
-                gameResult_ = GameResult::WIN;
-                return;
-            }
-        }
-    }
-
-    gameResult_ = GameResult::INVALID;
 }
 
 Action Game::GetNowAction() const

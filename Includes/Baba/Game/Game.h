@@ -142,7 +142,6 @@ class Game final
  private:
     void parseRules();
     void applyRules();
-    void determineResult();
 
  private:
     std::size_t width_, height_;
