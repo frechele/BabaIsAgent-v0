@@ -1,6 +1,7 @@
 // Copyright(c) 2019 Junyeong Park, Hyeonsu Kim
 
 #include <Baba/Rules/Rule.h>
+#include <Baba/Rules/Effects.h>
 
 namespace Baba
 {
@@ -33,8 +34,17 @@ std::int64_t Rule::GetRuleID() const
 std::int64_t Rule::CalcRuleID(ObjectType target, ObjectType verb,
                              ObjectType effect)
 {
-    return (static_cast<std::int64_t>(target) << 40) |
-           (static_cast<std::int64_t>(verb) << 20) |
+    std::int64_t ruleID = 0;
+
+    if (IsPropertyType(effect))
+    {
+        ruleID = static_cast<std::int64_t>(
+                 Effects::GetInstance().GetPriority(ObjectToProperty(effect)));
+    }
+
+    return (ruleID << 54) |
+           (static_cast<std::int64_t>(target) << 36) |
+           (static_cast<std::int64_t>(verb) << 18) |
            (static_cast<std::int64_t>(effect) << 0);
 }
 

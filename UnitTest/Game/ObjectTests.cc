@@ -26,7 +26,6 @@ TEST(ObjectTest, SetType)
     EXPECT_EQ(object.SetType(ObjectType::KEKE).GetType(), ObjectType::KEKE);
 
     EXPECT_TRUE(object.SetType(ObjectType::YOU).IsText());
-    EXPECT_TRUE(object.HasProperty(PropertyType::WORD));
 
     EXPECT_ANY_THROW(object.SetType(ObjectType::INVALID));
 }
