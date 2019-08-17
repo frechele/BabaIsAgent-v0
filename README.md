@@ -7,11 +7,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/615531ce885443ec981e7aee0b6388de)](https://www.codacy.com/app/JYPark09/BabaIsAgent?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=JYPark09/BabaIsAgent&amp;utm_campaign=Badge_Grade)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/JYPark09/BabaIsAgent.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JYPark09/BabaIsAgent/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/JYPark09/BabaIsAgent.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JYPark09/BabaIsAgent/context:cpp)  
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BabaIsAgent&metric=alert_status)](https://sonarcloud.io/dashboard?id=BabaIsAgent)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=BabaIsAgent&metric=ncloc)](https://sonarcloud.io/dashboard?id=BabaIsAgent)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=BabaIsAgent&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=BabaIsAgent)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=BabaIsAgent&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=BabaIsAgent)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=BabaIsAgent&metric=security_rating)](https://sonarcloud.io/dashboard?id=BabaIsAgent)  
 Baba Is Agent is [Baba Is You](https://store.steampowered.com/app/736260/Baba_Is_You/) simulation for Reinforcement Learning.  
 This project is a research project at [OOPArts](https://www.facebook.com/OOPArts-%EC%98%A4%ED%8C%8C%EC%B8%A0-1232318310248618/).
 
@@ -48,6 +43,9 @@ cd build
 cmake .. -G "Visual Studio 16 2019" -A x64
 MSBuild BabaIsAgent.sln /p:Configuration=Release
 ```
+
+## Thanks To
+- [Chris Ohk](https://github.com/utilForever)  
 
 ## Contact
 You can contact us using the following means.
