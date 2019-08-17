@@ -32,6 +32,7 @@ Object& Object::SetText(bool val)
     }
 
     isText_ = val;
+    AddProperty(PropertyType::WORD);
 
     return *this;
 }
