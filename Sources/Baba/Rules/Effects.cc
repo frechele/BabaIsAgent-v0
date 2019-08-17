@@ -47,7 +47,7 @@ void Effects::ImplementNonBlockEffects()
         (void)target;
         game.SetGameResult(GameResult::INVALID);
     };
-    emplace(PropertyType::YOU, YouEffect, 1);
+    emplace(PropertyType::YOU, YouEffect, 100);
 
     // ----------------------------------------------------------------------
     // WIN
@@ -63,7 +63,27 @@ void Effects::ImplementNonBlockEffects()
             }
         }
     };
-    emplace(PropertyType::WIN, WinEffect, 2);
+    emplace(PropertyType::WIN, WinEffect, 101);
+
+    // ----------------------------------------------------------------------
+    // PUSH
+    // Make target pushable and make it solid.
+    // ----------------------------------------------------------------------
+    auto PushEffect = [](Game& game, Object& target) {
+        (void)game;
+        (void)target;
+    };
+    emplace(PropertyType::PUSH, PushEffect, 10);
+
+    // ----------------------------------------------------------------------
+    // STOP
+    // Make target solid.
+    // ----------------------------------------------------------------------
+    auto StopEffect = [](Game& game, Object& target) {
+        (void)game;
+        (void)target;
+    };
+    emplace(PropertyType::STOP, StopEffect, 11);
 
     // ----------------------------------------------------------------------
     // MELT
@@ -73,7 +93,7 @@ void Effects::ImplementNonBlockEffects()
         (void)game;
         (void)target;
     };
-    emplace(PropertyType::MELT, MeltEffect, 100);
+    emplace(PropertyType::MELT, MeltEffect, 12);
 
     // ----------------------------------------------------------------------
     // HOT
@@ -90,7 +110,7 @@ void Effects::ImplementNonBlockEffects()
             }
         }
     };
-    emplace(PropertyType::HOT, HotEffect, 101);
+    emplace(PropertyType::HOT, HotEffect, 50);
 }
 
 Effects::Effects()
