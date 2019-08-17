@@ -243,3 +243,28 @@ TEST(GameTest, determineResult_Priority)
     game.Update(Action::DOWN);
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
+
+TEST(GameTest, MoveObject)
+{
+    Game game(10, 10);
+
+    Object& obj = game.Put(5, 5).SetType(ObjectType::BABA);
+
+    game.MoveObjects({ &obj }, Direction::DOWN);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 5);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 6);
+
+    game.MoveObjects({ &obj }, Direction::LEFT);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 4);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 6);
+    
+    game.MoveObjects({ &obj }, Direction::UP);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 4);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 5);
+
+    game.MoveObjects({ &obj }, Direction::RIGHT);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 5);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 5);
+
+    EXPECT_ANY_THROW(game.MoveObjects({ &obj }, Direction::INVALID));
+}
