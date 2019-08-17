@@ -62,8 +62,7 @@ TEST(GameTest, FindObjectsByPosition)
 
     game.Put(0, 0)
         .SetType(ObjectType::ME)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
 
     EXPECT_EQ(game.FindObjectsByPosition(obj1, true).size(), 2u);
 
@@ -98,13 +97,11 @@ TEST(GameTest, ParseRules_Vertical_Center)
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::KEKE)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(6, 5).SetType(ObjectType::IS).AddProperty(PropertyType::WORD);
+        .SetText(true);
+    game.Put(6, 5).SetType(ObjectType::IS);
     game.Put(7, 5)
         .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
 
     game.Update();
 
@@ -126,13 +123,11 @@ TEST(GameTest, ParseRules_Horizontal_Center)
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::KEKE)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(5, 6).SetType(ObjectType::IS).AddProperty(PropertyType::WORD);
+        .SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
     game.Put(5, 7)
         .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
 
     game.Update();
 
@@ -154,14 +149,12 @@ TEST(GameTest, ParseRules_Cross)
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 4)
         .SetType(ObjectType::KEKE)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
     game.Put(5, 5).SetType(ObjectType::IS);
     game.Put(5, 6).SetType(ObjectType::HOT);
     game.Put(4, 5)
         .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
     game.Put(6, 5).SetType(ObjectType::MELT);
     game.Put(1, 1).SetType(ObjectType::BABA);
 
@@ -171,30 +164,6 @@ TEST(GameTest, ParseRules_Cross)
 
     EXPECT_EQ(game.At(1, 1).at(0)->GetType(), ObjectType::KEKE);
     EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA, true).empty());
-}
-
-TEST(GameTest, DetermineResult_WIN)
-{
-    Game game(10, 10);
-
-    game.Put(1, 1).SetType(ObjectType::BABA);
-    game.Put(1, 1).SetType(ObjectType::FLAG);
-    game.Put(5, 5)
-        .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(5, 6).SetType(ObjectType::IS);
-    game.Put(5, 7).SetType(ObjectType::YOU);
-    game.Put(6, 5)
-        .SetType(ObjectType::FLAG)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(6, 6).SetType(ObjectType::IS);
-    game.Put(6, 7).SetType(ObjectType::WIN);
-
-    game.Update();
-
-    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
 }
 
 TEST(GameTest, AddOrRemoveRule)
@@ -220,24 +189,9 @@ TEST(GameTest, DetermineResult_DEFEAT)
 
     game.Put(1, 1).SetType(ObjectType::BABA);
 
+    game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::YOU);
+
     game.Update();
 
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
-}
-
-TEST(GameTest, DetermineResult_INVALID)
-{
-    Game game(10, 10);
-
-    game.Put(1, 1).SetType(ObjectType::BABA);
-    game.Put(5, 5)
-        .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(5, 6).SetType(ObjectType::IS);
-    game.Put(5, 7).SetType(ObjectType::YOU);
-
-    game.Update();
-
-    EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
 }

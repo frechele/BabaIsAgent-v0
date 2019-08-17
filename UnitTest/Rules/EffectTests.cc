@@ -30,12 +30,40 @@ TEST(EffectTest, BABA)
 
 TEST(EffectTest, YOU)
 {
-    // Not implemented yet
+     Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA);
+    game.Put(5, 5)
+        .SetType(ObjectType::BABA)
+        .SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(5, 7).SetType(ObjectType::YOU);
+
+    game.Update();
+
+    EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
 }
 
 TEST(EffectTest, WIN)
 {
-    // Do nothing
+    Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA);
+    game.Put(1, 1).SetType(ObjectType::FLAG);
+    game.Put(5, 5)
+        .SetType(ObjectType::BABA)
+        .SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(5, 7).SetType(ObjectType::YOU);
+    game.Put(6, 5)
+        .SetType(ObjectType::FLAG)
+        .SetText(true);
+    game.Put(6, 6).SetType(ObjectType::IS);
+    game.Put(6, 7).SetType(ObjectType::WIN);
+
+    game.Update();
+
+    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
 }
 
 TEST(EffectTest, MELT)
@@ -66,4 +94,13 @@ TEST(EffectTest, HOT)
     EXPECT_TRUE(game.FindObjectsByProperty(PropertyType::MELT).empty());
     EXPECT_EQ(game.At(0, 0).size(), 1);
     EXPECT_EQ(game.At(0, 0).at(0)->GetType(), ObjectType::KEKE);
+}
+
+TEST(EffectTest, Priority)
+{
+    Game game(5, 5);
+
+    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
+    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
+    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
 }
