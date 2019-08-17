@@ -206,6 +206,16 @@ void Game::RemoveRule(std::int64_t id)
                      [id](const Rule& rule) { return rule.GetRuleID() == id; });
     if (it != rules_.end())
     {
+        auto& rule = *it;
+        auto targets = FindObjectsByType(rule.GetTarget(), true);
+
+        if (IsPropertyType(rule.GetEffect()))
+        {
+            for (auto& target : targets)
+            {
+                target->RemoveProperty(ObjectToProperty(rule.GetEffect()));
+            }
+        }
         rules_.erase(it);
     }
 }
