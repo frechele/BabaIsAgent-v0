@@ -142,7 +142,6 @@ class Game final
     std::set<Rule> rules_;
 
     GameResult gameResult_ = GameResult::INVALID;
-    GameStep nowStep_ = GameStep::INVALID;
 };
 }  // namespace Baba
 

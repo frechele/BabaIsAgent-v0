@@ -48,7 +48,7 @@ enum class PropertyType
     INVALID,
 #define X(a) a,
 #include "PropertyType.def"
-#undef a
+#undef X
     COUNT,
 };
 
