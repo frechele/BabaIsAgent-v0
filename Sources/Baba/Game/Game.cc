@@ -178,15 +178,12 @@ bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 
 void Game::Update(Action action)
 {
-    gameResult_ = GameResult::DEFEAT;
+    gameResult_ = GameResult::INVALID;
+    nowAction_ = action;
 
     parseRules();
-    if (action != Action::STAY)
-    {
-        // Do nothing
-    }
-
     applyRules();
+    checkGameOver();
 }
 
 GameResult Game::GetGameResult() const
@@ -314,6 +311,62 @@ void Game::applyRules()
     }
 }
 
+void Game::checkGameOver()
+{
+    if (FindObjectsByProperty(PropertyType::YOU).empty())
+    {
+        gameResult_ = GameResult::DEFEAT;
+    }
+}
+
+Object::Arr Game::TieStuckMoveableObjects(Object& pusher, Direction dir) const
+{
+    Object::Arr result;
+    result.push_back(&pusher);
+
+    auto [dx, dy] = dir2Vec(dir);
+    auto pos = GetPositionByObject(pusher);
+    std::size_t x = std::get<0>(pos);
+    std::size_t y = std::get<1>(pos);
+
+    while (ValidatePosition(x += dx, y += dy))
+    {
+        auto objs = At(x, y);
+        if (objs.empty())
+        {
+            break;
+        }
+
+        for (auto& obj : objs)
+        {
+            if (obj->HasProperty(PropertyType::STOP))
+            {
+                return Object::Arr();
+            }
+            if (obj->HasProperty(PropertyType::PUSH))
+            {
+                result.push_back(obj);
+            }
+        }
+    }
+
+    return result;
+}
+
+void Game::MoveObjects(const Object::Arr& objects, Direction dir)
+{
+    for (auto& obj : objects)
+    {
+        auto [dx, dy] = dir2Vec(dir);
+        auto [x, y] = GetPositionByObject(*obj);
+        auto& box = map_[x + y * width_];
+
+        box.erase(std::find(box.begin(), box.end(), obj));
+        
+        map_[(x + dx) + (y + dy) * width_].push_back(obj);
+    }
+}
+
 Action Game::GetNowAction() const
 {
     return nowAction_;
@@ -322,5 +375,22 @@ Action Game::GetNowAction() const
 void Game::SetGameResult(GameResult gameResult)
 {
     gameResult_= gameResult;
+}
+
+Game::Point Game::dir2Vec(Direction dir) const
+{
+    switch (dir)
+    {
+        case Direction::UP:
+            return Game::Point(0, -1);
+        case Direction::DOWN:
+            return Game::Point(0, 1);
+        case Direction::LEFT:
+            return Game::Point(-1, 0);
+        case Direction::RIGHT:
+            return Game::Point(1, 0);
+        default:
+            throw std::runtime_error("Invalid Direction");
+    }
 }
 }  // namespace Baba

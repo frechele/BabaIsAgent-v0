@@ -127,6 +127,11 @@ class Game final
     //! \param id ID of rule to remove
     void RemoveRule(std::int64_t id);
 
+    //! Tie
+    Object::Arr TieStuckMoveableObjects(Object& pusher, Direction dir) const;
+
+    void MoveObjects(const Object::Arr& objects, Direction dir);
+
     //! Get set of rules
     //! \return Set of rules
     const std::set<Rule>& GetRules() const;
@@ -142,6 +147,8 @@ class Game final
  private:
     void parseRules();
     void applyRules();
+    void checkGameOver();
+    Point dir2Vec(Direction dir) const;
 
  private:
     std::size_t width_, height_;
