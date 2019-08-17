@@ -6,7 +6,7 @@
 
 #include <algorithm>
 #include <stdexcept>
-
+#include <iostream>
 namespace Baba
 {
 Game::Game(std::size_t width, std::size_t height)
@@ -225,22 +225,24 @@ std::int64_t Game::AddBaseRule(ObjectType target, ObjectType verb,
 
 void Game::RemoveRule(std::int64_t id)
 {
-    auto it =
-        std::find_if(rules_.begin(), rules_.end(),
-                     [id](const Rule& rule) { return rule.GetRuleID() == id; });
+    auto it = std::find_if(rules_.begin(), rules_.end(),
+                          [id](const Rule& rule) { return rule.GetRuleID() == id; });
+    std::cout << "statement 1" << std::endl;
     if (it != rules_.end())
     {
         auto& rule = *it;
         auto targets = FindObjectsByType(rule.GetTarget(), true);
-
+        std::cout << "statement 2" << std::endl;
         if (IsPropertyType(rule.GetEffect()))
         {
             for (auto& target : targets)
             {
                 target->RemoveProperty(ObjectToProperty(rule.GetEffect()));
+                std::cout << "statement 3" << std::endl;
             }
         }
         rules_.erase(it);
+        std::cout << "statement 4" << std::endl;
     }
 }
 
@@ -255,32 +257,36 @@ void Game::parseRules()
     {
         RemoveRule(rule.GetRuleID());
     }
+    std::cout << "statement 5" << std::endl;
 
     auto verbs = FindObjects(
         [](const Object& obj) { return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD); });
-
+    std::cout << "statement 6" << std::endl;
     for (auto& verb : verbs)
     {
         auto [x, y] = GetPositionByObject(*verb);
-
+        std::cout << "statement 7" << std::endl;
         const auto addRules = [&, x = x, y = y](std::size_t dx,
                                                 std::size_t dy) {
             if (ValidatePosition(x - dx, y - dy) &&
                 ValidatePosition(x + dx, y + dy))
             {
+                std::cout << "statement 8" << std::endl;
                 auto targets = FilterObjectByFunction(
                     At(x - dx, y - dy),
                     [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
+                std::cout << "statement 9" << std::endl;
                 auto effects = FilterObjectByFunction(
                     At(x + dx, y + dy),
                     [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
-                    
+                std::cout << "statement 10" << std::endl;
                 for (auto& target : targets)
                 {
                     for (auto& effect : effects)
                     {
                         AddRule(target->GetType(), verb->GetType(),
                                 effect->GetType());
+                        std::cout << "statement 11" << std::endl;
                     }
                 }
             }
@@ -289,6 +295,7 @@ void Game::parseRules()
         addRules(1, 0);
         addRules(0, 1);
     }
+    std::cout << "statement 12" << std::endl;
 }
 
 void Game::applyRules()
