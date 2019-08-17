@@ -32,8 +32,6 @@ Object& Object::SetText(bool val)
     }
 
     isText_ = val;
-    AddProperty(PropertyType::WORD);
-    AddProperty(PropertyType::PUSH);
 
     return *this;
 }
@@ -48,8 +46,6 @@ Object& Object::SetType(ObjectType type)
     if (IsTextType(type) || IsVerbType(type) || IsPropertyType(type))
     {
         isText_ = true;
-        AddProperty(PropertyType::WORD);
-        AddProperty(PropertyType::PUSH);
     }
 
     type_ = type;
