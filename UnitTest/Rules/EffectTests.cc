@@ -127,6 +127,21 @@ TEST(EffectTest, WIN)
     EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
 }
 
+TEST(EffectTest, WIN_YOU)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA);
+    game.Put(1, 2).SetType(ObjectType::FLAG);
+
+    game.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
+    game.AddBaseRule(ObjectType::FLAG, ObjectType::IS, ObjectType::WIN);
+
+    game.Update(Action::DOWN);
+
+    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
+}
+
 TEST(EffectTest, MELT)
 {
     Game game(5, 5);
