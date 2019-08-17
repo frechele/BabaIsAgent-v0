@@ -20,7 +20,7 @@ TEST(EffectTest, BABA)
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj1);
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::STAR).at(0), obj2);
 
-    game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::BABA);
+    game.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::BABA);
 
     game.Update();
 
@@ -30,7 +30,7 @@ TEST(EffectTest, BABA)
 
 TEST(EffectTest, YOU)
 {
-     Game game(10, 10);
+    Game game(10, 10);
 
     game.Put(1, 1).SetType(ObjectType::BABA);
     game.Put(5, 5)
@@ -39,9 +39,70 @@ TEST(EffectTest, YOU)
     game.Put(5, 6).SetType(ObjectType::IS);
     game.Put(5, 7).SetType(ObjectType::YOU);
 
-    game.Update();
+    game.Update(Action::RIGHT);
+    EXPECT_EQ(game.At(2, 1).size(), 1);
+    EXPECT_TRUE(game.At(1, 1).empty());
 
-    EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
+    game.Update(Action::DOWN);
+    EXPECT_EQ(game.At(2, 2).size(), 1);
+    EXPECT_TRUE(game.At(2, 1).empty());
+
+    game.Update(Action::LEFT);
+    EXPECT_EQ(game.At(1, 2).size(), 1);
+    EXPECT_TRUE(game.At(2, 2).empty());
+
+    game.Update(Action::UP);
+    EXPECT_EQ(game.At(1, 1).size(), 1);
+    EXPECT_TRUE(game.At(1, 2).empty());
+}
+
+TEST(EffectTest, PUSH)
+{
+    Game game(10, 10);
+
+    game.Put(0, 1).SetType(ObjectType::KEY);
+    game.Put(1, 1).SetType(ObjectType::BABA);
+    game.Put(1, 1).SetType(ObjectType::KEKE);
+    game.Put(2, 1).SetType(ObjectType::KEKE);
+    game.Put(3, 1).SetType(ObjectType::ALGAE);
+    game.Put(4, 1).SetType(ObjectType::IS);
+    game.Put(1, 2).SetType(ObjectType::STAR);
+
+    game.AddBaseRule(ObjectType::KEY, ObjectType::IS, ObjectType::PUSH);
+    game.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
+    game.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::PUSH);
+    game.AddBaseRule(ObjectType::ALGAE, ObjectType::IS, ObjectType::PUSH);
+    game.AddBaseRule(ObjectType::STAR, ObjectType::IS, ObjectType::YOU);
+
+    game.Update(Action::RIGHT);
+    EXPECT_EQ(game.At(0, 1)[0]->GetType(), ObjectType::KEY);
+    EXPECT_EQ(game.At(1, 1)[0]->GetType(), ObjectType::KEKE);
+    EXPECT_EQ(game.At(2, 1)[0]->GetType(), ObjectType::BABA);
+    EXPECT_EQ(game.At(3, 1)[0]->GetType(), ObjectType::KEKE);
+    EXPECT_EQ(game.At(4, 1)[0]->GetType(), ObjectType::ALGAE);
+    EXPECT_EQ(game.At(5, 1)[0]->GetType(), ObjectType::IS);
+    EXPECT_EQ(game.At(2, 2)[0]->GetType(), ObjectType::STAR);
+}
+
+TEST(EffectTest, STOP)
+{
+    Game game(10, 10);
+
+    game.Put(1, 1).SetType(ObjectType::BABA);
+    game.Put(2, 1).SetType(ObjectType::KEKE);
+    game.Put(3, 1).SetType(ObjectType::ALGAE);
+    game.Put(4, 1).SetType(ObjectType::WALL);
+
+    game.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
+    game.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::PUSH);
+    game.AddBaseRule(ObjectType::ALGAE, ObjectType::IS, ObjectType::PUSH);
+    game.AddBaseRule(ObjectType::WALL, ObjectType::IS, ObjectType::STOP);
+
+    game.Update(Action::RIGHT);
+    EXPECT_EQ(game.At(1, 1)[0]->GetType(), ObjectType::BABA);
+    EXPECT_EQ(game.At(2, 1)[0]->GetType(), ObjectType::KEKE);
+    EXPECT_EQ(game.At(3, 1)[0]->GetType(), ObjectType::ALGAE);
+    EXPECT_EQ(game.At(4, 1)[0]->GetType(), ObjectType::WALL);
 }
 
 TEST(EffectTest, WIN)
@@ -72,7 +133,7 @@ TEST(EffectTest, MELT)
 
     Object& obj1 = game.Put(0, 0).SetType(ObjectType::BABA);
 
-    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
+    game.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
 
     game.Update();
 
@@ -86,8 +147,8 @@ TEST(EffectTest, HOT)
     game.Put(0, 0).SetType(ObjectType::BABA);
     game.Put(0, 0).SetType(ObjectType::KEKE);
    
-    game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
-    game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::HOT);
+    game.AddBaseRule(ObjectType::BABA, ObjectType::IS, ObjectType::MELT);
+    game.AddBaseRule(ObjectType::KEKE, ObjectType::IS, ObjectType::HOT);
 
     game.Update();
 

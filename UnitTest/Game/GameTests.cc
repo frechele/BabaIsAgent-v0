@@ -38,6 +38,16 @@ TEST(GameTest, FindObjectByType)
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj2);
 }
 
+TEST(GameTest, FindObjectByType_TEXT)
+{
+    Game game(5, 5);
+
+    game.Put(0, 0).SetType(ObjectType::IS);
+    game.Put(0, 0).SetType(ObjectType::KEKE).SetText(true);
+
+    EXPECT_EQ(game.FindObjectsByType(ObjectType::TEXT).size(), 2);
+}
+
 TEST(GameTest, FindObjectsByProperty)
 {
     Game game(5, 5);
@@ -170,6 +180,8 @@ TEST(GameTest, AddOrRemoveRule)
 {
     Game game(5, 5);
 
+    game.Put(1, 1).SetType(ObjectType::BABA);
+
     std::int64_t id = game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
     EXPECT_EQ(game.GetRules().size(), 1u);
 
@@ -180,10 +192,11 @@ TEST(GameTest, AddOrRemoveRule)
     EXPECT_EQ(game.GetRules().begin()->GetEffect(), ObjectType::YOU);
 
     game.RemoveRule(id);
+    EXPECT_FALSE(game.At(1, 1)[0]->HasProperty(PropertyType::YOU));
     EXPECT_EQ(game.GetRules().size(), 0u);
 }
 
-TEST(GameTest, DetermineResult_DEFEAT)
+TEST(GameTest, checkGameOver)
 {
     Game game(10, 10);
 
@@ -192,6 +205,22 @@ TEST(GameTest, DetermineResult_DEFEAT)
     game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::YOU);
 
     game.Update();
-
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
+
+TEST(GameTest, checkGameOver_Push)
+{
+    Game game(10, 10);
+
+    game.Put(5, 5).SetType(ObjectType::BABA);
+    game.Put(4, 6).SetType(ObjectType::BABA).SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(6, 6).SetType(ObjectType::YOU);
+
+    game.Update(Action::STAY);
+    EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
+
+    game.Update(Action::DOWN);
+    EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
+}
+
