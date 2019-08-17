@@ -74,14 +74,8 @@ void Effects::ImplementNonBlockEffects()
     // If a YOU object contacts this object, the level is won.
     // ----------------------------------------------------------------------
     auto WinEffect = [](Game& game, Object& target) {
-        auto objs = game.FindObjectsByPosition(target);
-        for (auto& obj : objs)
-        {
-            if (obj->HasProperty(PropertyType::YOU))
-            {
-                game.SetGameResult(GameResult::WIN);
-            }
-        }
+        (void)game;
+        (void)target;
     };
     emplace(PropertyType::WIN, WinEffect, 101);
 
