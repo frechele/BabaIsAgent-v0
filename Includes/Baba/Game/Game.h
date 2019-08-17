@@ -155,7 +155,7 @@ class Game final
     void parseRules();
     void applyRules();
     void applyRules(std::set<Rule>& r, bool doFunc = true);
-    void checkGameOver();
+    void determineResult();
     Point dir2Vec(Direction dir) const;
 
  private:

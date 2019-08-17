@@ -199,7 +199,7 @@ void Game::Update(Action action)
     parseRules();
     applyRules(rules_, false);
     
-    checkGameOver();
+    determineResult();
 }
 
 GameResult Game::GetGameResult() const
@@ -342,12 +342,31 @@ void Game::applyRules(std::set<Rule>& r, bool doFunc)
     }
 }
 
-void Game::checkGameOver()
+void Game::determineResult()
 {
-    if (FindObjectsByProperty(PropertyType::YOU).empty())
+    auto targets = FindObjectsByProperty(PropertyType::YOU);
+
+    if (targets.empty())
     {
         gameResult_ = GameResult::DEFEAT;
+        return;
     }
+
+    for (auto& target : targets)
+    {
+        auto objs = FindObjectsByPosition(*target);
+
+        for (auto& obj : objs)
+        {
+            if (obj->HasProperty(PropertyType::WIN))
+            {
+                gameResult_ = GameResult::WIN;
+                return;
+            }
+        }
+    }
+
+    gameResult_ = GameResult::INVALID;
 }
 
 Object::Arr Game::TieStuckMoveableObjects(Object& pusher, Direction dir) const
