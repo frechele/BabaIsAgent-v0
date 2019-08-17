@@ -43,9 +43,8 @@ void Effects::ImplementNonBlockEffects()
     // YOU
     // The player can control this object
     // ----------------------------------------------------------------------
-    auto YouEffect = [](Game& game, Object& target, const Rule& rule) {
+    auto YouEffect = [](Game& game, Object& target) {
         (void)target;
-        (void)rule;
         game.SetGameResult(GameResult::INVALID);
     };
     emplace(PropertyType::YOU, YouEffect, 1);
@@ -54,9 +53,7 @@ void Effects::ImplementNonBlockEffects()
     // WIN
     // If a YOU object contacts this object, the level is won.
     // ----------------------------------------------------------------------
-    auto WinEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)rule;
-    
+    auto WinEffect = [](Game& game, Object& target) {
         auto objs = game.FindObjectsByPosition(target);
         for (auto& obj : objs)
         {
@@ -72,10 +69,9 @@ void Effects::ImplementNonBlockEffects()
     // MELT
     // Enchant target with MELT.
     // ----------------------------------------------------------------------
-    auto MeltEffect = [](Game& game, Object& target, const Rule& rule) {
+    auto MeltEffect = [](Game& game, Object& target) {
         (void)game;
         (void)target;
-        (void)rule;
     };
     emplace(PropertyType::MELT, MeltEffect, 100);
 
@@ -83,9 +79,7 @@ void Effects::ImplementNonBlockEffects()
     // HOT
     // Destroy any MELT object that is or intersects with it
     // ----------------------------------------------------------------------
-    auto HotEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)rule;
-
+    auto HotEffect = [](Game& game, Object& target) {
         auto objects = game.FindObjectsByPosition(target);
 
         for (auto& object : objects)

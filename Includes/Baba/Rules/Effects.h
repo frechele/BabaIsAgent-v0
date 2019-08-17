@@ -23,7 +23,7 @@ class Effects
     Effects();
 
  public:
-    using EffectFunc = std::function<void(Game&, Object&, const Rule&)>;
+    using EffectFunc = std::function<void(Game&, Object&)>;
 
  public:
     //! Default destructor

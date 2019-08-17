@@ -297,7 +297,7 @@ void Game::applyRules()
 
                 for (auto& target : targets)
                 {
-                    func(*this, *target, rule);
+                    func(*this, *target);
                 }
             }
         }
