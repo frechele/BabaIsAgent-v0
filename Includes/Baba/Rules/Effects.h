@@ -54,11 +54,11 @@ class Effects
     const std::map<PropertyType, EffectFunc>& GetEffects() const;
 
  private:
-    void emplace(PropertyType propertyType, EffectFunc func, std::size_t priority);
+    void emplace(PropertyType propertyType, EffectFunc func, std::uint8_t priority);
 
  private:
     std::map<PropertyType, EffectFunc> effects_;
-    std::map<PropertyType, std::size_t> priorities_;
+    std::map<PropertyType, std::uint8_t> priorities_;
 };
 }  // namespace Baba
 

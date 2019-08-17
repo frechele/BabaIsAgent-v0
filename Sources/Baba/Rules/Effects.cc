@@ -11,7 +11,7 @@ Effects& Effects::GetInstance()
     return instance;
 }
 
-void Effects::emplace(PropertyType propertyType, EffectFunc func, std::size_t priority)
+void Effects::emplace(PropertyType propertyType, EffectFunc func, std::uint8_t priority)
 {
     effects_.emplace(propertyType, func);
     priorities_.emplace(propertyType, priority);
