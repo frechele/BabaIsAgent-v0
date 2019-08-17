@@ -422,11 +422,6 @@ Action Game::GetNowAction() const
 {
     return nowAction_;
 }
-    
-void Game::SetGameResult(GameResult gameResult)
-{
-    gameResult_= gameResult;
-}
 
 Game::Point Game::dir2Vec(Direction dir) const
 {

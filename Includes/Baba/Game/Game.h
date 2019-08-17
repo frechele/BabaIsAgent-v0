@@ -147,10 +147,6 @@ class Game final
     //! \return nowAction_
     Action GetNowAction() const;
 
-    //! Set gameResult_
-    //! \param gameResult GameResult
-    void SetGameResult(GameResult gameResult);
-
  private:
     void parseRules();
     void applyRules();
