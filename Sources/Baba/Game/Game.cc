@@ -240,7 +240,7 @@ std::set<Rule>::iterator Game::RemoveRule(std::int64_t id)
                 target->RemoveProperty(ObjectToProperty(rule.GetEffect()));
             }
         }
-        return rules_.erase(it);
+        it = rules_.erase(it);
     }
     return it;
 }
