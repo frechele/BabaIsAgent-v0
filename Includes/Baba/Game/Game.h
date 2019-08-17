@@ -122,12 +122,22 @@ class Game final
     //! \param effect Effect of rule
     //! \return ID of added rule
     std::int64_t AddRule(ObjectType target, ObjectType verb, ObjectType effect);
+
     //! Remove rule
     //! \param id ID of rule to remove
     void RemoveRule(std::int64_t id);
+
     //! Get set of rules
     //! \return Set of rules
     const std::set<Rule>& GetRules() const;
+
+    //! Get nowAction_
+    //! \return nowAction_
+    Action GetNowAction() const;
+
+    //! Set gameResult_
+    //! \param gameResult GameResult
+    void SetGameResult(GameResult gameResult);
 
  private:
     void parseRules();
@@ -140,7 +150,8 @@ class Game final
     std::vector<Object::Arr> map_;
 
     std::set<Rule> rules_;
-
+    
+    Action nowAction_ = Action::STAY;
     GameResult gameResult_ = GameResult::INVALID;
 };
 }  // namespace Baba

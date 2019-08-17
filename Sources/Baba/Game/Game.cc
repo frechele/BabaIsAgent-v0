@@ -342,4 +342,14 @@ void Game::determineResult()
 
     gameResult_ = GameResult::INVALID;
 }
+
+Action Game::GetNowAction() const
+{
+    return nowAction_;
+}
+    
+void Game::SetGameResult(GameResult gameResult)
+{
+    gameResult_= gameResult;
+}
 }  // namespace Baba
