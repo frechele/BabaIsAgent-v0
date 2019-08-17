@@ -44,8 +44,28 @@ void Effects::ImplementNonBlockEffects()
     // The player can control this object
     // ----------------------------------------------------------------------
     auto YouEffect = [](Game& game, Object& target) {
-        (void)target;
-        game.SetGameResult(GameResult::INVALID);
+        Direction dir;
+
+        switch (game.GetNowAction())
+        {
+            case Action::UP:
+                dir = Direction::UP;
+                break;
+            case Action::DOWN:
+                dir = Direction::DOWN;
+                break;
+            case Action::LEFT:
+                dir = Direction::LEFT;
+                break;
+            case Action::RIGHT:
+                dir = Direction::RIGHT;
+                break;
+            default:
+                return;
+        }
+
+        auto objs = game.TieStuckMoveableObjects(target, dir);
+        game.MoveObjects(objs, dir);
     };
     emplace(PropertyType::YOU, YouEffect, 100);
 
