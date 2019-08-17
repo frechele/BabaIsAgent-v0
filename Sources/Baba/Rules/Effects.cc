@@ -85,6 +85,12 @@ void Effects::ImplementNonBlockEffects()
     };
     emplace(PropertyType::WIN, WinEffect, 101);
 
+    auto WordEffect = [](Game& game, Object& target) {
+        (void)game;
+        (void)target;
+    };
+    emplace(PropertyType::WORD, WordEffect, 0);
+
     // ----------------------------------------------------------------------
     // PUSH
     // Make target pushable and make it solid.
