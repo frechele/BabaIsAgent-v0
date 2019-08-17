@@ -199,7 +199,7 @@ std::int64_t Game::AddRule(ObjectType target, ObjectType verb,
 {
     rules_.emplace(target, verb, effect);
 
-    return Rule::GetRuleID(target, verb, effect);
+    return Rule::CalcRuleID(target, verb, effect);
 }
 
 void Game::RemoveRule(std::int64_t id)
