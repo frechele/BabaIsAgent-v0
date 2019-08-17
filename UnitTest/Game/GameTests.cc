@@ -208,7 +208,7 @@ TEST(GameTest, checkGameOver)
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
 
-TEST(GameTest, checkGameOver_Push)
+TEST(GameTest, determineResult_Push)
 {
     Game game(10, 10);
 
@@ -224,3 +224,22 @@ TEST(GameTest, checkGameOver_Push)
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
 
+TEST(GameTest, determineResult_Priority)
+{
+    Game game(10, 10);
+
+    game.Put(5, 5).SetType(ObjectType::BABA);
+    game.Put(5, 5).SetType(ObjectType::FLAG);
+    game.Put(5, 6).SetType(ObjectType::FLAG);
+    game.Put(4, 6).SetType(ObjectType::BABA).SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(6, 6).SetType(ObjectType::YOU);
+
+    game.AddBaseRule(ObjectType::FLAG, ObjectType::IS, ObjectType::WIN);
+
+    game.Update(Action::STAY);
+    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
+
+    game.Update(Action::DOWN);
+    EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
+}
