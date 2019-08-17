@@ -12,7 +12,8 @@ namespace Baba
 Game::Game(std::size_t width, std::size_t height)
     : width_(width), height_(height), map_(width * height)
 {
-    // Do nothing
+    AddBaseRule(ObjectType::TEXT, ObjectType::IS, ObjectType::PUSH);
+    AddBaseRule(ObjectType::TEXT, ObjectType::IS, ObjectType::WORD);
 }
 
 Game::~Game()
@@ -87,9 +88,19 @@ Object::Arr Game::FindObjects(std::function<bool(const Object&)> func,
 
 Object::Arr Game::FindObjectsByType(ObjectType type, bool excludeText) const
 {
-    return FindObjects(
-        [type](const Object& obj) { return obj.GetType() == type; },
-        excludeText);
+    std::function<bool(const Object&)> func;
+
+    if (type == ObjectType::TEXT)
+    {
+        func = [](const Object& obj) { return obj.IsText(); };
+        excludeText = false;
+    }
+    else
+    {
+        func = [type](const Object& obj) { return obj.GetType() == type; };
+    }
+
+    return FindObjects(func, excludeText);
 }
 
 Object::Arr Game::FindObjectsByProperty(PropertyType property,
@@ -181,8 +192,13 @@ void Game::Update(Action action)
     gameResult_ = GameResult::INVALID;
     nowAction_ = action;
 
+    applyRules(baseRules_);
     parseRules();
     applyRules();
+
+    parseRules();
+    applyRules(rules_, false);
+    
     checkGameOver();
 }
 
@@ -195,6 +211,14 @@ std::int64_t Game::AddRule(ObjectType target, ObjectType verb,
                            ObjectType effect)
 {
     rules_.emplace(target, verb, effect);
+
+    return Rule::CalcRuleID(target, verb, effect);
+}
+
+std::int64_t Game::AddBaseRule(ObjectType target, ObjectType verb,
+                               ObjectType effect)
+{
+    baseRules_.emplace(target, verb, effect);
 
     return Rule::CalcRuleID(target, verb, effect);
 }
@@ -227,8 +251,13 @@ const std::set<Rule>& Game::GetRules() const
 
 void Game::parseRules()
 {
+    for (auto& rule : rules_)
+    {
+        RemoveRule(rule.GetRuleID());
+    }
+
     auto verbs = FindObjects(
-        [](const Object& obj) { return IsVerbType(obj.GetType()); });
+        [](const Object& obj) { return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD); });
 
     for (auto& verb : verbs)
     {
@@ -245,7 +274,7 @@ void Game::parseRules()
                 auto effects = FilterObjectByFunction(
                     At(x + dx, y + dy),
                     [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
-
+                    
                 for (auto& target : targets)
                 {
                     for (auto& effect : effects)
@@ -264,25 +293,14 @@ void Game::parseRules()
 
 void Game::applyRules()
 {
+    applyRules(rules_);
+}
+
+void Game::applyRules(std::set<Rule>& r, bool doFunc)
+{
     auto& effects = Effects::GetInstance().GetEffects();
 
-    // for (auto& rule : rules_)
-    // {
-    //     if (IsPropertyType(rule.GetEffect()))
-    //     {
-    //         auto targets = FindObjectsByType(rule.GetTarget());
-
-    //         for (auto& target : targets)
-    //         {
-    //             if (!target->IsText())
-    //             {
-    //                 target->AddProperty(ObjectToProperty(rule.GetEffect()));
-    //             }
-    //         }
-    //     }
-    // }
-
-    for (auto& rule : rules_)
+    for (auto& rule : r)
     {
         if (rule.GetVerb() == ObjectType::IS)
         {
@@ -302,7 +320,10 @@ void Game::applyRules()
                 for (auto& target : targets)
                 {
                     target->AddProperty(ObjectToProperty(rule.GetEffect()));
-                    func(*this, *target);
+                    if (doFunc)
+                    {
+                        func(*this, *target);
+                    }
                 }
             }
         }

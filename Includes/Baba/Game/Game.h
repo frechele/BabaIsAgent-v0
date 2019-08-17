@@ -122,6 +122,13 @@ class Game final
     //! \param effect Effect of rule
     //! \return ID of added rule
     std::int64_t AddRule(ObjectType target, ObjectType verb, ObjectType effect);
+    
+    //! Add base rule
+    //! \param target Target of rule
+    //! \param verb Verb of rule
+    //! \param effect Effect of rule
+    //! \return ID of added rule
+    std::int64_t AddBaseRule(ObjectType target, ObjectType verb, ObjectType effect);
 
     //! Remove rule
     //! \param id ID of rule to remove
@@ -147,6 +154,7 @@ class Game final
  private:
     void parseRules();
     void applyRules();
+    void applyRules(std::set<Rule>& r, bool doFunc = true);
     void checkGameOver();
     Point dir2Vec(Direction dir) const;
 
@@ -156,6 +164,7 @@ class Game final
     std::vector<Object::Arr> map_;
 
     std::set<Rule> rules_;
+    std::set<Rule> baseRules_;
     
     Action nowAction_ = Action::STAY;
     GameResult gameResult_ = GameResult::INVALID;
