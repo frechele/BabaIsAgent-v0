@@ -44,22 +44,29 @@ void Effects::ImplementNonBlockEffects()
     // The player can control this object
     // ----------------------------------------------------------------------
     auto YouEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)game;
         (void)target;
         (void)rule;
+        game.SetGameResult(GameResult::INVALID);
     };
-    effects_.emplace(PropertyType::YOU, YouEffect);
+    emplace(PropertyType::YOU, YouEffect, 1);
 
     // ----------------------------------------------------------------------
     // WIN
     // If a YOU object contacts this object, the level is won.
     // ----------------------------------------------------------------------
     auto WinEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)game;
-        (void)target;
         (void)rule;
+    
+        auto objs = game.FindObjectsByPosition(target);
+        for (auto& obj : objs)
+        {
+            if (obj->HasProperty(PropertyType::YOU))
+            {
+                game.SetGameResult(GameResult::WIN);
+            }
+        }
     };
-    effects_.emplace(PropertyType::WIN, WinEffect);
+    emplace(PropertyType::WIN, WinEffect, 2);
 
     // ----------------------------------------------------------------------
     // MELT
@@ -70,7 +77,7 @@ void Effects::ImplementNonBlockEffects()
         (void)target;
         (void)rule;
     };
-    effects_.emplace(PropertyType::MELT, MeltEffect);
+    emplace(PropertyType::MELT, MeltEffect, 100);
 
     // ----------------------------------------------------------------------
     // HOT
@@ -89,7 +96,7 @@ void Effects::ImplementNonBlockEffects()
             }
         }
     };
-    effects_.emplace(PropertyType::HOT, HotEffect);
+    emplace(PropertyType::HOT, HotEffect, 101);
 }
 
 Effects::Effects()
