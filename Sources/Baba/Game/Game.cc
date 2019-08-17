@@ -259,36 +259,33 @@ void Game::applyRules()
 {
     auto& effects = Effects::GetInstance().GetEffects();
 
-    for (auto& rule : rules_)
-    {
-        if (IsPropertyType(rule.GetEffect()))
-        {
-            auto targets = FindObjectsByType(rule.GetTarget());
+    // for (auto& rule : rules_)
+    // {
+    //     if (IsPropertyType(rule.GetEffect()))
+    //     {
+    //         auto targets = FindObjectsByType(rule.GetTarget());
 
-            for (auto& target : targets)
-            {
-                if (!target->IsText())
-                {
-                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
-                }
-            }
-        }
-    }
+    //         for (auto& target : targets)
+    //         {
+    //             if (!target->IsText())
+    //             {
+    //                 target->AddProperty(ObjectToProperty(rule.GetEffect()));
+    //             }
+    //         }
+    //     }
+    // }
 
     for (auto& rule : rules_)
     {
         if (rule.GetVerb() == ObjectType::IS)
         {
-            auto targets = FindObjectsByType(rule.GetTarget());
+            auto targets = FindObjectsByType(rule.GetTarget(), true);
 
             if (IsObjectType(rule.GetEffect()))
             {
                 for (auto& target : targets)
                 {
-                    if (!target->IsText())
-                    {
-                        target->SetType(rule.GetEffect());
-                    }
+                    target->SetType(rule.GetEffect());
                 }
             }
             else
@@ -297,6 +294,7 @@ void Game::applyRules()
 
                 for (auto& target : targets)
                 {
+                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
                     func(*this, *target);
                 }
             }
