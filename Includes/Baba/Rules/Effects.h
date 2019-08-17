@@ -43,6 +43,11 @@ class Effects
 
     static Effects& GetInstance();
 
+    //! Returns priority of property
+    //! \param propertyType PropertyType
+    //! \return priority of propertyType 
+    std::uint8_t GetPriority(PropertyType propertyType) const;
+
     //! Implement effects of the texts that exist block.
     void ImplementBlockEffects();
 

@@ -11,6 +11,11 @@ Effects& Effects::GetInstance()
     return instance;
 }
 
+std::uint8_t Effects::GetPriority(PropertyType propertyType) const
+{
+    return priorities_.at(propertyType);
+}
+
 void Effects::emplace(PropertyType propertyType, EffectFunc func, std::uint8_t priority)
 {
     effects_.emplace(propertyType, func);
