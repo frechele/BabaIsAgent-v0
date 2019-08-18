@@ -15,11 +15,19 @@ target_compile_options(${target}
     INTERFACE
 )
 
+set_target_properties(${target}
+	PROPERTIES
+	${DEFAULT_PROJECT_OPTIONS}
+)
+
 target_link_libraries(${target}
-	Baba
-	${DEFAULT_LINKER_OPTIONS}
+	PUBLIC
 	sfml-graphics
 	sfml-system
 	sfml-window
 	spdlog::spdlog
+
+	PRIVATE
+	${DEFAULT_LINKER_OPTIONS}
+	Baba
 )

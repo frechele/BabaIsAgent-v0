@@ -38,6 +38,16 @@ TEST(GameTest, FindObjectByType)
     EXPECT_EQ(*game.FindObjectsByType(ObjectType::KEKE).at(0), obj2);
 }
 
+TEST(GameTest, FindObjectByType_TEXT)
+{
+    Game game(5, 5);
+
+    game.Put(0, 0).SetType(ObjectType::IS);
+    game.Put(0, 0).SetType(ObjectType::KEKE).SetText(true);
+
+    EXPECT_EQ(game.FindObjectsByType(ObjectType::TEXT).size(), 2);
+}
+
 TEST(GameTest, FindObjectsByProperty)
 {
     Game game(5, 5);
@@ -62,8 +72,7 @@ TEST(GameTest, FindObjectsByPosition)
 
     game.Put(0, 0)
         .SetType(ObjectType::ME)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
 
     EXPECT_EQ(game.FindObjectsByPosition(obj1, true).size(), 2u);
 
@@ -98,13 +107,11 @@ TEST(GameTest, ParseRules_Vertical_Center)
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::KEKE)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(6, 5).SetType(ObjectType::IS).AddProperty(PropertyType::WORD);
+        .SetText(true);
+    game.Put(6, 5).SetType(ObjectType::IS);
     game.Put(7, 5)
         .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
 
     game.Update();
 
@@ -126,13 +133,11 @@ TEST(GameTest, ParseRules_Horizontal_Center)
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 5)
         .SetType(ObjectType::KEKE)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(5, 6).SetType(ObjectType::IS).AddProperty(PropertyType::WORD);
+        .SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
     game.Put(5, 7)
         .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
 
     game.Update();
 
@@ -154,14 +159,12 @@ TEST(GameTest, ParseRules_Cross)
     game.Put(1, 1).SetType(ObjectType::KEKE);
     game.Put(5, 4)
         .SetType(ObjectType::KEKE)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
     game.Put(5, 5).SetType(ObjectType::IS);
     game.Put(5, 6).SetType(ObjectType::HOT);
     game.Put(4, 5)
         .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+        .SetText(true);
     game.Put(6, 5).SetType(ObjectType::MELT);
     game.Put(1, 1).SetType(ObjectType::BABA);
 
@@ -173,33 +176,11 @@ TEST(GameTest, ParseRules_Cross)
     EXPECT_TRUE(game.FindObjectsByType(ObjectType::BABA, true).empty());
 }
 
-TEST(GameTest, DetermineResult_WIN)
-{
-    Game game(10, 10);
-
-    game.Put(1, 1).SetType(ObjectType::BABA);
-    game.Put(1, 1).SetType(ObjectType::FLAG);
-    game.Put(5, 5)
-        .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(5, 6).SetType(ObjectType::IS);
-    game.Put(5, 7).SetType(ObjectType::YOU);
-    game.Put(6, 5)
-        .SetType(ObjectType::FLAG)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
-    game.Put(6, 6).SetType(ObjectType::IS);
-    game.Put(6, 7).SetType(ObjectType::WIN);
-
-    game.Update();
-
-    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
-}
-
 TEST(GameTest, AddOrRemoveRule)
 {
     Game game(5, 5);
+
+    game.Put(1, 1).SetType(ObjectType::BABA);
 
     std::int64_t id = game.AddRule(ObjectType::BABA, ObjectType::IS, ObjectType::YOU);
     EXPECT_EQ(game.GetRules().size(), 1u);
@@ -211,33 +192,79 @@ TEST(GameTest, AddOrRemoveRule)
     EXPECT_EQ(game.GetRules().begin()->GetEffect(), ObjectType::YOU);
 
     game.RemoveRule(id);
+    EXPECT_FALSE(game.At(1, 1)[0]->HasProperty(PropertyType::YOU));
     EXPECT_EQ(game.GetRules().size(), 0u);
 }
 
-TEST(GameTest, DetermineResult_DEFEAT)
+TEST(GameTest, checkGameOver)
 {
     Game game(10, 10);
 
     game.Put(1, 1).SetType(ObjectType::BABA);
 
-    game.Update();
+    game.AddRule(ObjectType::KEKE, ObjectType::IS, ObjectType::YOU);
 
+    game.Update();
     EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
 }
 
-TEST(GameTest, DetermineResult_INVALID)
+TEST(GameTest, determineResult_Push)
 {
     Game game(10, 10);
 
-    game.Put(1, 1).SetType(ObjectType::BABA);
-    game.Put(5, 5)
-        .SetType(ObjectType::BABA)
-        .SetText(true)
-        .AddProperty(PropertyType::WORD);
+    game.Put(5, 5).SetType(ObjectType::BABA);
+    game.Put(4, 6).SetType(ObjectType::BABA).SetText(true);
     game.Put(5, 6).SetType(ObjectType::IS);
-    game.Put(5, 7).SetType(ObjectType::YOU);
+    game.Put(6, 6).SetType(ObjectType::YOU);
 
-    game.Update();
-
+    game.Update(Action::STAY);
     EXPECT_EQ(game.GetGameResult(), GameResult::INVALID);
+
+    game.Update(Action::DOWN);
+    EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
+}
+
+TEST(GameTest, determineResult_Priority)
+{
+    Game game(10, 10);
+
+    game.Put(5, 5).SetType(ObjectType::BABA);
+    game.Put(5, 5).SetType(ObjectType::FLAG);
+    game.Put(5, 6).SetType(ObjectType::FLAG);
+    game.Put(4, 6).SetType(ObjectType::BABA).SetText(true);
+    game.Put(5, 6).SetType(ObjectType::IS);
+    game.Put(6, 6).SetType(ObjectType::YOU);
+
+    game.AddBaseRule(ObjectType::FLAG, ObjectType::IS, ObjectType::WIN);
+
+    game.Update(Action::STAY);
+    EXPECT_EQ(game.GetGameResult(), GameResult::WIN);
+
+    game.Update(Action::DOWN);
+    EXPECT_EQ(game.GetGameResult(), GameResult::DEFEAT);
+}
+
+TEST(GameTest, MoveObject)
+{
+    Game game(10, 10);
+
+    Object& obj = game.Put(5, 5).SetType(ObjectType::BABA);
+
+    game.MoveObjects({ &obj }, Direction::DOWN);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 5);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 6);
+
+    game.MoveObjects({ &obj }, Direction::LEFT);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 4);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 6);
+    
+    game.MoveObjects({ &obj }, Direction::UP);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 4);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 5);
+
+    game.MoveObjects({ &obj }, Direction::RIGHT);
+    EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 5);
+    EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 5);
+
+    EXPECT_ANY_THROW(game.MoveObjects({ &obj }, Direction::INVALID));
 }
