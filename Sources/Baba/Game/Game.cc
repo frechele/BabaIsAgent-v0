@@ -12,7 +12,8 @@ namespace Baba
 Game::Game(std::size_t width, std::size_t height)
     : width_(width), height_(height), map_(width * height)
 {
-    // Do nothing
+    AddBaseRule(ObjectType::TEXT, ObjectType::IS, ObjectType::PUSH);
+    AddBaseRule(ObjectType::TEXT, ObjectType::IS, ObjectType::WORD);
 }
 
 Game::~Game()
@@ -87,9 +88,19 @@ Object::Arr Game::FindObjects(std::function<bool(const Object&)> func,
 
 Object::Arr Game::FindObjectsByType(ObjectType type, bool excludeText) const
 {
-    return FindObjects(
-        [type](const Object& obj) { return obj.GetType() == type; },
-        excludeText);
+    std::function<bool(const Object&)> func;
+
+    if (type == ObjectType::TEXT)
+    {
+        func = [](const Object& obj) { return obj.IsText(); };
+        excludeText = false;
+    }
+    else
+    {
+        func = [type](const Object& obj) { return obj.GetType() == type; };
+    }
+
+    return FindObjects(func, excludeText);
 }
 
 Object::Arr Game::FindObjectsByProperty(PropertyType property,
@@ -178,14 +189,16 @@ bool Game::ValidatePosition(std::size_t x, std::size_t y) const
 
 void Game::Update(Action action)
 {
-    parseRules();
-    if (action != Action::STAY)
-    {
-        // Do nothing
-    }
+    gameResult_ = GameResult::INVALID;
+    nowAction_ = action;
 
+    applyRules(baseRules_);
+    parseRules();
     applyRules();
 
+    parseRules();
+    applyRules(rules_, false);
+    
     determineResult();
 }
 
@@ -202,15 +215,34 @@ std::int64_t Game::AddRule(ObjectType target, ObjectType verb,
     return Rule::CalcRuleID(target, verb, effect);
 }
 
-void Game::RemoveRule(std::int64_t id)
+std::int64_t Game::AddBaseRule(ObjectType target, ObjectType verb,
+                               ObjectType effect)
 {
-    auto it =
-        std::find_if(rules_.begin(), rules_.end(),
-                     [id](const Rule& rule) { return rule.GetRuleID() == id; });
+    baseRules_.emplace(target, verb, effect);
+
+    return Rule::CalcRuleID(target, verb, effect);
+}
+
+std::set<Rule>::iterator Game::RemoveRule(std::int64_t id)
+{
+    auto it = std::find_if(rules_.begin(), rules_.end(),
+                          [id](const Rule& rule) { return rule.GetRuleID() == id; });
+                          
     if (it != rules_.end())
     {
-        rules_.erase(it);
+        auto& rule = *it;
+        auto targets = FindObjectsByType(rule.GetTarget(), true);
+        
+        if (IsPropertyType(rule.GetEffect()))
+        {
+            for (auto& target : targets)
+            {
+                target->RemoveProperty(ObjectToProperty(rule.GetEffect()));
+            }
+        }
+        it = rules_.erase(it);
     }
+    return it;
 }
 
 const std::set<Rule>& Game::GetRules() const
@@ -220,13 +252,18 @@ const std::set<Rule>& Game::GetRules() const
 
 void Game::parseRules()
 {
-    auto verbs = FindObjects(
-        [](const Object& obj) { return IsVerbType(obj.GetType()); });
+    for (auto it = rules_.begin(); it != rules_.end();)
+    {
+        it = RemoveRule(it->GetRuleID());
+    }
 
+    auto verbs = FindObjects(
+        [](const Object& obj) { return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD); });
+        
     for (auto& verb : verbs)
     {
         auto [x, y] = GetPositionByObject(*verb);
-
+        
         const auto addRules = [&, x = x, y = y](std::size_t dx,
                                                 std::size_t dy) {
             if (ValidatePosition(x - dx, y - dy) &&
@@ -234,11 +271,11 @@ void Game::parseRules()
             {
                 auto targets = FilterObjectByFunction(
                     At(x - dx, y - dy),
-                    [](const Object& obj) { return obj.IsText(); });
+                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
                 auto effects = FilterObjectByFunction(
                     At(x + dx, y + dy),
-                    [](const Object& obj) { return obj.IsText(); });
-
+                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
+                    
                 for (auto& target : targets)
                 {
                     for (auto& effect : effects)
@@ -257,38 +294,24 @@ void Game::parseRules()
 
 void Game::applyRules()
 {
+    applyRules(rules_);
+}
+
+void Game::applyRules(std::set<Rule>& r, bool doFunc)
+{
     auto& effects = Effects::GetInstance().GetEffects();
 
-    for (auto& rule : rules_)
-    {
-        if (IsPropertyType(rule.GetEffect()))
-        {
-            auto targets = FindObjectsByType(rule.GetTarget());
-
-            for (auto& target : targets)
-            {
-                if (!target->IsText())
-                {
-                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
-                }
-            }
-        }
-    }
-
-    for (auto& rule : rules_)
+    for (auto& rule : r)
     {
         if (rule.GetVerb() == ObjectType::IS)
         {
-            auto targets = FindObjectsByType(rule.GetTarget());
+            auto targets = FindObjectsByType(rule.GetTarget(), true);
 
             if (IsObjectType(rule.GetEffect()))
             {
                 for (auto& target : targets)
                 {
-                    if (!target->IsText())
-                    {
-                        target->SetType(rule.GetEffect());
-                    }
+                    target->SetType(rule.GetEffect());
                 }
             }
             else
@@ -297,7 +320,11 @@ void Game::applyRules()
 
                 for (auto& target : targets)
                 {
-                    func(*this, *target, rule);
+                    target->AddProperty(ObjectToProperty(rule.GetEffect()));
+                    if (doFunc)
+                    {
+                        func(*this, *target);
+                    }
                 }
             }
         }
@@ -341,5 +368,75 @@ void Game::determineResult()
     }
 
     gameResult_ = GameResult::INVALID;
+}
+
+Object::Arr Game::TieStuckMoveableObjects(Object& pusher, Direction dir) const
+{
+    Object::Arr result;
+    result.push_back(&pusher);
+
+    auto [dx, dy] = dir2Vec(dir);
+    auto pos = GetPositionByObject(pusher);
+    std::size_t x = std::get<0>(pos);
+    std::size_t y = std::get<1>(pos);
+
+    while (ValidatePosition(x += dx, y += dy))
+    {
+        auto objs = At(x, y);
+        if (objs.empty())
+        {
+            break;
+        }
+
+        for (auto& obj : objs)
+        {
+            if (obj->HasProperty(PropertyType::STOP))
+            {
+                return Object::Arr();
+            }
+            if (obj->HasProperty(PropertyType::PUSH))
+            {
+                result.push_back(obj);
+            }
+        }
+    }
+
+    return result;
+}
+
+void Game::MoveObjects(const Object::Arr& objects, Direction dir)
+{
+    for (auto& obj : objects)
+    {
+        auto [dx, dy] = dir2Vec(dir);
+        auto [x, y] = GetPositionByObject(*obj);
+        auto& box = map_[x + y * width_];
+
+        box.erase(std::find(box.begin(), box.end(), obj));
+        
+        map_[(x + dx) + (y + dy) * width_].push_back(obj);
+    }
+}
+
+Action Game::GetNowAction() const
+{
+    return nowAction_;
+}
+
+Game::Point Game::dir2Vec(Direction dir) const
+{
+    switch (dir)
+    {
+        case Direction::UP:
+            return Game::Point(0, -1);
+        case Direction::DOWN:
+            return Game::Point(0, 1);
+        case Direction::LEFT:
+            return Game::Point(-1, 0);
+        case Direction::RIGHT:
+            return Game::Point(1, 0);
+        default:
+            throw std::runtime_error("Invalid Direction");
+    }
 }
 }  // namespace Baba

@@ -23,7 +23,7 @@ class Effects
     Effects();
 
  public:
-    using EffectFunc = std::function<void(Game&, Object&, const Rule&)>;
+    using EffectFunc = std::function<void(Game&, Object&)>;
 
  public:
     //! Default destructor
@@ -43,6 +43,11 @@ class Effects
 
     static Effects& GetInstance();
 
+    //! Returns priority of property
+    //! \param propertyType PropertyType
+    //! \return priority of propertyType 
+    std::uint8_t GetPriority(PropertyType propertyType) const;
+
     //! Implement effects of the texts that exist block.
     void ImplementBlockEffects();
 
@@ -54,7 +59,11 @@ class Effects
     const std::map<PropertyType, EffectFunc>& GetEffects() const;
 
  private:
+    void emplace(PropertyType propertyType, EffectFunc func, std::uint8_t priority);
+
+ private:
     std::map<PropertyType, EffectFunc> effects_;
+    std::map<PropertyType, std::uint8_t> priorities_;
 };
 }  // namespace Baba
 

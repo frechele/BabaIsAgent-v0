@@ -11,6 +11,17 @@ Effects& Effects::GetInstance()
     return instance;
 }
 
+std::uint8_t Effects::GetPriority(PropertyType propertyType) const
+{
+    return priorities_.at(propertyType);
+}
+
+void Effects::emplace(PropertyType propertyType, EffectFunc func, std::uint8_t priority)
+{
+    effects_.emplace(propertyType, func);
+    priorities_.emplace(propertyType, priority);
+}
+
 void Effects::ImplementBlockEffects()
 {
     // ----------------------------------------------------------------------
@@ -32,42 +43,83 @@ void Effects::ImplementNonBlockEffects()
     // YOU
     // The player can control this object
     // ----------------------------------------------------------------------
-    auto YouEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)game;
-        (void)target;
-        (void)rule;
+    auto YouEffect = [](Game& game, Object& target) {
+        Direction dir;
+
+        switch (game.GetNowAction())
+        {
+            case Action::UP:
+                dir = Direction::UP;
+                break;
+            case Action::DOWN:
+                dir = Direction::DOWN;
+                break;
+            case Action::LEFT:
+                dir = Direction::LEFT;
+                break;
+            case Action::RIGHT:
+                dir = Direction::RIGHT;
+                break;
+            default:
+                return;
+        }
+
+        auto objs = game.TieStuckMoveableObjects(target, dir);
+        game.MoveObjects(objs, dir);
     };
-    effects_.emplace(PropertyType::YOU, YouEffect);
+    emplace(PropertyType::YOU, YouEffect, 100);
 
     // ----------------------------------------------------------------------
     // WIN
     // If a YOU object contacts this object, the level is won.
     // ----------------------------------------------------------------------
-    auto WinEffect = [](Game& game, Object& target, const Rule& rule) {
+    auto WinEffect = [](Game& game, Object& target) {
         (void)game;
         (void)target;
-        (void)rule;
     };
-    effects_.emplace(PropertyType::WIN, WinEffect);
+    emplace(PropertyType::WIN, WinEffect, 101);
+
+    auto WordEffect = [](Game& game, Object& target) {
+        (void)game;
+        (void)target;
+    };
+    emplace(PropertyType::WORD, WordEffect, 0);
+
+    // ----------------------------------------------------------------------
+    // PUSH
+    // Make target pushable and make it solid.
+    // ----------------------------------------------------------------------
+    auto PushEffect = [](Game& game, Object& target) {
+        (void)game;
+        (void)target;
+    };
+    emplace(PropertyType::PUSH, PushEffect, 10);
+
+    // ----------------------------------------------------------------------
+    // STOP
+    // Make target solid.
+    // ----------------------------------------------------------------------
+    auto StopEffect = [](Game& game, Object& target) {
+        (void)game;
+        (void)target;
+    };
+    emplace(PropertyType::STOP, StopEffect, 11);
 
     // ----------------------------------------------------------------------
     // MELT
     // Enchant target with MELT.
     // ----------------------------------------------------------------------
-    auto MeltEffect = [](Game& game, Object& target, const Rule& rule) {
+    auto MeltEffect = [](Game& game, Object& target) {
         (void)game;
         (void)target;
-        (void)rule;
     };
-    effects_.emplace(PropertyType::MELT, MeltEffect);
+    emplace(PropertyType::MELT, MeltEffect, 12);
 
     // ----------------------------------------------------------------------
     // HOT
     // Destroy any MELT object that is or intersects with it
     // ----------------------------------------------------------------------
-    auto HotEffect = [](Game& game, Object& target, const Rule& rule) {
-        (void)rule;
-
+    auto HotEffect = [](Game& game, Object& target) {
         auto objects = game.FindObjectsByPosition(target);
 
         for (auto& object : objects)
@@ -78,7 +130,7 @@ void Effects::ImplementNonBlockEffects()
             }
         }
     };
-    effects_.emplace(PropertyType::HOT, HotEffect);
+    emplace(PropertyType::HOT, HotEffect, 50);
 }
 
 Effects::Effects()

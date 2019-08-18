@@ -46,7 +46,6 @@ Object& Object::SetType(ObjectType type)
     if (IsTextType(type) || IsVerbType(type) || IsPropertyType(type))
     {
         isText_ = true;
-        AddProperty(PropertyType::WORD);
     }
 
     type_ = type;
