@@ -29,6 +29,14 @@ void buildGameEnum(py::module& m)
         .value("DEFEAT", GameResult::DEFEAT)
         .value("COUNT", GameResult::COUNT)
         .export_values();
+
+    py::enum_<Direction>(m, "Direction")
+        .value("INVALID", Direction::INVALID)
+        .value("UP", Direction::UP)
+        .value("DOWN", Direction::DOWN)
+        .value("LEFT", Direction::LEFT)
+        .value("RIGHT", Direction::RIGHT)
+        .export_values();
 }
 
 void buildObjectTypeEnum(py::module& m)

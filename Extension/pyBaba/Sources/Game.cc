@@ -1,8 +1,8 @@
 // Copyrigh(C) 2019 Junyeong Park
 
 #include <pyBaba/Game.h>
-#include <pybind11/stl.h>
 #include <pybind11/functional.h>
+#include <pybind11/stl.h>
 
 #include <Baba/Game/Game.h>
 
@@ -55,6 +55,10 @@ void buildGame(py::module& m)
         .def("Update", &Game::Update)
         .def("GetGameResult", &Game::GetGameResult)
         .def("AddRule", &Game::AddRule)
+        .def("AddBaseRule", &Game::AddBaseRule)
         .def("RemoveRule", &Game::RemoveRule)
-        .def("GetRules", &Game::GetRules);
+        .def("TieStuckMoveableObjects", &Game::TieStuckMoveableObjects)
+        .def("MoveObjects", &Game::MoveObjects)
+        .def("GetRules", &Game::GetRules)
+        .def("GetNowAction", &Game::GetNowAction);
 }
