@@ -15,7 +15,7 @@ This project is a research project at [OOPArts](https://www.facebook.com/OOPArts
 - GUI simulator program
 
 ## To-do Features
-- [ ] Game simulation
+- [x] Game simulation
 - [ ] GUI program
 - [ ] Level solver
 
