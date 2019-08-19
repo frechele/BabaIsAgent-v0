@@ -12,11 +12,6 @@ RUN apt-get update && apt-get install -y \
 	cmake \
 	gcc-8 \
 	g++-8 \
-	libx11-dev \
-	freeglut3-dev \
-	libudev-dev \
-	libxrandr-dev \
-	libfreetype6-dev \
 	--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
