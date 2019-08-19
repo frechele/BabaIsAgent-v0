@@ -65,6 +65,4 @@ matrix:
         - sh Scripts/travis_build.sh
 
   before_install:
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
     - eval "${MATRIX_EVAL}"

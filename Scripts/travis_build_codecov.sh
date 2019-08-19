@@ -10,16 +10,11 @@ export CC_FOR_BUILD=gcc-7
 
 export NUM_JOBS=1
 
-sudo apt-get install -yq \
+sudo apt install -yq \
     gcovr \
     ggcov \
     lcov \
     curl \
-    libx11-dev \
-	freeglut3-dev \
-	libudev-dev \
-	libxrandr-dev \
-	libfreetype6-dev \
 
 mkdir build
 cd build
