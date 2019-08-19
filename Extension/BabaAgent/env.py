@@ -29,9 +29,13 @@ class BabaEnv(gym.Env):
     def _get_obs(self):
         return None
 
+class BabaEnv10x10(BabaEnv):
+    def __init__(self):
+        super(BabaEnv10x10, self).__init__(10, 10)
+
 register(
-    id='baba-20x20-v0',
-    entry_point='BabaEnv',
+    id='baba-10x10-v0',
+    entry_point='BabaEnv10x10',
     max_episode_steps=1000,
     nondeterministic=True
 )
