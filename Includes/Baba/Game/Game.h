@@ -132,7 +132,7 @@ class Game final
 
     //! Remove rule
     //! \param id ID of rule to remove
-    std::set<Rule>::iterator RemoveRule(std::int64_t id);
+    void RemoveRule(std::int64_t id);
 
     //! Tie affected objects as the object move
     //! \param pusher Object to be center of movement
