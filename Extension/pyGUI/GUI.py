@@ -2,6 +2,8 @@ import pygame
 import sys
 import pyBaba
 
+game = pyBaba.Game(10, 10)
+#test
 from pyBaba import Game, ObjectType
 
 game = Game(10, 10)
@@ -24,6 +26,7 @@ game.Put(9, 5).SetType(ObjectType.WIN)
 
 game.Put(8, 6).SetType(ObjectType.FLAG)
 
+#pyBaba.ObjectType.BABA
 # init
 pygame.init()
 pygame.font.init()
@@ -41,29 +44,35 @@ COLOR_BLACK = pygame.Color(0, 0, 0)
 COLOR_WHITE = pygame.Color(255, 255, 255)
 
 # image
-obj_images = {pyBaba.ObjectType.BABA: 'BABA', pyBaba.ObjectType.FLAG: 'FLAG', pyBaba.ObjectType: 'WALL'}
-text_images = {pyBaba.ObjectType.BABA: 'BABA', pyBaba.ObjectType.FLAG:  'FLAG', pyBaba.ObjectType.IS: 'IS',
+# 그냥 노가다로 다 로드해놓자
+obj_images = {pyBaba.ObjectType.BABA : 'BABA', pyBaba.ObjectType.FLAG: 'FLAG', pyBaba.ObjectType.WALL: 'WALL'}
+text_images = {pyBaba.ObjectType.BABA : 'BABA', pyBaba.ObjectType.FLAG:  'FLAG', pyBaba.ObjectType.IS: 'IS',
                pyBaba.ObjectType.YOU:  'YOU', pyBaba.ObjectType.PUSH: 'PUSH', pyBaba.ObjectType.STOP: 'STOP',
-               pyBaba.ObjectType.WALL: 'WALL'}
+               pyBaba.ObjectType.WALL: 'WALL', pyBaba.ObjectType.WIN: 'WIN'}
 for j in obj_images:
     temp = []
     for i in pyBaba.Action.__members__:
         if i == "COUNT":
             continue
-        temp.append(pygame.transform.scale(pygame.image.load('./sprite/{}/{}.png'.format(obj_images[j].name, i)),
+        temp.append(pygame.transform.scale(pygame.image.load('./sprite/{}/{}.png'.format(obj_images[j], i)),
                                            (BLOCK_SIZE, BLOCK_SIZE)))
+    print(temp)
     obj_images[j] = temp
+    print(obj_images[j])
 
 for i in text_images:
-    text_images[i] = pygame.transform.scale(pygame.image.load('./sprite/text/{}.png'.format(i)), (BLOCK_SIZE, BLOCK_SIZE))
-
+    text_images[i] = pygame.transform.scale(pygame.image.load('./sprite/text/{}.png'.format(text_images[i])), (BLOCK_SIZE, BLOCK_SIZE))
+    print(text_images[i])
+print(obj_images)
 
 def DrawObject(obj, x_position, y_position):
     if obj.IsText():
         obj_image = text_images[obj.GetType()]
     else:
-        obj_image = text_images[obj.GetType()][GetNowAction()]
-    obj_rect = self.image.get_rect()
+        print(obj.GetType())
+        obj_image = obj_images[obj.GetType()][int(game.GetNowAction())]
+
+    obj_rect = obj_image.get_rect()
     obj_rect.topleft = (x_position * BLOCK_SIZE, y_position * BLOCK_SIZE)
 
     Screen.blit(obj_image, obj_rect)
@@ -90,7 +99,7 @@ while True:
 
     Screen.fill(COLOR_WHITE)
 
-    check()
+    Check()
     pygame.display.flip()
 
     clock.tick(FPS)
