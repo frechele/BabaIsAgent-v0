@@ -134,9 +134,15 @@ class Game final
     //! \param id ID of rule to remove
     std::set<Rule>::iterator RemoveRule(std::int64_t id);
 
-    //! Tie
+    //! Tie affected objects as the object move
+    //! \param pusher Object to be center of movement
+    //! \param dir Direction of movement
+    //! \return Tied objects
     Object::Arr TieStuckMoveableObjects(Object& pusher, Direction dir) const;
 
+    //! Move objects without any condition check.
+    //! \param objects Objects
+    //! \param dir Direction of movement
     void MoveObjects(const Object::Arr& objects, Direction dir);
 
     //! Get set of rules
