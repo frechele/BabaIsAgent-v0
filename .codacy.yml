@@ -3,3 +3,4 @@ exclude_paths:
   - Dockerfile
   - Libraries/**
   - Scripts/**
+  - Documents/**
