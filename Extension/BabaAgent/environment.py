@@ -38,13 +38,6 @@ class BabaEnv(gym.Env):
         self.game.Put(3, 1).SetType(pyBaba.ObjectType.IS)
         self.game.Put(4, 1).SetType(pyBaba.ObjectType.YOU)
 
-        self.game.Put(2, 5).SetType(pyBaba.ObjectType.BABA).SetText(True)
-        self.game.Put(3, 5).SetType(pyBaba.ObjectType.IS)
-        self.game.Put(4, 5).SetType(pyBaba.ObjectType.YOU)
-
-        for i in range(10):
-            self.game.Put(6, i).SetType(pyBaba.ObjectType.WALL)
-
         self.game.Put(1, 6).SetType(pyBaba.ObjectType.BABA)
 
         self.game.Put(7, 3).SetType(pyBaba.ObjectType.FLAG).SetText(True)

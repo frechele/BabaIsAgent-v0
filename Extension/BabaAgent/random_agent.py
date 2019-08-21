@@ -1,8 +1,7 @@
-import gym
-import environment as envi
+import environment
 from pyBaba import RandomAgent
 
-env = gym.make('baba-10x10-v0')
+env = environment.BabaEnv10x10()
 
 env.reset()
 
