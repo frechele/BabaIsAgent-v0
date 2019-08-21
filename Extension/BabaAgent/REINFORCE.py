@@ -6,7 +6,7 @@ from torch.distributions import Categorical
 import copy
 import numpy as np
 
-from Environment import BabaEnv10x10
+from environment import BabaEnv10x10
 import pyBaba
 
 from tensorboardX import SummaryWriter
