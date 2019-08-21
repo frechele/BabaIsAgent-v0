@@ -2,13 +2,14 @@ import pygame
 import sys
 import pyBaba
 
-# test
+# testgame
 from pyBaba import Game, ObjectType
 
 game = Game(10, 10)
 
 game.Put(2, 1).SetType(ObjectType.BABA).SetText(True)
 game.Put(3, 1).SetType(ObjectType.IS)
+game.Put(5, 1).SetType(ObjectType.IS)
 game.Put(4, 1).SetType(ObjectType.YOU)
 
 game.Put(2, 5).SetType(ObjectType.BABA).SetText(True)
@@ -21,6 +22,7 @@ for i in range(10):
 game.Put(1, 6).SetType(ObjectType.BABA)
 
 game.Put(7, 3).SetType(ObjectType.FLAG).SetText(True)
+game.Put(6, 3).SetType(ObjectType.WALL).SetText(True)
 game.Put(9, 5).SetType(ObjectType.WIN)
 
 game.Put(8, 6).SetType(ObjectType.FLAG)
@@ -33,7 +35,7 @@ BLOCK_SIZE = 24
 
 clock = pygame.time.Clock()
 
-# SCREEN
+# screen
 Screen_size = (game.GetWidth() * BLOCK_SIZE, game.GetHeight() * BLOCK_SIZE)
 Screen = pygame.display.set_mode((Screen_size[0], Screen_size[1]), pygame.FULLSCREEN)
 
@@ -60,42 +62,26 @@ for i in text_images:
     text_images[i] = pygame.transform.scale(pygame.image.load('./sprite/text/{}.png'.format(text_images[i])), (BLOCK_SIZE, BLOCK_SIZE))
 
 
-# object class
-class TempObjectClass(pygame.sprite.Sprite):
-    def __init__(self, obj):
-        pygame.sprite.Sprite.__init__(self)
-        self.obj = obj
-        if obj.IsText():
-            self.image = text_images[self.obj.GetType()]
-        else:
-            self.image = obj_images[self.obj.GetType()][int(game.GetNowAction())]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (game.GetPositionByObject(self.obj)[0] * BLOCK_SIZE, game.GetPositionByObject(self.obj)[1] * BLOCK_SIZE)
-
-    def update(self):
-        if self.obj.IsDestroyed():
-            self.kill()
-        if self.obj.IsText():
-            self.image = text_images[self.obj.GetType()]
-        else:
-            self.image = obj_images[self.obj.GetType()][int(game.GetNowAction())]
-        self.rect.topleft = (game.GetPositionByObject(self.obj)[0] * BLOCK_SIZE, game.GetPositionByObject(self.obj)[1] * BLOCK_SIZE)
-
-
-object_group = pygame.sprite.Group()
-
 def IsObject(x_position, y_position):
     object_list = game.At(x_position, y_position)
     for obj in object_list:
-        object_group.add(TempObjectClass(obj))
+        if obj.IsText():
+            obj_image = text_images[obj.GetType()]
+        else:
+            obj_image = obj_images[obj.GetType()][int(game.GetNowAction())]
+        obj_rect = obj_image.get_rect()
+        obj_rect.topleft = (
+        game.GetPositionByObject(obj)[0] * BLOCK_SIZE, game.GetPositionByObject(obj)[1] * BLOCK_SIZE)
+        Screen.blit(obj_image, obj_rect)
 
 def Check():
     for y_position in range(game.GetHeight()):
         for x_position in range(game.GetWidth()):
+            print(x_position, y_position)
             IsObject(x_position, y_position)
-Check()
-gameover =False
 
+# loop
+gameover = False
 while True:
     if gameover:
         pygame.quit()
@@ -117,14 +103,13 @@ while True:
             if event.key == pygame.K_LEFT:
                 game.Update(pyBaba.Action.LEFT)
 
-    # update
-    object_group.update()
-    if game.GetGameResult() == pyBaba.GameResult.WIN or game.GetGameResult() == pyBaba.GameResult.DEFEAT:
+    # WIN
+    if game.GetGameResult() == pyBaba.GameResult.WIN:
         gameover = True
 
     # draw
     Screen.fill(COLOR_BLACK)
-    object_group.draw(Screen)
+    Check()
     pygame.display.flip()
 
     clock.tick(FPS)
