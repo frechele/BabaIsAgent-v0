@@ -1,12 +1,12 @@
 [submodule "Libraries/googletest"]
 	path = Libraries/googletest
 	url = https://github.com/google/googletest
-[submodule "Libraries/SFML"]
-	path = Libraries/SFML
-	url = https://github.com/SFML/SFML
 [submodule "Libraries/spdlog"]
 	path = Libraries/spdlog
 	url = https://github.com/gabime/spdlog
 [submodule "Libraries/random"]
 	path = Libraries/random
 	url = https://github.com/effolkronium/random
+[submodule "Libraries/pybind11"]
+	path = Libraries/pybind11
+	url = https://github.com/pybind/pybind11

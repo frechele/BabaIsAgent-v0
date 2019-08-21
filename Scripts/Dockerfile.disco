@@ -3,11 +3,10 @@ LABEL maintainer "JYPark09 <jyp10987@gmail.com>"
 
 RUN apt update && apt install -y \
 	build-essential \
-	libx11-dev \
-	freeglut3-dev \
-	libudev-dev \
-	libxrandr-dev \
-	libfreetype6-dev \
+    python3-dev \
+    python3-pip \
+    python3-venv \
+    python3-setuptools \
 	cmake \
 	--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
