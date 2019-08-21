@@ -68,8 +68,8 @@ class BabaEnv(gym.Env):
 
     def _get_obs(self):
         return np.array(
-            pyBaba.Preprocess.StateToTensor(self.game)
-            ).reshape(-1, self.height, self.width)
+            pyBaba.Preprocess.StateToTensor(self.game),
+            dtype=np.float32).reshape(-1, self.height, self.width)
 
 class BabaEnv10x10(BabaEnv):
     def __init__(self):
