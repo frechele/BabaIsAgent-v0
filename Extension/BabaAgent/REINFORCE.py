@@ -18,10 +18,11 @@ class Network(nn.Module):
     def __init__(self):
         super(Network, self).__init__()
 
-        self.conv1 = nn.Conv2d(pyBaba.Preprocess.TENSOR_DIM, 64, 3, padding=1)
-        self.conv2 = nn.Conv2d(64, 64, 3, padding=1)
-        self.conv3 = nn.Conv2d(64, 64, 3, padding=1)
-        self.conv4 = nn.Conv2d(64, 1, 1, padding=0)
+        self.conv1 = nn.Conv2d(pyBaba.Preprocess.TENSOR_DIM, 128, 3, padding=1)
+        self.conv2 = nn.Conv2d(128, 128, 3, padding=1)
+        self.conv3 = nn.Conv2d(128, 128, 3, padding=1)
+        self.conv4 = nn.Conv2d(128, 128, 3, padding=1)
+        self.conv5 = nn.Conv2d(128, 1, 1, padding=0)
         self.fc = nn.Linear(100, 5)
 
         self.log_probs = []
@@ -32,6 +33,7 @@ class Network(nn.Module):
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
         x = F.relu(self.conv4(x))
+        x = F.relu(self.conv5(x))
 
         x = x.view(x.data.size(0), -1)
         x = self.fc(x)
