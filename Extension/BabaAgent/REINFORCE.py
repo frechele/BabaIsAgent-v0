@@ -9,6 +9,8 @@ import numpy as np
 from Environment import BabaEnv10x10
 import pyBaba
 
+from tensorboardX import SummaryWriter
+
 USE_CUDA = torch.cuda.is_available()
 env = BabaEnv10x10()
 
@@ -18,7 +20,8 @@ class Network(nn.Module):
 
         self.conv1 = nn.Conv2d(pyBaba.Preprocess.TENSOR_DIM, 64, 3, padding=1)
         self.conv2 = nn.Conv2d(64, 64, 3, padding=1)
-        self.conv3 = nn.Conv2d(64, 1, 1, padding=0)
+        self.conv3 = nn.Conv2d(64, 64, 3, padding=1)
+        self.conv4 = nn.Conv2d(64, 1, 1, padding=0)
         self.fc = nn.Linear(100, 5)
 
         self.log_probs = []
@@ -28,6 +31,7 @@ class Network(nn.Module):
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
+        x = F.relu(self.conv4(x))
 
         x = x.view(x.data.size(0), -1)
         x = self.fc(x)
@@ -38,7 +42,7 @@ net = Network()
 if USE_CUDA:
     net = net.cuda()
 
-opt = optim.Adam(net.parameters(), lr=1e-2)
+opt = optim.Adam(net.parameters(), lr=1e-3)
 
 def get_action(state):
     state = torch.tensor(state)
@@ -76,9 +80,12 @@ def train():
 
     opt.step()
 
-    net.log_probs, net.rewards = [], []
+    del net.log_probs[:]
+    del net.rewards[:]
 
 if __name__ == '__main__':
+    writer = SummaryWriter()
+
     global_step = 0
     scores, episodes = [], []
 
@@ -87,7 +94,8 @@ if __name__ == '__main__':
 
         state = env.reset().reshape(1, -1, 10, 10)
 
-        while not env.done:
+        step = 0
+        while step < 3000:
             global_step += 1
 
             action = get_action(state)
@@ -98,8 +106,16 @@ if __name__ == '__main__':
             score += reward
             state = copy.deepcopy(next_state)
 
-            if env.done:
-                train()
-                scores.append(score)
+            step += 1
 
-                print(f'Episode {e}: score: {score} time_step: {global_step}')
+            if env.done:
+                break
+
+        train()
+        scores.append(score)
+        episodes.append(e)
+
+        writer.add_scalar('Reward', score, e)
+        writer.add_scalar('Step', step, e)
+
+        print(f'Episode {e}: score: {score:.3f} time_step: {global_step} step: {step}')    
