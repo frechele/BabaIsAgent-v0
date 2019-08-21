@@ -1,7 +1,7 @@
-import environment
+import Environment
 from pyBaba import RandomAgent
 
-env = environment.BabaEnv10x10()
+env = Environment.BabaEnv10x10()
 
 env.reset()
 
