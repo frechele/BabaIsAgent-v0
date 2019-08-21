@@ -6,6 +6,7 @@
 - [Object API](#Object)
 - [Rule API](#Rule)
 - [Game API](#Game)
+- [Preprocess API](#Preprocess)
 
   
 ## Enumerator
@@ -147,9 +148,20 @@ class MyAgent(pyBaba.Agent):
 ```게임의 기반 규칙을 추가하고, 추가된 규칙의 ID를 반환합니다. 추가된 규칙은 제거되지 않습니다.```
 - RemoveRule(id:int)  
 ```게임의 규칙을 제거합니다.```
-- TieStuckMoveableObjects(pusher:Object, dir:Direction)
+- TieStuckMoveableObjects(pusher:Object, dir:Direction)  
 ```움직임을 발생시키는 물체(YOU)가 움직일 때 영향을 받는 물체(자신 포함)를 모두 묶은 오브젝트의 목록을 반환합니다. 움직이는 게 불가능 할 경우 빈 목록을 반화합니다.```  
 - MoveObjects(objs:list(Object), dir:Direction)  
 ```물체들을 이동합니다.```
 - GetNowAction() -> Action  
 ```최근 한 행동을 반환합니다.```
+
+## Preprocess
+```게임의 상태를 인공신경망에 넣을 수 있도록 전처리하는 클래스입니다.```
+
+### 필드
+- TENSOR_DIM  
+```변환된 tensor의 channel 수입니다.```
+
+### 메소드
+- StateToTensor(game:Game) -> list(float)  
+```game을 tensor로 변환해줍니다.```

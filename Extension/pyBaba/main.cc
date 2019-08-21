@@ -15,6 +15,7 @@ PYBIND11_MODULE(pyBaba, m)
     buildPropertyTypeEnum(m);
     buildTypeUtilities(m);
 
+    buildPreprocess(m);
     buildAgents(m);
     buildObject(m);
     buildRule(m);
