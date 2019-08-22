@@ -42,6 +42,7 @@ Screen = pygame.display.set_mode((Screen_size[0], Screen_size[1]), pygame.FULLSC
 # color
 COLOR_BLACK = pygame.Color(0, 0, 0)
 COLOR_WHITE = pygame.Color(255, 255, 255)
+COLOR_BACKGROUND = pygame.Color(177, 216, 216)
 
 # image
 # 그냥 노가다로 다 로드해놓자
@@ -108,7 +109,7 @@ while True:
         gameover = True
 
     # draw
-    Screen.fill(COLOR_BLACK)
+    Screen.fill(COLOR_BACKGROUND)
     Check()
     pygame.display.flip()
 
