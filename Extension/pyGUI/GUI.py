@@ -52,9 +52,7 @@ text_images = {pyBaba.ObjectType.BABA: 'BABA', pyBaba.ObjectType.FLAG:  'FLAG', 
                pyBaba.ObjectType.WALL: 'WALL', pyBaba.ObjectType.WIN: 'WIN'}
 for j in obj_images:
     temp = []
-    for i in pyBaba.Action.__members__:
-        if i == "COUNT":
-            continue
+    for i in pyBaba.Direction.__members__:
         temp.append(pygame.transform.scale(pygame.image.load('./sprite/{}/{}.png'.format(obj_images[j], i)),
                                            (BLOCK_SIZE, BLOCK_SIZE)))
     obj_images[j] = temp
@@ -69,7 +67,7 @@ def IsObject(x_position, y_position):
         if obj.IsText():
             obj_image = text_images[obj.GetType()]
         else:
-            obj_image = obj_images[obj.GetType()][int(game.GetNowAction())]
+            obj_image = obj_images[obj.GetType()][int(obj.GetDirection())]
         obj_rect = obj_image.get_rect()
         obj_rect.topleft = (
         game.GetPositionByObject(obj)[0] * BLOCK_SIZE, game.GetPositionByObject(obj)[1] * BLOCK_SIZE)
