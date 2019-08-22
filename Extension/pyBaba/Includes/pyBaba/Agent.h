@@ -5,6 +5,7 @@
 
 #include <pybind11/pybind11.h>
 
+void buildPreprocess(pybind11::module& m);
 void buildAgents(pybind11::module& m);
 
 #endif  // PYBABA_AGENT_H
