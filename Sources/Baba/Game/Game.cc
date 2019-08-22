@@ -198,7 +198,7 @@ void Game::Update(Action action)
 
     parseRules();
     applyRules(rules_, false);
-    
+
     determineResult();
 }
 
@@ -225,14 +225,15 @@ std::int64_t Game::AddBaseRule(ObjectType target, ObjectType verb,
 
 void Game::RemoveRule(std::int64_t id)
 {
-    auto it = std::find_if(rules_.begin(), rules_.end(),
-                          [id](const Rule& rule) { return rule.GetRuleID() == id; });
-                          
+    auto it =
+        std::find_if(rules_.begin(), rules_.end(),
+                     [id](const Rule& rule) { return rule.GetRuleID() == id; });
+
     if (it != rules_.end())
     {
         auto& rule = *it;
         auto targets = FindObjectsByType(rule.GetTarget(), true);
-        
+
         if (IsPropertyType(rule.GetEffect()))
         {
             for (auto& target : targets)
@@ -256,25 +257,28 @@ void Game::parseRules()
         RemoveRule(rules_.begin()->GetRuleID());
     }
 
-    auto verbs = FindObjects(
-        [](const Object& obj) { return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD); });
-        
+    auto verbs = FindObjects([](const Object& obj) {
+        return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD);
+    });
+
     for (auto& verb : verbs)
     {
         auto [x, y] = GetPositionByObject(*verb);
-        
+
         const auto addRules = [&, x = x, y = y](std::size_t dx,
                                                 std::size_t dy) {
             if (ValidatePosition(x - dx, y - dy) &&
                 ValidatePosition(x + dx, y + dy))
             {
                 auto targets = FilterObjectByFunction(
-                    At(x - dx, y - dy),
-                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
+                    At(x - dx, y - dy), [](const Object& obj) {
+                        return obj.HasProperty(PropertyType::WORD);
+                    });
                 auto effects = FilterObjectByFunction(
-                    At(x + dx, y + dy),
-                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
-                    
+                    At(x + dx, y + dy), [](const Object& obj) {
+                        return obj.HasProperty(PropertyType::WORD);
+                    });
+
                 for (auto& target : targets)
                 {
                     for (auto& effect : effects)
@@ -388,16 +392,17 @@ Object::Arr Game::TieStuckMoveableObjects(Object& pusher, Direction dir) const
             break;
         }
 
-        if (!FilterObjectByFunction(objs, [](const Object& obj)->bool{
-            return obj.HasProperty(PropertyType::STOP);
-        }).empty())
+        if (!FilterObjectByFunction(objs, [](const Object& obj) -> bool {
+                 return obj.HasProperty(PropertyType::STOP);
+             }).empty())
         {
             return Object::Arr();
         }
 
-        auto filtered = FilterObjectByFunction(objs, [](const Object& obj)->bool{
-            return obj.HasProperty(PropertyType::PUSH);
-        });
+        auto filtered =
+            FilterObjectByFunction(objs, [](const Object& obj) -> bool {
+                return obj.HasProperty(PropertyType::PUSH);
+            });
 
         if (filtered.empty())
         {
@@ -419,8 +424,9 @@ void Game::MoveObjects(const Object::Arr& objects, Direction dir)
         auto& box = map_[x + y * width_];
 
         box.erase(std::find(box.begin(), box.end(), obj));
-        
+
         map_[(x + dx) + (y + dy) * width_].push_back(obj);
+        obj->SetDirection(dir);
     }
 }
 

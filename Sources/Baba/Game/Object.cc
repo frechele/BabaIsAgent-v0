@@ -81,6 +81,16 @@ bool Object::HasProperty(PropertyType type) const
            properties_.end();
 }
 
+void Object::SetDirection(Direction dir)
+{
+    dir_ = dir;
+}
+
+Direction Object::GetDirection() const
+{
+    return dir_;
+}
+
 void Object::Destroy()
 {
     if (isDestroyed_)
