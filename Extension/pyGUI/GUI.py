@@ -60,6 +60,9 @@ for j in obj_images:
 for i in text_images:
     text_images[i] = pygame.transform.scale(pygame.image.load('./sprite/text/{}.png'.format(text_images[i])), (BLOCK_SIZE, BLOCK_SIZE))
 
+win_image = pygame.transform.scale(pygame.image.load('./sprite/win0.png'), Screen_size)
+win_rect = win_image.get_rect()
+
 
 def IsObject(x_position, y_position):
     object_list = game.At(x_position, y_position)
@@ -81,10 +84,19 @@ def Check():
 
 # loop
 gameover = False
+timer = 0
 while True:
     if gameover:
-        pygame.quit()
-        sys.exit()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+        Screen.fill(COLOR_BACKGROUND)
+        Screen.blit(win_image, win_rect)
+        pygame.display.flip()
+
+        clock.tick(FPS)
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
