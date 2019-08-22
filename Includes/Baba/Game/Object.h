@@ -3,6 +3,7 @@
 #ifndef BABA_OBJECT_H
 #define BABA_OBJECT_H
 
+#include<Baba/Enums/Game.h>
 #include <Baba/Enums/ObjectType.h>
 
 #include <set>
@@ -69,6 +70,9 @@ class Object
     //! \return Whether object has property type
     bool HasProperty(PropertyType type) const;
 
+	void SetDirection(Direction dir);
+	Direction GetDirection() const;
+
     //! Destroy object
     void Destroy();
     //! Check object is destroyed
@@ -82,6 +86,7 @@ class Object
     int objectID_;
     std::set<PropertyType> properties_;
     ObjectType type_ = ObjectType::INVALID;
+    Direction dir_ = Direction::INVALID;
     bool isText_ = false;
 
     bool isDestroyed_ = false;
