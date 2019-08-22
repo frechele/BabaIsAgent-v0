@@ -2,4 +2,5 @@
 .vscode/*
 build/*
 **/__pycache__
+**/.idea
 *.pyd
