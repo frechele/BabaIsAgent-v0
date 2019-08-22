@@ -382,22 +382,29 @@ Object::Arr Game::TieStuckMoveableObjects(Object& pusher, Direction dir) const
     while (ValidatePosition(x += dx, y += dy))
     {
         auto objs = At(x, y);
+
         if (objs.empty())
         {
             break;
         }
 
-        for (auto& obj : objs)
+        if (!FilterObjectByFunction(objs, [](const Object& obj)->bool{
+            return obj.HasProperty(PropertyType::STOP);
+        }).empty())
         {
-            if (obj->HasProperty(PropertyType::STOP))
-            {
-                return Object::Arr();
-            }
-            if (obj->HasProperty(PropertyType::PUSH))
-            {
-                result.push_back(obj);
-            }
+            return Object::Arr();
         }
+
+        auto filtered = FilterObjectByFunction(objs, [](const Object& obj)->bool{
+            return obj.HasProperty(PropertyType::PUSH);
+        });
+
+        if (filtered.empty())
+        {
+            break;
+        }
+
+        result.insert(result.begin(), filtered.begin(), filtered.end());
     }
 
     return ValidatePosition(x, y) ? result : Object::Arr();
