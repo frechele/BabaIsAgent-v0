@@ -85,7 +85,6 @@ if __name__ == '__main__':
     writer = SummaryWriter()
 
     global_step = 0
-    scores, episodes = [], []
 
     for e in range(10000):
         score = 0
@@ -110,8 +109,6 @@ if __name__ == '__main__':
                 break
 
         train()
-        scores.append(score)
-        episodes.append(e)
 
         writer.add_scalar('Reward', score, e)
         writer.add_scalar('Step', step, e)
