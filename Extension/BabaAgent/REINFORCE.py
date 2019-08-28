@@ -11,7 +11,7 @@ import pyBaba
 
 from tensorboardX import SummaryWriter
 
-USE_CUDA = torch.cuda.is_available()
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 env = BabaEnv10x10()
 
 class Network(nn.Module):
@@ -40,16 +40,12 @@ class Network(nn.Module):
 
         return F.softmax(x, dim=1)
 
-net = Network()
-if USE_CUDA:
-    net = net.cuda()
+net = Network().to(device)
 
 opt = optim.Adam(net.parameters(), lr=1e-3)
 
 def get_action(state):
-    state = torch.tensor(state)
-    if USE_CUDA:
-        state = state.cuda()
+    state = torch.tensor(state).to(device)
 
     policy = net(state)
 
