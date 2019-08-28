@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 LABEL maintainer "JYPark09 <jyp10987@gmail.com>"
 
-RUN apt update && apt install -y \
+RUN apt-get update && apt-get install -y \
 	build-essential \
     python3-dev \
     python3-pip \

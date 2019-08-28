@@ -11,7 +11,7 @@ coverage:
     project: true
     path: true
     changes: true
-    
+
 ignore:
 - 'CMake'
 - 'Extensions'

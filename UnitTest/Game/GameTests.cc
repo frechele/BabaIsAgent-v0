@@ -265,6 +265,7 @@ TEST(GameTest, MoveObject)
     game.MoveObjects({ &obj }, Direction::RIGHT);
     EXPECT_EQ(std::get<0>(game.GetPositionByObject(obj)), 5);
     EXPECT_EQ(std::get<1>(game.GetPositionByObject(obj)), 5);
+    EXPECT_EQ(obj.GetDirection(), Direction::RIGHT);
 
     EXPECT_ANY_THROW(game.MoveObjects({ &obj }, Direction::INVALID));
 }
