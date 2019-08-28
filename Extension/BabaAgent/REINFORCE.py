@@ -4,7 +4,6 @@ import torch.nn.functional as F
 from torch.distributions import Categorical
 
 import copy
-import numpy as np
 
 from environment import BabaEnv10x10
 import pyBaba
@@ -113,4 +112,4 @@ if __name__ == '__main__':
         writer.add_scalar('Reward', score, e)
         writer.add_scalar('Step', step, e)
 
-        print(f'Episode {e}: score: {score:.3f} time_step: {global_step} step: {step}')    
+        print(f'Episode {e}: score: {score:.3f} time_step: {global_step} step: {step}')

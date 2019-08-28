@@ -5,7 +5,6 @@ import torch.nn.functional as F
 from collections import namedtuple
 import random
 import numpy as np
-import math
 
 from environment import BabaEnv10x10
 import pyBaba
@@ -134,7 +133,7 @@ if __name__ == '__main__':
             global_step += 1
 
             action = get_action(state)
-            
+
             next_state, reward, done, _ = env.step(action)
             next_state = next_state.reshape(1, -1, 10, 10)
             next_state = torch.tensor(next_state).to(device)
