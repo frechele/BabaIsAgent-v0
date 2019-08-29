@@ -55,6 +55,12 @@ class Game final
     //! \param y y position
     //! \return Object in that position vector
     const Object::Arr& At(std::size_t x, std::size_t y) const;
+
+    //! Returns whether a rule exists in that position.
+    //! \param x x position
+    //! \param y y position
+    //! \return Whether a rule exists in that position.
+    bool AtRule(std::size_t x, std::size_t y) const;
     
     //! Put object in that position
     //! \param x x position
@@ -160,6 +166,8 @@ class Game final
     void determineResult();
     Point dir2Vec(Direction dir) const;
 
+    std::size_t pt2idx(std::size_t x, std::size_t y) const;
+
  private:
     std::size_t width_, height_;
     Object::Arr objects_;
@@ -167,6 +175,7 @@ class Game final
 
     std::set<Rule> rules_;
     std::set<Rule> baseRules_;
+    std::vector<bool> ruleMap_;
     
     Action nowAction_ = Action::STAY;
     GameResult gameResult_ = GameResult::INVALID;

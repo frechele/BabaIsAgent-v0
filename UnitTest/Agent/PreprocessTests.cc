@@ -26,19 +26,30 @@ TEST(Preprocess, StateToTensor)
 
     game1.Put(0, 0).SetType(ObjectType::BABA).SetText(true);
     game1.Put(1, 0).SetType(ObjectType::IS);
-    game1.Put(2, 0).SetType(ObjectType::FLAG);
+    game1.Put(2, 0).SetType(ObjectType::FLAG).SetText(true);
+
+    game1.Put(4, 0).SetType(ObjectType::FLAG);
 
     const auto toIndex = [](std::size_t x, std::size_t y,
                                          std::size_t c) {
         return (c * 100) + (y * 10) + x;
     };
 
+
+    game1.Update();
     tensor = Preprocess::StateToTensor(game1);
 
     EXPECT_FLOAT_EQ(tensor[toIndex(0, 0, 0)], 1.f);
     EXPECT_FLOAT_EQ(tensor[toIndex(1, 0, 2)], 1.f);
     EXPECT_FLOAT_EQ(tensor[toIndex(2, 0, 1)], 1.f);
+
     EXPECT_FLOAT_EQ(tensor[toIndex(0, 0, 5)], 1.f);
     EXPECT_FLOAT_EQ(tensor[toIndex(1, 0, 5)], 1.f);
-    EXPECT_FLOAT_EQ(tensor[toIndex(2, 0, 5)], 0.f);
+    EXPECT_FLOAT_EQ(tensor[toIndex(2, 0, 5)], 1.f);
+    EXPECT_FLOAT_EQ(tensor[toIndex(4, 0, 5)], 0.f);
+
+    EXPECT_FLOAT_EQ(tensor[toIndex(0, 0, 6)], 1.f);
+    EXPECT_FLOAT_EQ(tensor[toIndex(1, 0, 6)], 1.f);
+    EXPECT_FLOAT_EQ(tensor[toIndex(2, 0, 6)], 1.f);
+    EXPECT_FLOAT_EQ(tensor[toIndex(4, 0, 6)], 0.f);
 }
