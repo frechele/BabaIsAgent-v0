@@ -40,9 +40,9 @@ class BabaEnv(gym.Env):
 
         self.game.Put(1, 4).SetType(pyBaba.ObjectType.BABA)
 
-        self.game.Put(7, 3).SetType(pyBaba.ObjectType.FLAG).SetText(True)
-        self.game.Put(8, 3).SetType(pyBaba.ObjectType.IS)
-        self.game.Put(9, 3).SetType(pyBaba.ObjectType.WIN)
+        self.game.Put(7, 5).SetType(pyBaba.ObjectType.FLAG).SetText(True)
+        self.game.Put(7, 6).SetType(pyBaba.ObjectType.IS)
+        self.game.Put(7, 7).SetType(pyBaba.ObjectType.WIN)
 
         self.game.Put(8, 6).SetType(pyBaba.ObjectType.FLAG)
 

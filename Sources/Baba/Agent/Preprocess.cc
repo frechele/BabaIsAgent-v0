@@ -38,7 +38,8 @@ std::vector<float> Preprocess::StateToTensor(const Game& game)
             if (objs.size() > 0)
             {
                 tensor[toIndex(x, y, TensorDimMap[objs[0]->GetType()])] = 1.f;
-                tensor[toIndex(x, y, TENSOR_DIM - 1)] = (objs[0]->IsText() ? 1.f : 0.f);
+                tensor[toIndex(x, y, TENSOR_DIM - 2)] = (objs[0]->IsText() ? 1.f : 0.f);
+                tensor[toIndex(x, y, TENSOR_DIM - 1)] = (game.AtRule(x, y) ? 1.f : 0.f);
             }
         }
     }

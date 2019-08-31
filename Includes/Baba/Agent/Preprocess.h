@@ -13,7 +13,7 @@ class Preprocess
 {
  public:
     //! Dimension of tensor
-    static constexpr int TENSOR_DIM = 6;
+    static constexpr int TENSOR_DIM = 7;
 
     //! Convert state to tensor
     //! \param game Game state

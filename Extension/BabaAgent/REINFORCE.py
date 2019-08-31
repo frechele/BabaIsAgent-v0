@@ -4,24 +4,24 @@ import torch.nn.functional as F
 from torch.distributions import Categorical
 
 import copy
-import numpy as np
 
 from environment import BabaEnv10x10
 import pyBaba
 
 from tensorboardX import SummaryWriter
 
-USE_CUDA = torch.cuda.is_available()
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 env = BabaEnv10x10()
 
 class Network(nn.Module):
     def __init__(self):
         super(Network, self).__init__()
 
-        self.conv1 = nn.Conv2d(pyBaba.Preprocess.TENSOR_DIM, 64, 3, padding=1)
-        self.conv2 = nn.Conv2d(64, 64, 3, padding=1)
-        self.conv3 = nn.Conv2d(64, 64, 3, padding=1)
-        self.conv4 = nn.Conv2d(64, 1, 1, padding=0)
+        self.conv1 = nn.Conv2d(pyBaba.Preprocess.TENSOR_DIM, 128, 3, padding=1)
+        self.conv2 = nn.Conv2d(128, 128, 3, padding=1)
+        self.conv3 = nn.Conv2d(128, 128, 3, padding=1)
+        self.conv4 = nn.Conv2d(128, 128, 3, padding=1)
+        self.conv5 = nn.Conv2d(128, 1, 1, padding=0)
         self.fc = nn.Linear(100, 5)
 
         self.log_probs = []
@@ -32,22 +32,19 @@ class Network(nn.Module):
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
         x = F.relu(self.conv4(x))
+        x = F.relu(self.conv5(x))
 
         x = x.view(x.data.size(0), -1)
         x = self.fc(x)
 
         return F.softmax(x, dim=1)
 
-net = Network()
-if USE_CUDA:
-    net = net.cuda()
+net = Network().to(device)
 
 opt = optim.Adam(net.parameters(), lr=1e-3)
 
 def get_action(state):
-    state = torch.tensor(state)
-    if USE_CUDA:
-        state = state.cuda()
+    state = torch.tensor(state).to(device)
 
     policy = net(state)
 
@@ -87,7 +84,6 @@ if __name__ == '__main__':
     writer = SummaryWriter()
 
     global_step = 0
-    scores, episodes = [], []
 
     for e in range(10000):
         score = 0
@@ -112,10 +108,8 @@ if __name__ == '__main__':
                 break
 
         train()
-        scores.append(score)
-        episodes.append(e)
 
         writer.add_scalar('Reward', score, e)
         writer.add_scalar('Step', step, e)
 
-        print(f'Episode {e}: score: {score:.3f} time_step: {global_step} step: {step}')    
+        print(f'Episode {e}: score: {score:.3f} time_step: {global_step} step: {step}')

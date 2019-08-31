@@ -21,6 +21,8 @@ void buildObject(py::module& m)
         .def("AddProperty", &Object::AddProperty)
         .def("RemoveProperty", &Object::RemoveProperty)
         .def("HasProperty", &Object::HasProperty)
+        .def("SetDirection", &Object::SetDirection)
+        .def("GetDirection", &Object::GetDirection)
         .def("Destroy", &Object::Destroy)
         .def("IsDestroyed", &Object::IsDestroyed);
 }
