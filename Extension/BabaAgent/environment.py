@@ -38,10 +38,11 @@ class BabaEnv(gym.Env):
         self.game.Put(3, 1).SetType(pyBaba.ObjectType.IS)
         self.game.Put(4, 1).SetType(pyBaba.ObjectType.YOU)
 
-        self.game.Put(1, 6).SetType(pyBaba.ObjectType.BABA)
+        self.game.Put(1, 4).SetType(pyBaba.ObjectType.BABA)
 
-        self.game.Put(7, 3).SetType(pyBaba.ObjectType.FLAG).SetText(True)
-        self.game.Put(9, 5).SetType(pyBaba.ObjectType.WIN)
+        self.game.Put(7, 5).SetType(pyBaba.ObjectType.FLAG).SetText(True)
+        self.game.Put(7, 6).SetType(pyBaba.ObjectType.IS)
+        self.game.Put(7, 7).SetType(pyBaba.ObjectType.WIN)
 
         self.game.Put(8, 6).SetType(pyBaba.ObjectType.FLAG)
 
@@ -68,8 +69,8 @@ class BabaEnv(gym.Env):
 
     def _get_obs(self):
         return np.array(
-            pyBaba.Preprocess.StateToTensor(self.game)
-            ).reshape(-1, self.height, self.width)
+            pyBaba.Preprocess.StateToTensor(self.game),
+            dtype=np.float32).reshape(-1, self.height, self.width)
 
 class BabaEnv10x10(BabaEnv):
     def __init__(self):

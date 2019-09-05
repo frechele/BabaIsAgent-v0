@@ -10,7 +10,7 @@
 namespace Baba
 {
 Game::Game(std::size_t width, std::size_t height)
-    : width_(width), height_(height), map_(width * height)
+    : width_(width), height_(height), map_(width * height), ruleMap_(width * height)
 {
     AddBaseRule(ObjectType::TEXT, ObjectType::IS, ObjectType::PUSH);
     AddBaseRule(ObjectType::TEXT, ObjectType::IS, ObjectType::WORD);
@@ -37,15 +37,20 @@ std::size_t Game::GetHeight() const
 
 const Object::Arr& Game::At(std::size_t x, std::size_t y) const
 {
-    return map_[x + y * width_];
+    return map_[pt2idx(x, y)];
+}
+
+bool Game::AtRule(std::size_t x, std::size_t y) const
+{
+    return ruleMap_[pt2idx(x, y)];
 }
 
 Object& Game::Put(std::size_t x, std::size_t y)
 {
     objects_.emplace_back(new Object);
-    map_[x + y * width_].emplace_back(objects_.back());
+    map_[pt2idx(x, y)].emplace_back(objects_.back());
 
-    return *map_[x + y * width_].back();
+    return *map_[pt2idx(x, y)].back();
 }
 
 void Game::DestroyObject(Object& object)
@@ -167,7 +172,7 @@ const Game::Point Game::GetPositionByObject(const Object& target) const
     {
         for (std::size_t x = 0; x < GetWidth(); x++)
         {
-            const auto& objs = map_[x + y * width_];
+            const auto& objs = map_[pt2idx(x, y)];
 
             for (auto& obj : objs)
             {
@@ -198,7 +203,7 @@ void Game::Update(Action action)
 
     parseRules();
     applyRules(rules_, false);
-    
+
     determineResult();
 }
 
@@ -225,14 +230,15 @@ std::int64_t Game::AddBaseRule(ObjectType target, ObjectType verb,
 
 void Game::RemoveRule(std::int64_t id)
 {
-    auto it = std::find_if(rules_.begin(), rules_.end(),
-                          [id](const Rule& rule) { return rule.GetRuleID() == id; });
-                          
+    auto it =
+        std::find_if(rules_.begin(), rules_.end(),
+                     [id](const Rule& rule) { return rule.GetRuleID() == id; });
+
     if (it != rules_.end())
     {
         auto& rule = *it;
         auto targets = FindObjectsByType(rule.GetTarget(), true);
-        
+
         if (IsPropertyType(rule.GetEffect()))
         {
             for (auto& target : targets)
@@ -251,30 +257,35 @@ const std::set<Rule>& Game::GetRules() const
 
 void Game::parseRules()
 {
+    std::fill(ruleMap_.begin(), ruleMap_.end(), false);
+
     while (!rules_.empty())
     {
         RemoveRule(rules_.begin()->GetRuleID());
     }
 
-    auto verbs = FindObjects(
-        [](const Object& obj) { return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD); });
-        
+    auto verbs = FindObjects([](const Object& obj) {
+        return IsVerbType(obj.GetType()) && obj.HasProperty(PropertyType::WORD);
+    });
+
     for (auto& verb : verbs)
     {
         auto [x, y] = GetPositionByObject(*verb);
-        
+
         const auto addRules = [&, x = x, y = y](std::size_t dx,
                                                 std::size_t dy) {
             if (ValidatePosition(x - dx, y - dy) &&
                 ValidatePosition(x + dx, y + dy))
             {
                 auto targets = FilterObjectByFunction(
-                    At(x - dx, y - dy),
-                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
+                    At(x - dx, y - dy), [](const Object& obj) {
+                        return obj.HasProperty(PropertyType::WORD);
+                    });
                 auto effects = FilterObjectByFunction(
-                    At(x + dx, y + dy),
-                    [](const Object& obj) { return obj.HasProperty(PropertyType::WORD); });
-                    
+                    At(x + dx, y + dy), [](const Object& obj) {
+                        return obj.HasProperty(PropertyType::WORD);
+                    });
+
                 for (auto& target : targets)
                 {
                     for (auto& effect : effects)
@@ -283,6 +294,13 @@ void Game::parseRules()
                                 effect->GetType());
                     }
                 }
+
+                bool hasRule = (targets.size() > 0 && effects.size() > 0);
+                ruleMap_[pt2idx(x - dx, y - dy)] =
+                    ruleMap_[pt2idx(x - dx, y - dy)] | hasRule;
+                ruleMap_[pt2idx(x + dx, y + dy)] =
+                    ruleMap_[pt2idx(x + dx, y + dy)] | hasRule;
+                ruleMap_[pt2idx(x, y)] = ruleMap_[pt2idx(x, y)] | hasRule;
             }
         };
 
@@ -388,16 +406,20 @@ Object::Arr Game::TieStuckMoveableObjects(Object& pusher, Direction dir) const
             break;
         }
 
-        if (!FilterObjectByFunction(objs, [](const Object& obj)->bool{
-            return obj.HasProperty(PropertyType::STOP);
-        }).empty())
+        if (!FilterObjectByFunction(objs,
+                                    [](const Object& obj) -> bool {
+                                        return obj.HasProperty(
+                                            PropertyType::STOP);
+                                    })
+                 .empty())
         {
             return Object::Arr();
         }
 
-        auto filtered = FilterObjectByFunction(objs, [](const Object& obj)->bool{
-            return obj.HasProperty(PropertyType::PUSH);
-        });
+        auto filtered =
+            FilterObjectByFunction(objs, [](const Object& obj) -> bool {
+                return obj.HasProperty(PropertyType::PUSH);
+            });
 
         if (filtered.empty())
         {
@@ -416,11 +438,12 @@ void Game::MoveObjects(const Object::Arr& objects, Direction dir)
     {
         auto [dx, dy] = dir2Vec(dir);
         auto [x, y] = GetPositionByObject(*obj);
-        auto& box = map_[x + y * width_];
+        auto& box = map_[pt2idx(x, y)];
 
         box.erase(std::find(box.begin(), box.end(), obj));
-        
-        map_[(x + dx) + (y + dy) * width_].push_back(obj);
+
+        map_[pt2idx(x + dx, y + dy)].push_back(obj);
+        obj->SetDirection(dir);
     }
 }
 
@@ -444,5 +467,10 @@ Game::Point Game::dir2Vec(Direction dir) const
         default:
             throw std::runtime_error("Invalid Direction");
     }
+}
+
+std::size_t Game::pt2idx(std::size_t x, std::size_t y) const
+{
+    return x + y * width_;
 }
 }  // namespace Baba
