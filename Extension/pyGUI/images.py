@@ -5,7 +5,6 @@ import gamedata
 BLOCK_SIZE = gamedata.BLOCK_SIZE
 screen_size = gamedata.Screen_size
 
-
 class ImageLoader:
     def __init__(self):
         self.obj_images = {pyBaba.ObjectType.BABA: 'BABA', pyBaba.ObjectType.FLAG: 'FLAG', pyBaba.ObjectType.WALL: 'WALL'}
@@ -24,7 +23,6 @@ class ImageLoader:
                                                          (BLOCK_SIZE, BLOCK_SIZE))
 
 imageLoader = ImageLoader()
-
 
 class clearImage(pygame.sprite.Sprite):
     def __init__(self):
